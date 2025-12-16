@@ -1,0 +1,14 @@
+AccountID:ACC001,IBAN:GR0000000000000001,InterestRate:1.0,Balance:5200.0,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:U001,SecondaryOwnerIDs:U001|,MaintenanceFee:
+AccountID:ACC002,IBAN:GR0000000000000002,InterestRate:1.0,Balance:15000.5,DateCreated:2024-02-10,AccountType:BUSINESS,MainOwnerID:BIZ00003,SecondaryOwnerIDs:,MaintenanceFee:5.0
+AccountID:AC0099,IBAN:GR02003030399,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:U001,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0090,IBAN:GR02003030352,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0066,IBAN:GR02003030323,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0016,IBAN:GR02003030352,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:U001|,MaintenanceFee:
+AccountID:AC0088,IBAN:GR02003030330,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:U001,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0029,IBAN:GR02003030317,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:U001|,MaintenanceFee:
+AccountID:AC0064,IBAN:GR02003030344,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:U001,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0054,IBAN:GR02003030324,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0082,IBAN:GR02003030388,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0049,IBAN:GR02003030339,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0016,IBAN:GR02003030314,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:,MaintenanceFee:
+AccountID:AC0017,IBAN:GR02003030393,InterestRate:1.0,Balance:33.22,DateCreated:1970-01-01,AccountType:PERSONAL,MainOwnerID:,SecondaryOwnerIDs:,MaintenanceFee:

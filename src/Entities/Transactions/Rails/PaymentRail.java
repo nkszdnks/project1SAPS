@@ -1,0 +1,55 @@
+package Entities.Transactions.Rails;
+
+
+import Entities.Transactions.Payment;
+import Entities.Transactions.Requests.PaymentRequest;
+import Entities.Transactions.Requests.TransactionRequest;
+import Entities.Transactions.TransactionStatus;
+import Entities.checks.*;
+import Managers.TransactionManager;
+
+import java.time.LocalDateTime;
+
+public class PaymentRail {
+    private TransactionCheck checks;
+
+    public PaymentRail() {
+        var iban = new IbanFormatCheck();
+        var RfCode = new RfCodeCheck();
+        var balance = new BalanceCheck();
+        var daily = new DailyLimitCheck();
+
+        iban.setNext(RfCode);
+        RfCode.setNext(balance);
+        balance.setNext(daily);
+
+        checks = iban;
+    }
+
+    public String execute(TransactionRequest req){
+        // 1) Chain of Responsibility: validations
+
+        try {
+            checks.handle(req);
+        } catch (IllegalStateException e) {
+            return "Transfer failed. Reason:"+ e.getMessage();
+        }
+
+//        // 2) Strategy: fee computation
+//        FeeStrategy feeStrategy = FeeStrategyFactory.getStrategyFor(req);
+//        double fee = feeStrategy.computeFee(req);
+        double fee = 0.0;
+        // ⭐ Use your TransferBuilder with flow interface
+        Payment payment = new Payment("DefaultId",LocalDateTime.now(),req.getAmount(),req.getReason(),req.getExecutorID(), TransactionStatus.PENDING,req.getFromIban(),((PaymentRequest)req).getRfCode());
+        TransactionManager.getInstance().Transact(payment);
+        if(payment.getStatus() == TransactionStatus.FAILED){
+            return "Transfer failed!!!";
+        }
+        // 3) Mock execution: just compute totals and return a message
+        double debited = req.getAmount() + fee;
+        return "Transfer executed successfully: rail="
+                + "   Amount=" + req.getAmount()
+                + "   Fee=" + String.format("%.2f", fee)
+                + "   Debited=" + String.format("%.2f", debited);
+    }
+}
