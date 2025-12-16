@@ -57,6 +57,7 @@ class BusinessDashboardPanel extends JPanel implements ActionListener {
         center.add(btnCPD);
         center.add(btnAbout);
         center.add(btnLogout);
+        center.add(btnMyBills);
 
         add(center, BorderLayout.CENTER);
 
@@ -72,6 +73,7 @@ class BusinessDashboardPanel extends JPanel implements ActionListener {
         btnCPD.addActionListener(this);
         btnAbout.addActionListener(this);
         btnLogout.addActionListener(this);
+        btnMyBills.addActionListener(this);
     }
 
     @Override
