@@ -16,11 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-class BusinessDashboardPanel extends JPanel implements ActionListener{
+public class BusinessDashboardPanel extends JPanel implements ActionListener{
 
     JButton btnAccounts, btnAbout, btnLogout,btnTransfers,btnPayments,btnCPD,btnESO,btnMyBills;
 
-    BusinessDashboardPanel() {
+    public BusinessDashboardPanel() {
         setLayout(new BorderLayout(10,10)); //(int hgap, int vgap)
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
 

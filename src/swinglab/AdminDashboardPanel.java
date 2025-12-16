@@ -1,8 +1,5 @@
 package swinglab;
 
-import Entities.Users.Customer;
-import swinglab.Contollers.AccountsController;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
