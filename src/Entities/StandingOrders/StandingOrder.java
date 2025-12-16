@@ -3,8 +3,9 @@ package Entities.StandingOrders;
 import java.time.LocalDate;
 import java.util.HashMap;
 
-public abstract class StandingOrder {
 
+public abstract class StandingOrder {
+    
     protected int orderId;
     protected String title;
     protected String description;
@@ -68,9 +69,9 @@ public abstract class StandingOrder {
 
         String[] data = csvLine.split(",", -1);
         HashMap<String, String> map = new HashMap<>();
-
+        String Split = ":";
         for (String c : data) {
-            String[] kv = c.split(":", 2);
+            String[] kv = c.split(Split, 2);
             if (kv.length == 2) map.put(kv[0], kv[1]);
         }
 

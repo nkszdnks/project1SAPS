@@ -22,7 +22,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-class BankFrame extends JFrame implements ActionListener{
+public class BankFrame extends JFrame implements ActionListener{
 	JMenuItem miLogin,miDashboard,miBusinessDashboard,miAdminDashboard,miAccounts,miTransfers,miPayments,miAbout,miExit,miLogout,miMyBills,miViewAccounts,miViewStatements,miRequests;
 	JMenu nav;
 	
