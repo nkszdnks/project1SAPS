@@ -44,31 +44,20 @@ public class BillManager implements Manager {
         return paid;
     }
 
-//    public void disbursement(String RF) {
-//        Bills bill = findBill(RF);
-//        if (bill == null) return;
-//        BankAcount[] accounts = new BankAcount[]{AccountManager.getInstance().findAccountByOwner(bill.getCustomer()),AccountManager.getInstance().findAccountByOwner(bill.getIssuer())};
-//        User user = UserManager.getInstance().findCustomerByVAT(accounts[0].getOwner());
-//        if(user == null) {
-//            System.out.println("User not found and I don't know what to do");
-//            return;
-//        }
-//        TransactionManager.getInstance().Transact(new Payment(user, accounts, "Bill Payment", bill.getAmount(),MainMenu.today));
-//        if (TransactionManager.getInstance().getTransactions().get(TransactionManager.getInstance().getTransactions().size()-1).isSuccessful())
-//            billsPayed(bill);
-//    }
-//
-//    public void disbursement(String RF, String IBAN) {
-//        Bills bill = findBill(RF);
-//        if (bill == null) return;
-//        BankAcount[] accounts = new BankAcount[]{AccountManager.getInstance().findAccountByIBAN(IBAN),AccountManager.getInstance().findAccountByOwner(bill.getIssuer())};
-//        User user = UserManager.getInstance().findCustomerByVAT(accounts[0].getOwner());
-//        TransactionManager.getInstance().Transact(new Payment(user, accounts, "Bill Payment", bill.getAmount(),MainMenu.today));
-//        if (TransactionManager.getInstance().getTransactions().get(TransactionManager.getInstance().getTransactions().size()-1).isSuccessful())
-//            billsPayed(bill);
-//    }
+    public ArrayList<Bills> getExpired() {
+        return expired;
+    }               
+        
 
-    public void create(String RF, String billNumber, int amount, Business issuer, Customer customer, LocalDate issueDate, LocalDate dueDate) {
+
+    public void create(
+        String RF,
+         String billNumber,
+         int amount,
+         Business issuer,
+         Customer customer,
+         LocalDate issueDate,
+         LocalDate dueDate) {
         Bills bill = new Bills(RF , billNumber, amount, issuer , customer , issueDate , dueDate, BillStatus.PENDING);
         issued.add(bill);
     }

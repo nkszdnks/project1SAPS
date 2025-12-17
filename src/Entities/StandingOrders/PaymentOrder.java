@@ -26,7 +26,10 @@ public class PaymentOrder extends StandingOrder {
     }
 
     @Override
-    public String getType() { return "PAYMENT_ORDER"; }
+    public String getType() {
+        
+        return "PAYMENT_ORDER"; 
+    }
 
     @Override
     public String marshal() {
