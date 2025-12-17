@@ -18,14 +18,24 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+<<<<<<< HEAD:src/swinglab/View/BusinessDashboardPanel.java
 class BusinessDashboardPanel extends JPanel implements ActionListener {
+=======
+public class BusinessDashboardPanel extends JPanel implements ActionListener{
+>>>>>>> 941ddeee882c77fd7c81d3838bc71acb5a5e8a46:src/swinglab/BusinessDashboardPanel.java
 
     JButton btnAccounts, btnAbout, btnLogout, btnTransfers, btnPayments,
             btnCPD, btnESO, btnMyBills, btnPayBills, btnSPO, btnSPH;
 
+<<<<<<< HEAD:src/swinglab/View/BusinessDashboardPanel.java
     BusinessDashboardPanel() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+=======
+    public BusinessDashboardPanel() {
+        setLayout(new BorderLayout(10,10)); //(int hgap, int vgap)
+        setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
+>>>>>>> 941ddeee882c77fd7c81d3838bc71acb5a5e8a46:src/swinglab/BusinessDashboardPanel.java
 
         JLabel title = new JLabel("Business Dashboard", SwingConstants.LEFT);
         title.setFont(title.getFont().deriveFont(Font.BOLD, 20f));

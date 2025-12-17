@@ -162,7 +162,7 @@ public class BankFrame extends JFrame implements ActionListener{
     	LoginPanel loginPanel = new LoginPanel();
         loginPanel.setBackground(Color.pink);
     	DashboardPanel dashboardPanel = new DashboardPanel();
-        swinglab.BusinessDashboardPanel businessDashboardPanel = new swinglab.BusinessDashboardPanel();
+        BusinessDashboardPanel businessDashboardPanel = new BusinessDashboardPanel();
         swinglab.AdminDashboardPanel adminDashboardPanel = new swinglab.AdminDashboardPanel();
         AccountsPanel accountsPanel = new AccountsPanel();
         AccountsController.getInstance().setView(accountsPanel);
