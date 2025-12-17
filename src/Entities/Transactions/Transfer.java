@@ -32,7 +32,7 @@ public class Transfer extends Transaction {
     public String getType() { return "TRANSFER"; }
 
     @Override
-    public void createStatement(BankAcount source, BankAcount target) {
+    protected void createStatement(BankAcount source, BankAcount target) {
         String[] ibansInvolved = {sourceIBAN, targetIBAN};
         double[] remainingBalances = {source.getAccountBalance(), target.getAccountBalance()};
         Statement accountStatements = new Statement(super.getTransactionId(),LocalDateTime.now(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());

@@ -1,16 +1,10 @@
 package swinglab;
 
+import Entities.Transactions.Rails.DepositRail;
 import Entities.Users.Customer;
-import Managers.AccountManager;
-import Managers.BillManager;
-import Managers.StatementManager;
-import Managers.UserManager;
-import swinglab.Contollers.CoOwnersController;
-import swinglab.Contollers.AccountsController;
-import swinglab.Contollers.PayBillsController;
-import swinglab.Contollers.TransactionHistoryController;
-import swinglab.Contollers.IntraBankTransferController;
-import swinglab.Contollers.WithdrawlsController;
+import Managers.*;
+import swinglab.Contollers.*;
+import swinglab.View.AdminRequestsPanel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -89,6 +83,7 @@ class BankFrame extends JFrame implements ActionListener{
         AccountManager.getInstance().restore();
         BillManager.getInstance().restore();
         StatementManager.getInstance().restore();
+        AdminRequestsManager.getInstance().restore();
 
 
         //
@@ -104,6 +99,7 @@ class BankFrame extends JFrame implements ActionListener{
                 AccountManager.getInstance().save();
                 StatementManager.getInstance().save();
                 BillManager.getInstance().save();
+                AdminRequestsManager.getInstance().save();
                 System.out.println("Data saved before exit.");
             }
         });
@@ -166,6 +162,8 @@ class BankFrame extends JFrame implements ActionListener{
         swinglab.AdminDashboardPanel adminDashboardPanel = new swinglab.AdminDashboardPanel();
         AccountsPanel accountsPanel = new AccountsPanel();
         AccountsController.getInstance().setView(accountsPanel);
+        AdminRequestsPanel adminRequestsPanel = new AdminRequestsPanel();
+        AdminRequestsController.getInstance().setView(adminRequestsPanel);
     	AboutPanel aboutPanel = new AboutPanel();
     	CoOwnersPanel coOwnersPanel = new CoOwnersPanel();
         CoOwnersController.getInstance().setView(coOwnersPanel);
@@ -180,6 +178,7 @@ class BankFrame extends JFrame implements ActionListener{
     	// register the panels with names
 
     	cards.add(loginPanel, "login");
+        cards.add(adminRequestsPanel, "adminRequests");
         cards.add(businessDashboardPanel, "businessDashboard");
         cards.add(adminDashboardPanel, "adminDashboard");
         cards.add(dashboardPanel, "dashboard");
@@ -191,12 +190,16 @@ class BankFrame extends JFrame implements ActionListener{
     	cards.add(transfersPanel, "transfersPanel");
     	cards.add(new InterBankTransferPanel(), "interbank");
     	cards.add(intraBankTransferPanel, "intrabank");
-    	cards.add(new DepositMoneyPanel(), "deposit");
+        DepositMoneyPanel depositMoneyPanel = new DepositMoneyPanel();
+        DepositMoneyController depositMoneyController = new DepositMoneyController(depositMoneyPanel);
         WithdrawMoneyPanel withdrawMoneyPanel = new WithdrawMoneyPanel();
         WithdrawlsController withdrawlsController = new WithdrawlsController(withdrawMoneyPanel);
+        cards.add(depositMoneyPanel, "deposit");
         cards.add(withdrawMoneyPanel, "withdraw");
         cards.add(new StandingTransferOrderPanel(), "standingTransferOrder");
-    	cards.add(new NewCoOwnerPanel(), "newCoOwner");
+        NewCoOwnerPanel newCoOwnerPanel = new NewCoOwnerPanel();
+        NewCoOwnerController.getInstance().setView(newCoOwnerPanel);
+    	cards.add(newCoOwnerPanel, "newCoOwner");
     	cards.add(new ChangePasswordPanel(), "changePersonalDetails");
     	cards.add(new PaymentsPanel(), "payments");
         PayBillsPanel  payBillsPanel = new PayBillsPanel();

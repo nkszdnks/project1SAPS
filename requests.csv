@@ -1,0 +1,3 @@
+RequestType:Deposit,requestID:DEPOSIT:Test Depositdefault ID,description:DEPOSIT:Test Deposit,customerUsername:User1,iban:GR1701851426,amount:1000.0,status:REJECTED
+RequestType:Deposit,requestID:Test Depositdefault ID,description:Test Deposit,customerUsername:User2,iban:GR1013290435,amount:1000.0,status:REJECTED
+RequestType:Deposit,requestID:Test2default ID,description:Test2,customerUsername:User6,iban:GR1377937266,amount:90.0,status:ACCEPTED

@@ -9,6 +9,7 @@ public class FactoryDAO {
     private static final String statementsFile = "statements.csv";
     private static final String[] standingOrdersFiles = {"activeOrders.csv","pausedOrders.csv","canceledOrders.csv"};
     private static final String billsFile = "bills.csv";
+    private static final String requestsFile = "requests.csv";
 
     private FactoryDAO() {
     }
@@ -42,6 +43,11 @@ public class FactoryDAO {
     public BillsDAO getBillsDAO() {
         BillsDAO billsDAO = new BillsDAO(billsFile);
         return billsDAO;
+    }
+
+    public AdminRequestsDAO getAdminRequestsDAO() {
+        AdminRequestsDAO adminsDAO = new AdminRequestsDAO(requestsFile);
+        return adminsDAO;
     }
 
 }

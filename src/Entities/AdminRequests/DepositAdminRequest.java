@@ -1,18 +1,48 @@
 package Entities.AdminRequests;
 
 import Entities.Accounts.BankAcount;
+import Entities.Transactions.Deposit;
 import Entities.Transactions.Requests.TransactionRequest;
+import Entities.Transactions.TransactionStatus;
 import Entities.Users.Admin;
 import Entities.Users.Customer;
+import Managers.TransactionManager;
+
+import java.time.LocalDateTime;
+import java.util.Random;
 
 public class DepositAdminRequest extends AdminRequest {
     private BankAcount bankAccount;
     private double amount;
-    public DepositAdminRequest(String requestID, String requestType, String description, Customer customer, Admin admin,BankAcount bankAccount, double amount) {
-        super(requestID, requestType, "DEPOSIT:"+description, customer, admin);
+
+    public double getAmount() {
+        return amount;
+    }
+
+    @Override
+    public void acceptRequest() {
+        Deposit deposit = new Deposit("defaultID", LocalDateTime.now(),getAmount(),getDescription(),getCustomer().getUserId(), TransactionStatus.PENDING,getBankAccount());
+        TransactionManager.getInstance().Transact(deposit);
+        setRequestStatus(RequestStatus.ACCEPTED);
+    }
+
+    @Override
+    public void rejectRequest() {
+        setRequestStatus(RequestStatus.REJECTED);
+    }
+
+    @Override
+    public String marshal() {
+        return "RequestType:Deposit,requestID:"+getRequestID()+",description:"+getDescription()+",customerUsername:"+getCustomer().getUsername()+",iban:"+getBankAccount().getIBAN()+",amount:"+String.valueOf(getAmount())+",status:"+String.valueOf(getRequestStatus());
+    }
+
+    public DepositAdminRequest(String description, Customer customer, BankAcount bankAccount, double amount) {
+        super(description+"default ID", "Deposit", description, customer);
         this.bankAccount = bankAccount;
         this.amount = amount;
     }
 
-
+    public BankAcount getBankAccount() {
+        return bankAccount;
+    }
 }

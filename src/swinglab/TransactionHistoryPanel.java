@@ -81,8 +81,6 @@ public class TransactionHistoryPanel extends JPanel {
 
     private String formatAmount(double amount,String[] ibansInvolved) {
         if (TransactionHistoryController.getInstance().getModel().getIBAN().equals(ibansInvolved[0])) {
-
-
         return String.format("-"+"%.2f", amount);
     }
     else {

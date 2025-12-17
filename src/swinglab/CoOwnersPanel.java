@@ -1,5 +1,7 @@
 package swinglab;
 
+import Entities.Accounts.PersonalAccount;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -20,8 +22,11 @@ public class CoOwnersPanel extends JPanel {
     private final JTable table;
     private final DefaultTableModel model;
     public JButton removeSelected,addNew, clearSel, closePan;
+
     
     public CoOwnersPanel() {
+
+
         setLayout(new BorderLayout(8,8));
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
 
@@ -49,6 +54,7 @@ public class CoOwnersPanel extends JPanel {
         south.add(clearSel);
         south.add(closePan);
         add(south, BorderLayout.SOUTH);
+
 
     }
 
@@ -83,6 +89,7 @@ public class CoOwnersPanel extends JPanel {
     public void clearSelection() {
         table.clearSelection();
     }
+
 
 }
 

@@ -65,6 +65,7 @@ public class CoOwnersController extends WindowAdapter implements ActionListener 
         switch (cmd) {
 
             case "Add new":
+                NewCoOwnerController.getInstance().setModel(model);
                 AppMediator.getCardLayout().show(AppMediator.getCards(), "newCoOwner");
                 break;
 

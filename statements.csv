@@ -10,3 +10,7 @@ statementId:DefaultId,timestamp:2025-12-12T23:20:18.910568600,amount:12.0,descri
 statementId:DefaultId,timestamp:2025-12-15T20:34:36.699350900,amount:9.92,description:Withdrawal,iban1:GR1701851426,iban2:,balanceAfter1:60.0,balanceAfter2:,transactionId:DefaultId
 statementId:DefaultId,timestamp:2025-12-15T21:06:41.676916200,amount:2931.45,description:Electricity,iban1:GR1876026831,iban2:GR1534612679,balanceAfter1:2471.6899999999996,balanceAfter2:3875.88,transactionId:DefaultId
 statementId:DefaultID....,timestamp:2025-12-15T21:46:37.958149400,amount:1.5,description:Fauk,iban1:GR1701851426,iban2:GR1337393342,balanceAfter1:58.5,balanceAfter2:4111.60,transactionId:DefaultID....
+statementId:defaultID,timestamp:2025-12-17T11:30:50.106153100,amount:1000.0,description:DEPOSIT:DEPOSIT:DEPOSIT:DEPOSIT:Test Deposit,iban1:GR1701851426,iban2:,balanceAfter1:-941.5,balanceAfter2:,transactionId:defaultID
+statementId:defaultID,timestamp:2025-12-17T12:04:19.932428500,amount:1000.0,description:Test Deposit,iban1:GR1013290435,iban2:,balanceAfter1:4481.45,balanceAfter2:,transactionId:defaultID
+statementId:defaultID,timestamp:2025-12-17T12:12:30.805404800,amount:1000.0,description:DEPOSIT:Test Deposit,iban1:GR1701851426,iban2:,balanceAfter1:58.5,balanceAfter2:,transactionId:defaultID
+statementId:defaultID,timestamp:2025-12-17T12:43:18.714538300,amount:90.0,description:Test2,iban1:GR1377937266,iban2:,balanceAfter1:9095.86,balanceAfter2:,transactionId:defaultID

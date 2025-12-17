@@ -24,7 +24,7 @@ public class Withdrawal extends Transaction {
     public String getType() { return "WITHDRAWAL"; }
 
     @Override
-    public void createStatement(BankAcount Source, BankAcount Target) {
+    protected void createStatement(BankAcount Source, BankAcount Target) {
         String[] ibansInvolved = {sourceIBAN,""};
         double[] remainingBalances = {Source.getAccountBalance(),0.0};
         Statement accountStatements = new Statement(super.getTransactionId(),LocalDateTime.now(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());

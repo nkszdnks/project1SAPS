@@ -10,7 +10,7 @@ import java.awt.*;
 import javax.swing.*;;
 
 // Popup Using JDialog
-class AccountDetailsDialog extends JDialog {
+public class AccountDetailsDialog extends JDialog {
     AccountDetailsDialog(Window owner, String iban, String type, String balance, String interest, BankAcount b) {
         super(owner, "Account Details", ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

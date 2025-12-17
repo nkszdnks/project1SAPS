@@ -37,7 +37,7 @@ public abstract class Transaction {
 
     public abstract String getType();
 
-    public abstract void createStatement(BankAcount Source, BankAcount Target);
+    protected abstract void createStatement(BankAcount Source, BankAcount Target);
 
     public abstract void Transact();
 }

@@ -524,7 +524,7 @@ AccountID:ACC522,IBAN:GR1869996358,InterestRate:1.0,Balance:9058.64,DateCreated:
 AccountID:ACC523,IBAN:GR1899647834,InterestRate:1.0,Balance:6845.77,DateCreated:2024-09-16,AccountType:BUSINESS,MainOwnerID:BIZ00026,SecondaryOwnerIDs:,MaintenanceFee:5.0
 AccountID:ACC524,IBAN:GR1782253079,InterestRate:1.0,Balance:3202.85,DateCreated:2024-05-21,AccountType:PERSONAL,MainOwnerID:U022,SecondaryOwnerIDs:,MaintenanceFee:
 AccountID:ACC525,IBAN:GR1806608375,InterestRate:1.0,Balance:9474.28,DateCreated:2024-10-24,AccountType:BUSINESS,MainOwnerID:BIZ00082,SecondaryOwnerIDs:,MaintenanceFee:5.0
-AccountID:ACC526,IBAN:GR1013290435,InterestRate:1.0,Balance:3481.45,DateCreated:2024-01-27,AccountType:PERSONAL,MainOwnerID:U002,SecondaryOwnerIDs:U032|,MaintenanceFee:
+AccountID:ACC526,IBAN:GR1013290435,InterestRate:1.0,Balance:4481.45,DateCreated:2024-01-27,AccountType:PERSONAL,MainOwnerID:U002,SecondaryOwnerIDs:U032|,MaintenanceFee:
 AccountID:ACC527,IBAN:GR1130645774,InterestRate:1.0,Balance:624.56,DateCreated:2024-01-08,AccountType:BUSINESS,MainOwnerID:BIZ00102,SecondaryOwnerIDs:,MaintenanceFee:5.0
 AccountID:ACC528,IBAN:GR1126951307,InterestRate:1.0,Balance:3415.97,DateCreated:2024-05-20,AccountType:PERSONAL,MainOwnerID:U015,SecondaryOwnerIDs:,MaintenanceFee:
 AccountID:ACC529,IBAN:GR1132190551,InterestRate:1.0,Balance:6602.85,DateCreated:2024-02-24,AccountType:BUSINESS,MainOwnerID:BIZ00151,SecondaryOwnerIDs:,MaintenanceFee:5.0
@@ -532,7 +532,7 @@ AccountID:ACC530,IBAN:GR1209154111,InterestRate:1.0,Balance:5454.65,DateCreated:
 AccountID:ACC531,IBAN:GR1639826976,InterestRate:1.0,Balance:6833.32,DateCreated:2024-04-02,AccountType:BUSINESS,MainOwnerID:BIZ00185,SecondaryOwnerIDs:,MaintenanceFee:5.0
 AccountID:ACC532,IBAN:GR1586733537,InterestRate:1.0,Balance:1498.17,DateCreated:2024-07-10,AccountType:PERSONAL,MainOwnerID:U108,SecondaryOwnerIDs:,MaintenanceFee:
 AccountID:ACC533,IBAN:GR1844436644,InterestRate:1.0,Balance:2179.26,DateCreated:2024-09-23,AccountType:BUSINESS,MainOwnerID:BIZ00181,SecondaryOwnerIDs:,MaintenanceFee:5.0
-AccountID:ACC534,IBAN:GR1377937266,InterestRate:1.0,Balance:9005.86,DateCreated:2024-04-01,AccountType:PERSONAL,MainOwnerID:U006,SecondaryOwnerIDs:U170|U154|,MaintenanceFee:
+AccountID:ACC534,IBAN:GR1377937266,InterestRate:1.0,Balance:9095.86,DateCreated:2024-04-01,AccountType:PERSONAL,MainOwnerID:U006,SecondaryOwnerIDs:U170|U154|,MaintenanceFee:
 AccountID:ACC535,IBAN:GR1762473601,InterestRate:1.0,Balance:5849.9,DateCreated:2024-11-28,AccountType:BUSINESS,MainOwnerID:BIZ00117,SecondaryOwnerIDs:,MaintenanceFee:5.0
 AccountID:ACC536,IBAN:GR1842047834,InterestRate:1.0,Balance:6586.39,DateCreated:2024-08-04,AccountType:PERSONAL,MainOwnerID:U112,SecondaryOwnerIDs:U095|,MaintenanceFee:
 AccountID:ACC537,IBAN:GR1417653313,InterestRate:1.0,Balance:4981.04,DateCreated:2024-01-24,AccountType:BUSINESS,MainOwnerID:BIZ00034,SecondaryOwnerIDs:,MaintenanceFee:5.0

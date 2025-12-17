@@ -14,7 +14,7 @@ public class Statement {
     private double[] balanceAfter;
     private String description;
     private String[] ibansInvolved = new String[2];
-    private String transactionId; // connection to Transaction
+    private String transactionId;// connection to Transaction
 
     public Statement(String statementId, LocalDateTime timestamp, double amount,
                      double[] balanceAfter, String description,String[] ibansInvolved, String transactionId) {

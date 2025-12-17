@@ -1,5 +1,7 @@
 package swinglab;
 
+import swinglab.Contollers.AdminRequestsController;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -61,8 +63,10 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
         }
         else if (e.getSource()==btnAbout)
             AppMediator.getCardLayout().show(AppMediator.getCards(), "about");
-//        else if (e.getSource()==btnTransfers)
-//            AppMediator.getCardLayout().show(AppMediator.getCards(), "transfersPanel");
+        else if (e.getSource()==btnRequests) {
+            AdminRequestsController.getInstance().loadPendingRequests();
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "adminRequests");
+        }
 //        else if (e.getSource()==btnCPD)
 //            AppMediator.getCardLayout().show(AppMediator.getCards(), "changePersonalDetails");
 //        else if (e.getSource()==btnPayments)
