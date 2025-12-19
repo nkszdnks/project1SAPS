@@ -7,8 +7,10 @@ import Entities.Transactions.TransactionStatus;
 import Entities.Users.Admin;
 import Entities.Users.Customer;
 import Managers.TransactionManager;
+import swinglab.AppMediator;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Random;
 
 public class DepositAdminRequest extends AdminRequest {
@@ -21,7 +23,7 @@ public class DepositAdminRequest extends AdminRequest {
 
     @Override
     public void acceptRequest() {
-        Deposit deposit = new Deposit("defaultID", LocalDateTime.now(),getAmount(),getDescription(),getCustomer().getUserId(), TransactionStatus.PENDING,getBankAccount());
+        Deposit deposit = new Deposit("defaultID",AppMediator.getToday().atTime(LocalTime.now()),getAmount(),getDescription(),getCustomer().getUserId(), TransactionStatus.PENDING,getBankAccount());
         TransactionManager.getInstance().Transact(deposit);
         setRequestStatus(RequestStatus.ACCEPTED);
     }

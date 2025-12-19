@@ -36,7 +36,7 @@ public class Payment extends Transaction {
     protected void createStatement(BankAcount source, BankAcount target) {
         String[] ibansInvolved = {sourceIBAN, target.getIBAN()};
         double[] remainingBalances = {source.getAccountBalance(), target.getAccountBalance()};
-        Statement accountStatements = new Statement(super.getTransactionId(),LocalDateTime.now(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
+        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
         source.addStatements(accountStatements);
         target.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);
@@ -54,6 +54,7 @@ public class Payment extends Transaction {
         bill.setStatus(BillStatus.PAID);
         setStatus(TransactionStatus.COMPLETED);
         createStatement(source, target);
+        BillManager.getInstance().billsPayed(bill);
 
     }
 }

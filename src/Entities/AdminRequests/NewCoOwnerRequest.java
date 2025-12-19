@@ -13,7 +13,7 @@ import Managers.UserManager;
 import java.time.LocalDateTime;
 
 public class NewCoOwnerRequest extends AdminRequest {
-    private PersonalAccount personalAccount;
+    private  PersonalAccount personalAccount;
     private IndividualPerson individualPerson;
 
     public NewCoOwnerRequest(Customer customer,PersonalAccount personalAccount,IndividualPerson individualPerson) {
@@ -33,6 +33,7 @@ public class NewCoOwnerRequest extends AdminRequest {
     @Override
     public void acceptRequest() {
         personalAccount.getSecondaryOwners().add(individualPerson);
+        setRequestStatus(RequestStatus.ACCEPTED);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class NewCoOwnerRequest extends AdminRequest {
 
     @Override
     public String marshal() {
-        return "RequestType:Deposit,requestID:"+getRequestID()+",description:"+getDescription()+",customerUsername:"+getCustomer().getUsername()+",iban: "+",amount: "+",status:"+String.valueOf(getRequestStatus());
+        return "RequestType:NewCoOwner,requestID:"+getRequestID()+",description:"+getDescription()+",customerUsername:"+getCustomer().getUsername()+",iban:"+getPersonalAccount().getIBAN()+",status:"+String.valueOf(getRequestStatus())+",coOwnerFullName:"+getIndividualPerson().getFirstName()+getIndividualPerson().getLastName();
     }
 
 

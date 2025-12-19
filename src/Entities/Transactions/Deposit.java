@@ -4,8 +4,10 @@ import Entities.Accounts.BankAcount;
 import Entities.Accounts.Statements.Statement;
 import Managers.AccountManager;
 import Managers.StatementManager;
+import swinglab.AppMediator;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Deposit extends Transaction {
 
@@ -27,7 +29,7 @@ public class Deposit extends Transaction {
     protected void createStatement(BankAcount Source, BankAcount Target) {
         String[] ibansInvolved = {Source.getIBAN(),""};
         double[] remainingBalances = {Source.getAccountBalance(),0.0};
-        Statement accountStatements = new Statement(super.getTransactionId(),LocalDateTime.now(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
+        Statement accountStatements = new Statement(super.getTransactionId(), AppMediator.getToday().atTime(LocalTime.now()),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
         Source.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);
     }

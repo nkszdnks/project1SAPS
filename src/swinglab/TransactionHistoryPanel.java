@@ -46,6 +46,8 @@ public class TransactionHistoryPanel extends JPanel {
         };
         table = new JTable(model);
         table.setFillsViewportHeight(true);
+        table.setGridColor(Color.orange);
+        table.setRowHeight(25);
         add(new JScrollPane(table), BorderLayout.CENTER);
         
         // 🔹 Apply custom renderer for the "Amount" column

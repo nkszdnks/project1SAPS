@@ -47,7 +47,7 @@ public class CoOwnersController extends WindowAdapter implements ActionListener 
 
         for (IndividualPerson p : model.getSecondaryOwners()) {
             view.addCoOwnerRow(
-                    p.getFirstName()+p.getLastName(),
+                    p.getFirstName()+" "+p.getLastName(),
                     p.getAfm()
             );
         }

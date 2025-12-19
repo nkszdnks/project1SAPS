@@ -3,6 +3,7 @@ package swinglab;
 import Entities.Users.User;
 
 import java.awt.CardLayout;
+import java.time.LocalDate;
 
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ public class AppMediator {
 		private static User CurrentUser;
 		
 		private static BankFrame bank;
+        private static LocalDate today =  LocalDate.now();
 		private static CardLayout cardLayout;
 		private static JPanel cards;  
 		private static String acount_IBAN;
@@ -55,4 +57,13 @@ public class AppMediator {
 		public static void setAcount_IBAN(String acount_IBAN) {
 			AppMediator.acount_IBAN = acount_IBAN;
 		}
+
+        public static void setToday(LocalDate today) {
+           AppMediator.today = today;
+           bank.date.setText("Date: " + today.toString());
+        }
+
+        public static LocalDate getToday() {
+           return today;
+        }
 }

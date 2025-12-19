@@ -7,8 +7,10 @@ import Entities.Transactions.Requests.TransactionRequest;
 import Entities.Transactions.TransactionStatus;
 import Entities.checks.*;
 import Managers.TransactionManager;
+import swinglab.AppMediator;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class PaymentRail {
     private TransactionCheck checks;
@@ -32,7 +34,8 @@ public class PaymentRail {
         try {
             checks.handle(req);
         } catch (IllegalStateException e) {
-            return "Transfer failed. Reason:"+ e.getMessage();
+
+            return "Payment failed. Reason:"+ e.getMessage();
         }
 
 //        // 2) Strategy: fee computation
@@ -40,7 +43,7 @@ public class PaymentRail {
 //        double fee = feeStrategy.computeFee(req);
         double fee = 0.0;
         // ⭐ Use your TransferBuilder with flow interface
-        Payment payment = new Payment("DefaultId",LocalDateTime.now(),req.getAmount(),req.getReason(),req.getExecutorID(), TransactionStatus.PENDING,req.getFromIban(),((PaymentRequest)req).getRfCode());
+        Payment payment = new Payment("DefaultId", AppMediator.getToday().atTime(LocalTime.now()),req.getAmount(),req.getReason(),req.getExecutorID(), TransactionStatus.PENDING,req.getFromIban(),((PaymentRequest)req).getRfCode());
         TransactionManager.getInstance().Transact(payment);
         if(payment.getStatus() == TransactionStatus.FAILED){
             return "Transfer failed!!!";

@@ -5,8 +5,10 @@ import Entities.Transactions.TransactionStatus;
 import Entities.Transactions.Withdrawal;
 import Entities.checks.*;
 import Managers.TransactionManager;
+import swinglab.AppMediator;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class WithdrawlRail {
     private TransactionCheck checks;
@@ -36,7 +38,7 @@ public class WithdrawlRail {
 //        double fee = feeStrategy.computeFee(req);
         double fee = 0.0;
         // ⭐ Use your TransferBuilder with flow interface
-        Withdrawal withdrawal = new Withdrawal("DefaultId", LocalDateTime.now(),req.getAmount(),req.getReason(),req.getExecutorID(), TransactionStatus.PENDING,req.getFromIban());
+        Withdrawal withdrawal = new Withdrawal("DefaultId", AppMediator.getToday().atTime(LocalTime.now()),req.getAmount(),req.getReason(),req.getExecutorID(), TransactionStatus.PENDING,req.getFromIban());
         TransactionManager.getInstance().Transact(withdrawal);
         if(withdrawal.getStatus() == TransactionStatus.FAILED){
             return "Transfer failed!!!";

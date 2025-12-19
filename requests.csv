@@ -1,3 +1,10 @@
 RequestType:Deposit,requestID:DEPOSIT:Test Depositdefault ID,description:DEPOSIT:Test Deposit,customerUsername:User1,iban:GR1701851426,amount:1000.0,status:REJECTED
 RequestType:Deposit,requestID:Test Depositdefault ID,description:Test Deposit,customerUsername:User2,iban:GR1013290435,amount:1000.0,status:REJECTED
 RequestType:Deposit,requestID:Test2default ID,description:Test2,customerUsername:User6,iban:GR1377937266,amount:90.0,status:ACCEPTED
+RequestType:NewCoOwner,requestID:U006defaultID,description:New Co-Owner,customerUsername:User6,iban:GR1377937266,status:ACCEPTED,coOwnerFullName:First1Last1
+RequestType:NewCoOwner,requestID:U001defaultID,description:New Co-Owner,customerUsername:User1,iban:GR1701851426,status:ACCEPTED,coOwnerFullName:First1Last1
+RequestType:NewAccount,requestID:U005defaultID432,description:New Account,customerUsername:User5,status:ACCEPTED,coOwnersAfm:328141224|,initialDeposit:100.0
+RequestType:NewAccount,requestID:U001defaultID61,description:New Account,customerUsername:User1,status:ACCEPTED,coOwnersAfm:250699142|756247160|,initialDeposit:567.9
+RequestType:NewAccount,requestID:U001defaultID33,description:New Account,customerUsername:User1,status:ACCEPTED,coOwnersAfm:,initialDeposit:1000.0
+RequestType:NewAccount,requestID:U001defaultID48,description:New Account,customerUsername:User1,status:REJECTED,coOwnersAfm:,initialDeposit:1.0E7
+RequestType:Deposit,requestID:From Daddydefault ID,description:From Daddy,customerUsername:User1,iban:GR1876026831,amount:500.0,status:ACCEPTED

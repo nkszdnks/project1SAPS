@@ -18,7 +18,7 @@ public class Statement {
 
     public Statement(String statementId, LocalDateTime timestamp, double amount,
                      double[] balanceAfter, String description,String[] ibansInvolved, String transactionId) {
-        this.statementId = statementId;
+        this.statementId = "SID"+String.valueOf(timestamp.getMinute())+String.valueOf(timestamp.getSecond());
         this.timestamp = timestamp;
         this.amount = amount;
         this.balanceAfter = balanceAfter;

@@ -7,7 +7,7 @@ public class FactoryDAO {
     private static final String usersFile = "users.csv";
     private static final String acountsFile = "accounts.csv";
     private static final String statementsFile = "statements.csv";
-    private static final String[] standingOrdersFiles = {"activeOrders.csv","pausedOrders.csv","canceledOrders.csv"};
+    private static final String[] standingOrdersFiles = {"activeOrders.csv","expiredOrders.csv","failedOrders.csv"};
     private static final String billsFile = "bills.csv";
     private static final String requestsFile = "requests.csv";
 

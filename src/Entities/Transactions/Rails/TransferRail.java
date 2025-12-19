@@ -14,6 +14,7 @@ import Managers.TransactionManager;
 import swinglab.AppMediator;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class TransferRail {
     private TransactionCheck checks;
@@ -51,7 +52,7 @@ public class TransferRail {
                 .setReason(req.getReason())
                 .setExecutorID(AppMediator.getUser().getUserId())
                 .setStatus(TransactionStatus.PENDING)
-                .setTimestamp(LocalDateTime.now())
+                .setTimestamp(AppMediator.getToday().atTime(LocalTime.now()))
                 .setTransactionId("DefaultID....")
                 .build();
         TransactionManager.getInstance().Transact(transfer);

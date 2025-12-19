@@ -1,6 +1,7 @@
 package swinglab;
 
 import swinglab.Contollers.AdminRequestsController;
+import swinglab.Contollers.AllStatementsController;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,7 +18,7 @@ import javax.swing.SwingConstants;
 
 class AdminDashboardPanel extends JPanel implements ActionListener{
 
-    JButton btnViewAccounts, btnAbout, btnLogout,btnViewStatements,btnRequests;
+    JButton btnViewAccounts, btnAbout, btnLogout,btnViewStatements,btnRequests,btnSimulateTime;
 
     AdminDashboardPanel() {
         setLayout(new BorderLayout(10,10)); //(int hgap, int vgap)
@@ -33,6 +34,7 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
         btnLogout = new JButton("Logout");
         btnViewStatements = new JButton("View Statements");
         btnRequests = new JButton("Requests");
+        btnSimulateTime = new JButton("Simulate Time");
 
 
         center.add(btnViewAccounts);
@@ -40,6 +42,7 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
         center.add(btnLogout);
         center.add(btnViewStatements);
         center.add(btnRequests);
+        center.add(btnSimulateTime);
 
 
         center.setPreferredSize(new Dimension(200, center.getPreferredSize().height));
@@ -52,6 +55,7 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
         btnLogout.addActionListener(this);
         btnViewStatements.addActionListener(this);
         btnRequests.addActionListener(this);
+        btnSimulateTime.addActionListener(this);
 
     }
 
@@ -67,8 +71,13 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
             AdminRequestsController.getInstance().loadPendingRequests();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "adminRequests");
         }
-//        else if (e.getSource()==btnCPD)
-//            AppMediator.getCardLayout().show(AppMediator.getCards(), "changePersonalDetails");
+        else if (e.getSource()==btnSimulateTime) {
+            AppMediator.getCardLayout().show(AppMediator.getCards(),"simulateTime");
+        }
+        else if (e.getSource()==btnViewStatements) {
+            AllStatementsController.getInstance().loadStatements();
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "allStatements");
+        }
 //        else if (e.getSource()==btnPayments)
 //            AppMediator.getCardLayout().show(AppMediator.getCards(), "payments");
 //        else if (e.getSource()==btnESO)

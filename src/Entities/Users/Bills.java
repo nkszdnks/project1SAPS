@@ -102,8 +102,8 @@ public class Bills  {
         return String.valueOf(
                 "billNumber:" + getBillNumber() +
                         ",RF:" + getRF() +
-                        ",issuerVat:" + (getIssuer() != null ? getIssuer().getVAT() : "null") +
-                        ",customerVat:" + (getCustomer() != null ? getCustomer().getVAT() : "null") +
+                        ",issuerID:" + (getIssuer() != null ? getIssuer().getUserId() : "null") +
+                        ",customerID:" + (getCustomer() != null ? getCustomer().getUserId() : "null") +
                         ",amount:" + getAmount() +
                         ",issueDate:" + getIssueDate() +
                         ",dueDate:" + getDueDate()+
@@ -126,10 +126,10 @@ public class Bills  {
         double amount = Double.parseDouble(map.get("amount"));
         LocalDate issueDate = LocalDate.parse(map.get("issueDate"));
         LocalDate dueDate = LocalDate.parse(map.get("dueDate"));
-        String  issuerVat = map.get("issuerVat");
-        String  customerVat = map.get("customerVat");
-        Customer customer = UserManager.getInstance().findCustomerByVAT(customerVat);
-        Business issuer = (Business)UserManager.getInstance().findCustomerByVAT(issuerVat);
+        String  issuerID = map.get("issuerID");
+        String  customerID = map.get("customerID");
+        Customer customer = UserManager.getInstance().findCustomerByID(customerID);
+        Business issuer = (Business)UserManager.getInstance().findCustomerByID(issuerID);
 
         return new Bills(RF,billNumber,amount,issuer,customer,issueDate,dueDate,status);
 

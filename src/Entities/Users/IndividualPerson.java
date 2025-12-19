@@ -37,6 +37,11 @@ public class IndividualPerson extends Customer {
                 ",vatNumber:" + getVAT();
     }
 
+    @Override
+    public String getFullName() {
+        return getFirstName()+" "+getLastName();
+    }
+
 /*
     public  static IndividualPerson unmarshal(HashMap<String,String> map) {
         return new IndividualPerson(

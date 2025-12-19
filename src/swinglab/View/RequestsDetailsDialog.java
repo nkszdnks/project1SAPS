@@ -2,9 +2,8 @@ package swinglab.View;
 
 import Entities.Accounts.BankAcount;
 import Entities.Accounts.PersonalAccount;
-import Entities.AdminRequests.AdminRequest;
-import Entities.AdminRequests.DepositAdminRequest;
-import Entities.AdminRequests.NewCoOwnerRequest;
+import Entities.AdminRequests.*;
+import Entities.Users.IndividualPerson;
 import swinglab.AppMediator;
 import swinglab.Contollers.CoOwnersController;
 import swinglab.Contollers.TransactionHistoryController;
@@ -90,10 +89,39 @@ public class RequestsDetailsDialog extends JDialog implements ActionListener {
             c.gridx = 1; c.gridy = 7; content.add(new JTextField(newCoOwnerRequest.getIndividualPerson().getAfm(), 22) {{
                 setEditable(false);
             }}, c);
-            c.gridx = 0; c.gridy = 7; content.add(new JLabel("Phone:"), c);
-            c.gridx = 1; c.gridy = 7; content.add(new JTextField(newCoOwnerRequest.getIndividualPerson().getPhoneNumber(), 22) {{
+            c.gridx = 0; c.gridy = 8; content.add(new JLabel("Phone:"), c);
+            c.gridx = 1; c.gridy = 8; content.add(new JTextField(newCoOwnerRequest.getIndividualPerson().getPhoneNumber(), 22) {{
                 setEditable(false);
             }}, c);
+            c.gridx = 0; c.gridy = 9; content.add(new JLabel("Iban:"), c);
+            c.gridx = 1; c.gridy = 9; content.add(new JTextField(newCoOwnerRequest.getPersonalAccount().getIBAN(), 22) {{
+                setEditable(false);
+            }}, c);
+
+        }
+        else if(adminRequest.getRequestType().equals("NewAccount")){
+            // Row 2
+            NewAccountRequest newAccountRequest = (NewAccountRequest)adminRequest;
+            c.gridx = 0; c.gridy = 5; content.add(new JLabel("Initial Deposit:"), c);
+            c.gridx = 1; c.gridy = 5; content.add(new JTextField(String.valueOf(newAccountRequest.getInitialDeposit()), 22) {{
+                setEditable(false);
+            }}, c);
+            int i = 0;
+            for(IndividualPerson coOwner:newAccountRequest.getCoOwners()) {
+
+                c.gridx = 0;
+                c.gridy = i+6;
+                content.add(new JLabel("Co Owner's "+String.valueOf(i+1)+" Afm:"), c);
+                c.gridx = 1;
+                c.gridy =i+6;
+                content.add(new JTextField(coOwner.getAfm(), 22) {{
+                    setEditable(false);
+                }}, c);
+                i++;
+
+
+            }
+
 
         }
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -109,7 +137,7 @@ public class RequestsDetailsDialog extends JDialog implements ActionListener {
         add(buttons, BorderLayout.SOUTH);
 
         c.gridwidth = 2;
-        c.gridx = 0; c.gridy = 8; c.anchor = GridBagConstraints.EAST;
+        c.gridx = 0; c.gridy = 10; c.anchor = GridBagConstraints.EAST;
         content.add(buttons, c);
         rejectbtn.addActionListener(this);
         acceptbtn.addActionListener(this);
@@ -118,6 +146,10 @@ public class RequestsDetailsDialog extends JDialog implements ActionListener {
         setLocationRelativeTo(owner);
 
         close.addActionListener(e -> dispose());
+        if(adminRequest.getRequestStatus().equals(RequestStatus.REJECTED)||adminRequest.getRequestStatus().equals(RequestStatus.ACCEPTED)){
+            rejectbtn.setVisible(false);
+            acceptbtn.setVisible(false);
+        }
 
     }
 
@@ -129,6 +161,7 @@ public class RequestsDetailsDialog extends JDialog implements ActionListener {
                     "Request accepted","Success",
                     JOptionPane.INFORMATION_MESSAGE);
             acceptbtn.setVisible(false);
+            rejectbtn.setVisible(false);
         }
         else if(e.getSource() == rejectbtn){
             adminRequest.rejectRequest();
@@ -136,7 +169,7 @@ public class RequestsDetailsDialog extends JDialog implements ActionListener {
                     "Request rejected","Success",
                     JOptionPane.INFORMATION_MESSAGE);
             acceptbtn.setVisible(false);
-
+            rejectbtn.setVisible(false);
         }
     }
 }

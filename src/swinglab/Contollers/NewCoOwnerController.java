@@ -25,7 +25,8 @@ public class NewCoOwnerController {
     }
     public static NewCoOwnerController getInstance(){
         if(instance == null){
-            return new NewCoOwnerController();
+            instance = new NewCoOwnerController();
+            return instance;
         }
         return instance;
     }

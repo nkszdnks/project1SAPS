@@ -19,8 +19,11 @@ public class StatementManager implements Manager {
         factoryDAO = FactoryDAO.getInstance();
         statementDAO = factoryDAO.getStatementsDAO();
     }
-    
-    
+
+    public ArrayList<Statement> getStatements() {
+        return statements;
+    }
+
     public static StatementManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new StatementManager();

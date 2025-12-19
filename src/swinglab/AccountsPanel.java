@@ -54,6 +54,7 @@ public class AccountsPanel extends JPanel {
 
         table = new JTable(model);
         table.setFillsViewportHeight(true);
+        table.setRowHeight(20);
         add(new JScrollPane(table), BorderLayout.CENTER);
 
         JPanel south = new JPanel(new FlowLayout(FlowLayout.RIGHT));

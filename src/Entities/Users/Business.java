@@ -32,6 +32,11 @@ public class Business extends Customer {
     }
 
     @Override
+    public String getFullName() {
+        return getBusinessName();
+    }
+
+    @Override
     public String marshal() {
         return  "userId:" + getUserId() +
                 ",username:" + getUsername() +

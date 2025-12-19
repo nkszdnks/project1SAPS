@@ -2,14 +2,13 @@ package Entities.AdminRequests;
 
 import Entities.Accounts.AccountFactory;
 import Entities.Accounts.BankAcount;
-import Entities.Users.Admin;
-import Entities.Users.Business;
-import Entities.Users.Customer;
-import Entities.Users.IndividualPerson;
+import Entities.Accounts.PersonalAccount;
+import Entities.Users.*;
 import Managers.AccountManager;
 import Managers.UserManager;
 import com.sun.net.httpserver.Request;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class AdminRequest {
@@ -85,25 +84,37 @@ public abstract class AdminRequest {
                 return depositAdminRequest;
 
 
-//            case "Add Co-Owner":
-//                return new Business(
-//                        map.get("userId"),
-//                        map.get("username"),
-//                        map.get("passwordHash"),
-//                        map.get("email"),
-//                        map.get("phone"),
-//                        map.get("businessName"),
-//                        map.get("afm"),
-//                        map.get("vatNumber")
-//                );
-//
-//            case "New Account":
-//                return new Admin(
-//                        map.get("userId"),
-//                        map.get("username"),
-//                        map.get("passwordHash"),
-//                        map.get("employeeId")
-//                );
+            case "NewCoOwner":
+                Customer adder = (Customer)UserManager.getInstance().findUser(map.get("customerUsername"));
+                PersonalAccount personalAccount = (PersonalAccount) AccountManager.getInstance().findAccountByIBAN(map.get("iban"));
+                IndividualPerson newCoOwner = UserManager.getInstance().findUserByFullName(map.get("coOwnerFullName"));
+                NewCoOwnerRequest newCoOwnerRequest = new NewCoOwnerRequest(
+                        adder,
+                        personalAccount,
+                        newCoOwner
+                );
+                newCoOwnerRequest.setRequestStatus(RequestStatus.valueOf(map.get("status")));
+                return newCoOwnerRequest;
+
+            case "NewAccount":
+                Customer ad = (Customer)UserManager.getInstance().findUser(map.get("customerUsername"));
+                ArrayList<IndividualPerson> newCoOwners = new ArrayList<>();
+                // Secondary Owners (split by "|")
+                String secStr = map.get("coOwnersAfm");
+                String[] temp = secStr.split("\\|", -1);
+                for (String coOwnerAfm : temp) {
+                    IndividualPerson newCoOwnersObj = UserManager.getInstance().findUserByAfm(coOwnerAfm);
+                    if (newCoOwnersObj != null) {
+                        newCoOwners.add(newCoOwnersObj);
+                    }
+                    }
+                NewAccountRequest newAccountRequest = new NewAccountRequest(
+                        ad,
+                        Double.parseDouble(map.get("initialDeposit")),
+                        newCoOwners
+                );
+                newAccountRequest.setRequestStatus(RequestStatus.valueOf(map.get("status")));
+                return newAccountRequest;
 
             default:
                 throw new RuntimeException("Unknown role in CSV: " + type);

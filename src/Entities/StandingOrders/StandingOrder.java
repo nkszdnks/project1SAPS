@@ -5,37 +5,53 @@ import java.util.HashMap;
 
 public abstract class StandingOrder {
 
-    protected int orderId;
+    protected String orderId;
+    protected String executorID;
     protected String title;
     protected String description;
-    protected FrequencyType frequency;
     protected LocalDate startDate;
     protected LocalDate endDate;
     protected double maxAmount;
     protected OrderStatus status;
-    private int attempts=0;
+    protected int attempts=0;
     private String chargeIBAN;
+    private LocalDate executionDate;
+    protected double executionFee;
+    protected double amount;
+    private String failureReason;
 
-    public StandingOrder(int orderId, String title, String description,
-                         FrequencyType frequency, LocalDate startDate,
-                         LocalDate endDate, double maxAmount, OrderStatus status, String chargeIBAN) {
+    public StandingOrder(String executorID,String orderId, String title, String description, LocalDate startDate,
+                         LocalDate endDate, double maxAmount, OrderStatus status,String chargeIBAN,int attempts,double executionFee) {
 
+        this.executorID =  executorID;
         this.orderId = orderId;
         this.title = title;
         this.description = description;
-        this.frequency = frequency;
         this.startDate = startDate;
         this.endDate = endDate;
         this.maxAmount = maxAmount;
         this.status = status;
-        this.attempts = 0;
+        this.attempts = attempts;
         this.chargeIBAN = chargeIBAN;
+        this.executionFee =  executionFee;
     }
 
-    public int getOrderId() { return orderId; }
+    public void setAttempts(int attempts) {
+        this.attempts = attempts;
+    }
+
+    public abstract void computeNextExecutionDate(LocalDate today);
+    public void setExecutionDate(LocalDate executionDate) {
+        this.executionDate = executionDate;
+    }
+
+    public LocalDate getExecutionDate() {
+        return executionDate;
+    }
+
+    public String getOrderId() { return orderId; }
     public String getTitle() { return title; }
     public String getDescription() { return description; }
-    public FrequencyType getFrequency() { return frequency; }
     public LocalDate getStartDate() { return startDate; }
     public LocalDate getEndDate() { return endDate; }
     public double getMaxAmount() { return maxAmount; }
@@ -50,17 +66,30 @@ public abstract class StandingOrder {
     }
 
     public abstract String getType();
+    public abstract boolean executeOrder();
+    public abstract double getAmount();
+    public  String getFailureReason() { return failureReason; }
+
+    public void setFailureReason(String failureReason) {
+        this.failureReason = failureReason;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 
     // Key:value CSV marshal
     public String marshalBase() {
-        return "orderId:" + orderId +
+        return  "executorID:" + executorID +
+                ",orderId:" + orderId +
                 ",title:" + title +
                 ",description:" + description +
-                ",frequency:" + frequency +
                 ",startDate:" + startDate +
                 ",endDate:" + endDate +
                 ",maxAmount:" + maxAmount +
-                ",status:" + status;
+                ",executionFee:"+executionFee+
+                ",status:" + status+
+                ",attempts:" + attempts;
     }
     public abstract String marshal();
 
@@ -77,46 +106,52 @@ public abstract class StandingOrder {
         String type = map.get("type");
 
         // Base fields
-        int orderId = Integer.parseInt(map.get("orderId"));
+        String orderId = map.get("orderId");
+        String executorId = map.get("executorID");
         String title = map.get("title");
         String description = map.get("description");
-        FrequencyType frequency = FrequencyType.valueOf(map.get("frequency"));
         LocalDate start = LocalDate.parse(map.get("startDate"));
         LocalDate end = LocalDate.parse(map.get("endDate"));
         double maxAmount = Double.parseDouble(map.get("maxAmount"));
         OrderStatus status = OrderStatus.valueOf(map.get("status"));
+        int attempts = Integer.parseInt(map.get("attempts"));
+        double executionFee = Double.parseDouble(map.get("executionFee"));
 
         switch (type) {
 
             case "TRANSFER_ORDER":
                 return new TransferOrder(
+                        executorId,
                         orderId,
                         title,
                         description,
-                        frequency,
+                        Integer.parseInt(map.get("firstExecution")),
+                        Integer.parseInt(map.get("frequencyMonths")),
                         start,
                         end,
                         maxAmount,
                         status,
                         map.get("targetIBAN"),
                         Double.parseDouble(map.get("amount")),
-                        map.get("sourceIBAN")
+                        map.get("sourceIBAN"),
+                        attempts,
+                        executionFee
                 );
 
             case "PAYMENT_ORDER":
                 return new PaymentOrder(
+                        executorId,
                         orderId,
                         title,
                         description,
-                        frequency,
                         start,
                         end,
                         maxAmount,
                         status,
                         map.get("RFCode"),
-                        Double.parseDouble(map.get("amount")),
                         map.get("sourceIBAN"),
-                        LocalDate.parse(map.get("expirationDate"))
+                        attempts,
+                        executionFee
                 );
 
             default:

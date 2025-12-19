@@ -27,7 +27,7 @@ public class Withdrawal extends Transaction {
     protected void createStatement(BankAcount Source, BankAcount Target) {
         String[] ibansInvolved = {sourceIBAN,""};
         double[] remainingBalances = {Source.getAccountBalance(),0.0};
-        Statement accountStatements = new Statement(super.getTransactionId(),LocalDateTime.now(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
+        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
         Source.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);
     }

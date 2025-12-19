@@ -1,0 +1,30 @@
+
+
+executorID:TestID1,orderId:TestID,title:ΚΙΝΗΤΟ,description:Mobile Bill,startDate:2026-01-01,endDate:2026-12-31,maxAmount:60.0,executionFee:0.3,status:ACTIVE,attempts:0,type:PAYMENT_ORDER,RFCode:RF10203040,sourceIBAN:GR100202503111546001
+executorID:TestID2,orderId:TestID,title:MOBILE,description:067688307,startDate:2026-01-01,endDate:2026-12-31,maxAmount:50.0,executionFee:0.3,status:ACTIVE,attempts:0,type:PAYMENT_ORDER,RFCode:RF10203043,sourceIBAN:GR100202503111546005
+executorID:TestID3,orderId:TestID,title:ΣΤΑΘΕΡΗ,description:Statheri,startDate:2026-01-01,endDate:2026-12-31,maxAmount:60.0,executionFee:0.3,status:ACTIVE,attempts:0,type:PAYMENT_ORDER,RFCode:RF10203041,sourceIBAN:GR100202503111546002
+executorID:TestID4,orderId:TestID,title:Nova TV,description:Δημητρίου Ελένη,startDate:2026-01-01,endDate:2026-12-31,maxAmount:45.0,executionFee:0.3,status:ACTIVE,attempts:0,type:PAYMENT_ORDER,RFCode:RF10203050,sourceIBAN:GR100202503111546005
+executorID:TestID5,orderId:TestID,title:RENT,description:GIOLDASIS RENT,startDate:2026-01-01,endDate:2026-06-30,maxAmount:450.0,executionFee:0.1,status:ACTIVE,attempts:0,frequencyMonths:1,firstExecution:1,type:TRANSFER_ORDER,sourceIBAN:GR100202503111546004,targetIBAN:GR100202503111546003,amount:450.0
+executorID:TestID6,orderId:TestID,title:ENGLISH,description:ΑΓΓΛΙΚΑ Λ.,startDate:2026-01-01,endDate:2026-06-30,maxAmount:180.0,executionFee:0.1,status:ACTIVE,attempts:0,frequencyMonths:2,firstExecution:15,type:TRANSFER_ORDER,sourceIBAN:GR100202503111546002,targetIBAN:GR100202503111546006,amount:180.0
+executorID:TestID7,orderId:TestID,title:TUDELF FEE,description:DIDAKTRA K.,startDate:2026-01-01,endDate:2026-07-31,maxAmount:120.0,executionFee:1.2,status:ACTIVE,attempts:0,frequencyMonths:1,firstExecution:10,type:TRANSFER_ORDER,sourceIBAN:GR100202503111546002,targetIBAN:DU552202603111549009,amount:120.0
+executorID:TestID8,orderId:TestID,title:FRENCH,description:ΓΑΛΛΙΚΑ ΕΙΡΗΝΗΣ,startDate:2026-01-01,endDate:2026-06-30,maxAmount:100.0,executionFee:0.1,status:ACTIVE,attempts:0,frequencyMonths:1,firstExecution:28,type:TRANSFER_ORDER,sourceIBAN:GR100202503111546003,targetIBAN:GR100202503111546005,amount:100.0
+executorID:TestID9,orderId:TestID,title:ΑΠΟΤΑΜΙΕΥΣΗ,description:,startDate:2026-01-01,endDate:2026-06-30,maxAmount:100.0,executionFee:4.0,status:ACTIVE,attempts:0,frequencyMonths:1,firstExecution:1,type:TRANSFER_ORDER,sourceIBAN:GR100202503111546004,targetIBAN:US860202604132546006,amount:100.0
+
+
+
+billNumber:CO20250501001,RF:RF10203040,issuerID:TestID9,customerID:TestID2,amount:29.46,issueDate:2026-02-01,dueDate:2026-02-21,status:PENDING
+billNumber:CO20250501002,RF:RF10203041,issuerID:TestID9,customerID:TestID3,amount:37.45,issueDate:2026-02-01,dueDate:2026-02-21,status:PENDING
+billNumber:CO20250501003,RF:RF10203042,issuerID:TestID9,customerID:TestID4,amount:52.0,issueDate:2026-02-01,dueDate:2026-02-21,status:PENDING
+billNumber:CO20250501004,RF:RF10203043,issuerID:TestID9,customerID:TestID7,amount:35.99,issueDate:2026-02-01,dueDate:2026-02-21,status:PENDING
+billNumber:CO20250501005,RF:RF10203044,issuerID:TestID9,customerID:TestID5,amount:42.11,issueDate:2026-02-01,dueDate:2026-02-21,status:PENDING
+billNumber:VF20250415001,RF:RF10203045,issuerID:TestID8,customerID:TestID2,amount:45.5,issueDate:2026-02-10,dueDate:2026-03-02,status:PENDING
+billNumber:VF20250415002,RF:RF10203046,issuerID:TestID8,customerID:TestID3,amount:45.5,issueDate:2026-02-10,dueDate:2026-03-02,status:PENDING
+billNumber:VF20250415003,RF:RF10203047,issuerID:TestID8,customerID:TestID4,amount:35.6,issueDate:2026-02-10,dueDate:2026-03-02,status:PENDING
+billNumber:VF20250415004,RF:RF10203048,issuerID:TestID8,customerID:TestID7,amount:35.0,issueDate:2026-02-10,dueDate:2026-03-02,status:PENDING
+billNumber:NV20250425001,RF:RF10203049,issuerID:TestID11,customerID:TestID5,amount:102.0,issueDate:2026-03-01,dueDate:2026-03-21,status:PENDING
+billNumber:NV20250425002,RF:RF10203050,issuerID:TestID11,customerID:TestID7,amount:37.8,issueDate:2026-03-01,dueDate:2026-03-21,status:PENDING
+billNumber:CO20250601001,RF:RF10203040,issuerID:TestID9,customerID:TestID2,amount:29.3,issueDate:2026-03-15,dueDate:2026-04-04,status:PENDING
+billNumber:CO20250601002,RF:RF10203041,issuerID:TestID9,customerID:TestID3,amount:36.8,issueDate:2026-03-15,dueDate:2026-04-04,status:PENDING
+billNumber:CO20250601003,RF:RF10203042,issuerID:TestID9,customerID:TestID4,amount:52.0,issueDate:2026-03-15,dueDate:2026-04-04,status:PENDING
+billNumber:CO20250601004,RF:RF10203043,issuerID:TestID9,customerID:TestID7,amount:32.1,issueDate:2026-03-15,dueDate:2026-04-04,status:PENDING
+billNumber:CO20250601005,RF:RF10203044,issuerID:TestID9,customerID:TestID5,amount:40.0,issueDate:2026-03-15,dueDate:2026-04-04,status:PENDING

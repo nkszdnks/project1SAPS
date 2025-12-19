@@ -42,6 +42,7 @@ public abstract class Customer extends User {
     public int getNumberOfAcounts() {
         return numberOfAcounts;
     }
+    public abstract String getFullName();
 
     public void setEmail(String email) {
         this.email = email;

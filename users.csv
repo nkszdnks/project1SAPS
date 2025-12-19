@@ -401,3 +401,14 @@ userId:BIZ00199,username:business00199,passwordHash:hash,email:business00199@exa
 userId:ADM0,username:admin0,passwordHash:hash,email:,phone:,role:ADMIN,firstName:,lastName:,afm:,businessName:,employeeId:EMP0,vatNumber:
 userId:ADM1,username:admin1,passwordHash:hash,email:,phone:,role:ADMIN,firstName:,lastName:,afm:,businessName:,employeeId:EMP1,vatNumber:
 userId:ADM2,username:admin2,passwordHash:hash,email:,phone:,role:ADMIN,firstName:,lastName:,afm:,businessName:,employeeId:EMP2,vatNumber:
+userId:TestID1,username:admin,passwordHash:hash,email:,phone:,role:ADMIN,firstName:,lastName:,afm:,businessName:,employeeId:,vatNumber:
+userId:TestID2,username:ngioldasis,passwordHash:hash,email:ngioldasis@example.com,phone:690000001,role:PERSON,firstName:ΝΕΚΤΑΡΙΟΣ,lastName:ΓΙΟΛΔΑΣΗΣ,afm:067688302,businessName:,employeeId:,vatNumber:
+userId:TestID3,username:pappas,passwordHash:hash,email:pappas@example.com,phone:690000002,role:PERSON,firstName:ΝΙΚΟΣ,lastName:ΠΑΠΠΑΣ,afm:067688303,businessName:,employeeId:,vatNumber:
+userId:TestID4,username:gchalkiadakis,passwordHash:hash,email:gchalkiadakis@example.com,phone:690000003,role:PERSON,firstName:ΓΙΩΡΓΟΣ,lastName:ΧΑΛΚΙΑΔΑΚΗΣ,afm:067688304,businessName:,employeeId:,vatNumber:
+userId:TestID5,username:mteranova,passwordHash:hash,email:mteranova@example.com,phone:690000004,role:PERSON,firstName:ΜΑΡΙΑ,lastName:ΤΕΡΑΝΟΒΑ,afm:067688305,businessName:,employeeId:,vatNumber:
+userId:TestID6,username:skarakosta,passwordHash:hash,email:skarakosta@example.com,phone:690000005,role:PERSON,firstName:ΣΟΦΙΑ,lastName:ΚΑΡΑΚΩΣΤΑ,afm:067688306,businessName:,employeeId:,vatNumber:
+userId:TestID7,username:edimitriou,passwordHash:hash,email:edimitriou@example.com,phone:690000006,role:PERSON,firstName:ΕΛΕΝΗ,lastName:ΔΗΜΗΤΡΙΟΥ,afm:067688307,businessName:,employeeId:,vatNumber:
+userId:TestID8,username:vodafone,passwordHash:hash,email:vodafone@example.com,phone:690000007,role:BUSINESS,firstName:,lastName:,afm:,businessName:VODAFONE GR,employeeId:,vatNumber:CVAT00001
+userId:TestID9,username:cosmote,passwordHash:hash,email:cosmote@example.com,phone:690000008,role:BUSINESS,firstName:,lastName:,afm:,businessName:COSMOTE,employeeId:,vatNumber:CVAT00002
+userId:TestID10,username:dei,passwordHash:hash,email:dei@example.com,phone:690000009,role:BUSINESS,firstName:,lastName:,afm:,businessName:DEI,employeeId:,vatNumber:CVAT00003
+userId:TestID11,username:nova,passwordHash:hash,email:nova@example.com,phone:690000010,role:BUSINESS,firstName:,lastName:,afm:,businessName:NOVA,employeeId:,vatNumber:CVAT00004

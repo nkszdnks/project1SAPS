@@ -76,6 +76,17 @@ public class UserManager implements Manager {
         }
         return null;
     }
+    public IndividualPerson findUserByAfm(String afm) {
+        IndividualPerson p;
+        for (User usr : users) {
+            if (usr.getRole().equals(UserRole.PERSON)) {
+                p = (IndividualPerson) usr;
+                if (p.getAfm().equals(afm))
+                    return p;
+            }
+        }
+        return null;
+    }
 
     public Customer findCustomerByVAT(String VAT) {
         Customer customer;

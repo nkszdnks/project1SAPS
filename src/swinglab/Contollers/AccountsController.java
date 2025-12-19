@@ -56,7 +56,7 @@ public class AccountsController extends WindowAdapter implements ActionListener 
         for (BankAcount account : AccountManager.getInstance().getMyAccounts(model)) {
             view.addAccountRow(
                     account.getIBAN(),
-                    account.getCustomer().getUserId(),
+                    account.getCustomer().getFullName(),
                     account.getAccountBalance()
             );
         }

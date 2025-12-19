@@ -3,22 +3,22 @@ package swinglab;
 import Entities.Transactions.Rails.DepositRail;
 import Entities.Users.Customer;
 import Managers.*;
+import swinglab.AllStatementsPanel;
 import swinglab.Contollers.*;
 import swinglab.View.AdminRequestsPanel;
+import swinglab.View.SimulateTimePanel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalTime;
 
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 class BankFrame extends JFrame implements ActionListener{
 	JMenuItem miLogin,miDashboard,miBusinessDashboard,miAdminDashboard,miAccounts,miTransfers,miPayments,miAbout,miExit,miLogout,miMyBills,miViewAccounts,miViewStatements,miRequests;
 	JMenu nav;
+    JLabel date;
 	
 	
 	public BankFrame() {
@@ -31,6 +31,7 @@ class BankFrame extends JFrame implements ActionListener{
         // --- Menu bar ---
         JMenuBar bar = new JMenuBar();
         nav = new JMenu("Navigate");
+        date  = new JLabel("Date:"+String.valueOf(AppMediator.getToday()));
         miLogin = new JMenuItem("Login");
         miDashboard = new JMenuItem("Dashboard");
         miAccounts = new JMenuItem("Accounts");
@@ -76,6 +77,7 @@ class BankFrame extends JFrame implements ActionListener{
 
 
         bar.add(nav);
+        bar.add(date);
         setJMenuBar(bar);
 
         //
@@ -84,6 +86,7 @@ class BankFrame extends JFrame implements ActionListener{
         BillManager.getInstance().restore();
         StatementManager.getInstance().restore();
         AdminRequestsManager.getInstance().restore();
+        StandingOrderManager.getInstance().restore();
 
 
         //
@@ -100,6 +103,7 @@ class BankFrame extends JFrame implements ActionListener{
                 StatementManager.getInstance().save();
                 BillManager.getInstance().save();
                 AdminRequestsManager.getInstance().save();
+                StandingOrderManager.getInstance().save();
                 System.out.println("Data saved before exit.");
             }
         });
@@ -168,16 +172,25 @@ class BankFrame extends JFrame implements ActionListener{
     	CoOwnersPanel coOwnersPanel = new CoOwnersPanel();
         CoOwnersController.getInstance().setView(coOwnersPanel);
     	OpenAcountPanel newAcountPanel = new OpenAcountPanel();
+        OpenAccountController.getInstance().setView(newAcountPanel);
     	TransactionHistoryPanel transactionPanel = new TransactionHistoryPanel();
         TransactionHistoryController.getInstance().setView(transactionPanel);
     	TransfersPanel  transfersPanel = new TransfersPanel();
         IntraBankTransferPanel intraBankTransferPanel= new IntraBankTransferPanel();
         IntraBankTransferController ic = new IntraBankTransferController(intraBankTransferPanel);
+
+        SimulateTimePanel simulateTimePanel = new SimulateTimePanel();
+        SimulateTimeController simulateTimeController = new SimulateTimeController(simulateTimePanel);
+
+        AllStatementsPanel allStatementsPanel = new AllStatementsPanel();
+        AllStatementsController.getInstance().setView(allStatementsPanel);
     	
 
     	// register the panels with names
 
     	cards.add(loginPanel, "login");
+        cards.add(allStatementsPanel, "allStatements");
+        cards.add(simulateTimePanel, "simulateTime");
         cards.add(adminRequestsPanel, "adminRequests");
         cards.add(businessDashboardPanel, "businessDashboard");
         cards.add(adminDashboardPanel, "adminDashboard");
@@ -253,6 +266,8 @@ class BankFrame extends JFrame implements ActionListener{
             AccountManager.getInstance().save();
             StatementManager.getInstance().save();
             BillManager.getInstance().save();
+            AdminRequestsManager.getInstance().save();
+            StandingOrderManager.getInstance().save();
             System.exit(0);
         }
 	}

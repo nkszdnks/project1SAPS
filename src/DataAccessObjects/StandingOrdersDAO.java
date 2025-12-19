@@ -1,5 +1,7 @@
 package DataAccessObjects;
 
+import Entities.Accounts.Statements.FailedOrderStatement;
+import Entities.Accounts.Statements.Statement;
 import Entities.StandingOrders.OrderStatus;
 import Entities.StandingOrders.StandingOrder;
 
@@ -63,8 +65,8 @@ public class StandingOrdersDAO {
         }
     }
 
-    public ArrayList<StandingOrder> loadFailedStandingOrders() {
-        ArrayList<StandingOrder> activeStandingOrders = new ArrayList<>();
+    public ArrayList<FailedOrderStatement> loadFailedStandingOrders() {
+        ArrayList<FailedOrderStatement> activeStandingOrders = new ArrayList<>();
         File f = new File(standingOrdersFiles[2]);
         if (!f.exists()) return activeStandingOrders;
 
@@ -77,7 +79,7 @@ public class StandingOrdersDAO {
                 //   continue;
                 //} // skip header
                 if (line.trim().isEmpty()) continue;
-                StandingOrder acc = StandingOrder.unmarshal(line);
+                FailedOrderStatement acc = FailedOrderStatement.unmarshal(line);
                 activeStandingOrders.add(acc);
 
             }
@@ -87,10 +89,10 @@ public class StandingOrdersDAO {
         return activeStandingOrders;
     }
 
-    public void saveFailedStandingOrders(List<StandingOrder> StandingOrders) {
+    public void saveFailedStandingOrders(List<FailedOrderStatement> StandingOrders) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(standingOrdersFiles[2]))) {
             //pw.println("AccountID,IBAN,InterestRate,Balance,DateCreated,AccountType,MainOwnerID,SecondaryOwnerIDs,MaintenanceFee");
-            for (StandingOrder a : StandingOrders) {
+            for (FailedOrderStatement a : StandingOrders) {
                 pw.println(a.marshal());
             }
         } catch (IOException e) {
@@ -125,6 +127,7 @@ public class StandingOrdersDAO {
         try (PrintWriter pw = new PrintWriter(new FileWriter(standingOrdersFiles[1]))) {
             //pw.println("AccountID,IBAN,InterestRate,Balance,DateCreated,AccountType,MainOwnerID,SecondaryOwnerIDs,MaintenanceFee");
             for (StandingOrder a : StandingOrders) {
+                a.setStatus(OrderStatus.EXPIRED);
                 pw.println(a.marshal());
             }
         } catch (IOException e) {

@@ -9,6 +9,7 @@ import Entities.Users.Bills;
 import Entities.Users.Business;
 import Entities.Users.Customer;
 import Managers.Manager;
+import swinglab.AppMediator;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -22,7 +23,9 @@ public class BillManager implements Manager {
     private ArrayList<Bills> issued = new ArrayList<>();
     private ArrayList<Bills> paid = new ArrayList<>();
     private ArrayList<Bills> expired = new ArrayList<>();
-    
+    private ArrayList<Bills> futureBills = new ArrayList<>();
+
+
     private BillManager() {
         factoryDAO = FactoryDAO.getInstance();
         billsDAO = factoryDAO.getBillsDAO();
@@ -138,19 +141,43 @@ public class BillManager implements Manager {
 //            }
 //        }
 //    }
+public void restoreEachDay(LocalDate today) {
+    List<Bills> toMoveFromFuture = new ArrayList<>();
+    List<Bills> toMoveFromIssued = new ArrayList<>();
+
+    for (Bills bill : futureBills) {
+        if (!today.isBefore(bill.getIssueDate())) {
+            issued.add(bill);
+            toMoveFromFuture.add(bill);
+        }
+    }
+    for (Bills bill : issued) {
+        if(today.isAfter(bill.getDueDate())){
+            bill.setStatus(BillStatus.EXPIRED);
+            expired.add(bill);
+            toMoveFromIssued.add(bill);
+        }
+    }
+
+    futureBills.removeAll(toMoveFromFuture);
+    issued.removeAll(toMoveFromIssued);
+}
+
 
     @Override
     public void restore() {
-       billsDAO.loadBills();
+       billsDAO.loadBills(AppMediator.getToday());
        issued =(ArrayList<Bills>) billsDAO.getIssued();
        paid =(ArrayList<Bills>) billsDAO.getPaid();
        expired =(ArrayList<Bills>) billsDAO.getExpired();
+       futureBills = (ArrayList<Bills>) billsDAO.getFutureBills();
     }
     @Override
     public void save(){
         billsDAO.saveBills(issued);
         billsDAO.appendBills(paid);
         billsDAO.appendBills(expired);
+        billsDAO.appendBills(futureBills);
     }
 
 //    @Override

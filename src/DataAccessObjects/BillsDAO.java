@@ -6,6 +6,7 @@ import Entities.Users.Bills;
 import Entities.Accounts.Statements.Statement;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class BillsDAO {
     List<Bills> issued = new ArrayList<>();
     List<Bills> paid = new ArrayList<>();
     List<Bills> expired = new ArrayList<>();
+    List<Bills> futureBills = new ArrayList<>();
 
     public BillsDAO(String filePath) {
         this.filePath = filePath;
@@ -23,29 +25,43 @@ public class BillsDAO {
     // ---------------------------------------------------------
     // Load all statements
     // ---------------------------------------------------------
-    public void loadBills() {
+    public void loadBills(LocalDate today) {
 
         File file = new File(filePath);
-
         if (!file.exists()) return;
+
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-
+            issued.clear();
+            expired.clear();
+            paid.clear();
+            futureBills.clear();
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
+
                 Bills s = Bills.unmarshal(line);
+
                 switch (s.getStatus()) {
                     case BillStatus.PENDING:
-                        issued.add(s);
+                        if (!today.isBefore(s.getIssueDate())) {
+                            issued.add(s);
+                            break;
+                        }
+                        futureBills.add(s);
                         break;
+
                     case BillStatus.PAID:
                         paid.add(s);
                         break;
+
                     case BillStatus.EXPIRED:
+                        s.setStatus(BillStatus.EXPIRED);
                         expired.add(s);
                         break;
                 }
+
+
             }
 
         } catch (IOException e) {
@@ -54,6 +70,7 @@ public class BillsDAO {
 
 
     }
+
 
     // ---------------------------------------------------------
     // Save all statements (overwrite file)
@@ -91,5 +108,9 @@ public class BillsDAO {
     }
     public List<Bills> getExpired() {
         return expired;
+    }
+
+    public List<Bills> getFutureBills() {
+        return futureBills;
     }
 }
