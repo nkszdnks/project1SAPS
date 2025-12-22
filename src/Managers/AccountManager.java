@@ -49,6 +49,15 @@ public class AccountManager implements Manager {
         }
         return myAccounts;
     }
+    // Get all business accounts of a specific business
+public ArrayList<BusinessAcount> getMyBusinessAccounts(Business b) {
+    ArrayList<BusinessAcount> list = new ArrayList<>();
+    for (BankAcount acc : bankAccounts) {
+        if (acc instanceof BusinessAcount ba && acc.getCustomer().equals(b))
+            list.add(ba);
+    }
+    return list;
+}
     public ArrayList<BusinessAcount> getBusinessAccounts() {
         ArrayList<BusinessAcount> businessAccounts = new ArrayList<>();
         for(BankAcount account: bankAccounts){
