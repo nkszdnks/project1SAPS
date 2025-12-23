@@ -16,7 +16,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
-class BankFrame extends JFrame implements ActionListener{
+public class BankFrame extends JFrame implements ActionListener{
 	JMenuItem miLogin,miDashboard,miBusinessDashboard,miAdminDashboard,miAccounts,miTransfers,miPayments,miAbout,miExit,miLogout,miMyBills,miViewAccounts,miViewStatements,miRequests;
 	JMenu nav;
     JLabel date;

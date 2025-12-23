@@ -11,9 +11,10 @@ import Entities.Transactions.Transfer;
 import Entities.Users.Business;
 import Entities.Users.Customer;
 import Entities.Users.IndividualPerson;
-
-
+import Entities.Transactions.TransactionStatus;
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,24 @@ public class AccountManager implements Manager {
         }
         return myAccounts;
     }
+    // Get all business accounts of a specific business
+public ArrayList<BusinessAcount> getMyBusinessAccounts(Business b) {
+    ArrayList<BusinessAcount> list = new ArrayList<>();
+    for (BankAcount acc : bankAccounts) {
+        if (acc instanceof BusinessAcount ba && acc.getCustomer().equals(b))
+            list.add(ba);
+    }
+    return list;
+}
+    public ArrayList<BusinessAcount> getBusinessAccounts() {
+        ArrayList<BusinessAcount> businessAccounts = new ArrayList<>();
+        for(BankAcount account: bankAccounts){
+            if(account instanceof BusinessAcount businessAccount){
+                businessAccounts.add(businessAccount);
+            }
+        }
+        return businessAccounts;
+    }
 
     public void ComputeDailyInterests() {
         for (BankAcount account: bankAccounts) {
@@ -84,12 +103,57 @@ public class AccountManager implements Manager {
 
     }
 
-//    public void TaxPay(String iban) {
-//        BusinessAcount account = (BusinessAcount) findAccountByIBAN(iban);
-//        float amount = account.getMaintenanceFee();
-//        TransactionManager transactionManager = TransactionManager.getInstance();
-//        transactionManager.Transact(new Transfer(Company.getUserOfTuc(), new BusinessAcount[]{account, BusinessAccount.getBankOfTuc()},"Maintenance Tax Payment" , amount , LocalDate.now()));
-//    }
+public void TaxPay(String iban) {
+        BankAcount acc = findAccountByIBAN(iban);
+        if (!(acc instanceof BusinessAcount account)) {
+            throw new IllegalArgumentException("IBAN does not belong to a Business Account");
+        }
+
+        float fee = account.getMaintenanceFee();
+        if (fee <= 0) return; // τίποτα να χρεωθεί
+
+        if (account.getAccountBalance() < fee) {
+            throw new IllegalStateException("Insufficient balance for maintenance fee");
+        }
+         String txId = account.getIBAN();
+        //Chang to the bank's IBAN
+        String bankOfTucIBAN = "1234567890";
+
+        Transfer maintenancePayment = new Transfer(
+                txId,
+                LocalDateTime.now(),
+                fee,
+                "Maintenance Tax Payment",
+                account.getAcountID(),        // executor
+                TransactionStatus.PENDING,    // αφήνουμε το Transact() να το περάσει COMPLETED
+                account.getIBAN(),            // source
+                bankOfTucIBAN,                // target
+                0f,                           // bankFee
+                "TRANSFER"
+        );
+        maintenancePayment.Transact();
+    }
+
+        
+       
+    public void TaxPayAllBusinesses() {
+        for (BusinessAcount acc : getBusinessAccounts()) {
+            if (acc instanceof BusinessAcount) {
+                TaxPay(acc.getIBAN());          // ήδη υπάρχουσα μέθοδος
+            }
+        }
+    }
+
+    public void payInterest(){
+        for(BankAcount acc : bankAccounts){
+            double interestAmount = acc.getAccountBalance() * (acc.getInterestRate() / 100);
+            acc.setAccountBalance(acc.getAccountBalance() + interestAmount);
+        }
+        for(BusinessAcount acc : getBusinessAccounts()){
+            double interestAmount = acc.getAccountBalance() * (acc.getInterestRate() / 100);
+            acc.setAccountBalance(acc.getAccountBalance() + interestAmount);
+        }
+    }
 
     public BankAcount findAccountByIBAN(String iban) {
         for (BankAcount bankAccount : bankAccounts) {

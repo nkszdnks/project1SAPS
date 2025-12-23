@@ -1,4 +1,4 @@
-package swinglab;
+package swinglab.View;
 
 import swinglab.Contollers.AccountsController;
 import swinglab.Contollers.ActiveOrdersController;
