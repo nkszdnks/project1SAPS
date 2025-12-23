@@ -28,7 +28,9 @@ public class AccountsController extends WindowAdapter implements ActionListener 
 
     public void setModel(Customer model) {
         this.model = model;
-        loadAccounts();
+        if(model != null) {
+            loadAccounts();
+        }
 
     }
 
@@ -60,7 +62,21 @@ public class AccountsController extends WindowAdapter implements ActionListener 
                     account.getAccountBalance()
             );
         }
+        view.newAcount.setEnabled(true);
     }
+    public void loadAllAccounts() {
+        view.clearTable();
+
+        for (BankAcount account : AccountManager.getInstance().getBankAccounts()) {
+            view.addAccountRow(
+                    account.getIBAN(),
+                    account.getCustomer()!=null?account.getCustomer().getFullName():"BankOfTUC",
+                    account.getAccountBalance()
+            );
+        }
+        view.newAcount.setEnabled(false);
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -78,6 +94,10 @@ public class AccountsController extends WindowAdapter implements ActionListener 
                 break;
 
             case "Close":
+                if(model==null){
+                    AppMediator.getCardLayout().show(AppMediator.getCards(),"adminDashboard");
+                    break;
+                }
                 AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
                 break;
 

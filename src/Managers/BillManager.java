@@ -180,6 +180,18 @@ public void restoreEachDay(LocalDate today) {
         billsDAO.appendBills(futureBills);
     }
 
+    public ArrayList<Bills> getAllBills() {
+        ArrayList<Bills> all = new ArrayList<>();
+
+        all.addAll(issued);
+        all.addAll(paid);
+        all.addAll(expired);
+        all.addAll(futureBills);
+
+        return all;
+    }
+
+
 //    @Override
 //    public void save() {
 //        List<ArrayList<Bills>> sameDateCollections = new ArrayList<>();

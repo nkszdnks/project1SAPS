@@ -15,16 +15,38 @@ public class Statement {
     private String description;
     private String[] ibansInvolved = new String[2];
     private String transactionId;// connection to Transaction
+    private static long COUNTER = 0;
+    private double fee;
 
-    public Statement(String statementId, LocalDateTime timestamp, double amount,
-                     double[] balanceAfter, String description,String[] ibansInvolved, String transactionId) {
-        this.statementId = "SID"+String.valueOf(timestamp.getMinute())+String.valueOf(timestamp.getSecond());
+    public Statement( LocalDateTime timestamp, double amount,
+                     double[] balanceAfter, String description,String[] ibansInvolved, String transactionId,double fee) {
+        this.statementId =  String.format(
+                "SID-%s-%04d",
+                timestamp.toLocalDate().toString().replace("-", ""),
+                ++COUNTER
+        );
         this.timestamp = timestamp;
         this.amount = amount;
         this.balanceAfter = balanceAfter;
         this.description = description;
         this.ibansInvolved = ibansInvolved;
         this.transactionId = transactionId;
+        this.fee = fee;
+    }
+    public Statement( String statementId,LocalDateTime timestamp, double amount,
+                      double[] balanceAfter, String description,String[] ibansInvolved, String transactionId,double fee) {
+        this.statementId =  statementId;
+        this.timestamp = timestamp;
+        this.amount = amount;
+        this.balanceAfter = balanceAfter;
+        this.description = description;
+        this.ibansInvolved = ibansInvolved;
+        this.transactionId = transactionId;
+        this.fee = fee;
+    }
+
+    public void setFee(double fee) {
+        this.fee = fee;
     }
 
     public void setStatementId(String statementId) {
@@ -46,7 +68,7 @@ public class Statement {
     // ---------------------------------------------------------
     public String marshal() {
         return String.format(
-                "statementId:%s,timestamp:%s,amount:%s,description:%s,iban1:%s,iban2:%s,balanceAfter1:%s,balanceAfter2:%s,transactionId:%s",
+                "statementId:%s,timestamp:%s,amount:%s,description:%s,iban1:%s,iban2:%s,balanceAfter1:%s,balanceAfter2:%s,transactionId:%s,fee:%s",
                 statementId,
                 timestamp,
                 String.valueOf(amount),
@@ -55,7 +77,8 @@ public class Statement {
                 ibansInvolved[1] == null ? "" : ibansInvolved[1],
                 String.valueOf(balanceAfter[0]),
                 balanceAfter[1] == 0 ? "" : String.format("%.2f", balanceAfter[1]),
-                transactionId
+                transactionId,
+                fee
         );
     }
 
@@ -81,19 +104,23 @@ public class Statement {
        double[]  balanceAfter = new double[2];
        balanceAfter[0] = Double.parseDouble(map.get("balanceAfter1"));
        balanceAfter[1] = Double.parseDouble(map.get("balanceAfter2").equals("") ? "0" : map.get("balanceAfter2"));
-
-        return new Statement(
-                map.get("statementId"),
-                LocalDateTime.parse(map.get("timestamp")),
-                Double.parseDouble(map.get("amount")),
-                balanceAfter,
-                map.get("description"),
-                ibans,
-                map.get("transactionId")
-        );
+       Statement s =  new Statement(
+               map.get("statementId"),
+               LocalDateTime.parse(map.get("timestamp")),
+               Double.parseDouble(map.get("amount")),
+               balanceAfter,
+               map.get("description"),
+               ibans,
+               map.get("transactionId"),
+               Double.parseDouble(map.get("fee"))
+       );
+       s.setStatementId(map.get("statementId"));
+        return s;
     }
 
 
-
+    public double getFee() {
+        return fee;
+    }
 }
 

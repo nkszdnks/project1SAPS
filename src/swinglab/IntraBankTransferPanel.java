@@ -1,11 +1,14 @@
 package swinglab;
 
+import Entities.Accounts.BankAcount;
+
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
-public class IntraBankTransferPanel extends JPanel {
-    public final JTextField fromIban = new JTextField(20);
+public class IntraBankTransferPanel extends JPanel implements hasIbanField{
+    public final JComboBox<String> fromIbans = new JComboBox<>();
     public final JTextField toIban = new JTextField(20);
     public final JTextField amount = new JTextField(10);
     public final JTextField reason = new JTextField(20);
@@ -20,7 +23,7 @@ public class IntraBankTransferPanel extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
 
         c.gridx=0; c.gridy=0; add(new JLabel("From IBAN:"), c);
-        c.gridx=1; add(fromIban, c);
+        c.gridx=1; add(fromIbans, c);
         c.gridx=0; c.gridy=1; add(new JLabel("To IBAN (same bank):"), c);
         c.gridx=1; add(toIban, c);
         c.gridx=0; c.gridy=2; add(new JLabel("Amount (€):"), c);
@@ -38,4 +41,10 @@ public class IntraBankTransferPanel extends JPanel {
     }
 
 
+    @Override
+    public void setIbans(ArrayList<BankAcount> accounts) {
+            fromIbans.removeAllItems();
+            for (BankAcount b : accounts)
+                fromIbans.addItem(b.getIBAN());
+    }
 }

@@ -48,6 +48,6 @@ public class TransactionHistoryController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == view.closePan)
-            AppMediator.getCardLayout().show(AppMediator.getCards(),"dashboard");
+            AppMediator.getCardLayout().show(AppMediator.getCards(),"accounts");
     }
 }

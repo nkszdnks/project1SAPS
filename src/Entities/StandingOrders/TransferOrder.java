@@ -1,44 +1,62 @@
 package Entities.StandingOrders;
 
 import Entities.Transactions.Builders.TransferBuilder;
+import Entities.Transactions.Rails.PaymentRail;
+import Entities.Transactions.Rails.TransferRail;
+import Entities.Transactions.Requests.PaymentRequest;
 import Entities.Transactions.Requests.TransferRequest;
 import Entities.Transactions.Transaction;
 import Entities.Transactions.TransactionStatus;
 import Entities.checks.BalanceCheck;
 import Entities.checks.DailyLimitCheck;
 import Entities.checks.TransactionCheck;
+import Managers.AccountManager;
 import Managers.TransactionManager;
 import swinglab.AppMediator;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashMap;
 
 import static Entities.Transactions.Requests.TransferRequest.Rail.LOCAL;
 
 public class TransferOrder extends StandingOrder {
 
+    private TransferRequest.Rail rail;
     private String targetIBAN;
     private double amount;
     private int frequencyMonths;
     private int firstExecutionDay;
+    private HashMap<String, String> transferDetails = new HashMap<>();
 
-    public TransferOrder(String executorID, String orderId, String title, String description,int firstExecutionDay, int frequency,
+    public void setDetails(HashMap<String, String> Details) {
+        this.transferDetails = Details;
+    }
+
+    public TransferOrder(String executorID, String orderId, String title, String description, int firstExecutionDay, int frequency,
                          LocalDate startDate, LocalDate endDate, double maxAmount,
-                         OrderStatus status, String targetIBAN, double amount, String chargeIBAN, int attempts,double executionFee) {
+                         OrderStatus status, String targetIBAN, double amount, String chargeIBAN, int attempts, double executionFee, TransferRequest.Rail rail) {
 
-        super(executorID,orderId, title, description, startDate, endDate, maxAmount, status,chargeIBAN,attempts,executionFee);
+        super(executorID, orderId, title, description, startDate, endDate, maxAmount, status, chargeIBAN, attempts, executionFee);
         this.targetIBAN = targetIBAN;
         this.amount = amount;
         this.frequencyMonths = frequency;
         this.firstExecutionDay = firstExecutionDay;
+        this.rail = rail;
     }
 
 
-    public String getTargetIBAN() { return targetIBAN; }
-    public double getAmount() { return amount; }
+    public String getTargetIBAN() {
+        return targetIBAN;
+    }
 
-//    @Override
+    public double getAmount() {
+        return amount;
+    }
+
+
+    //    @Override
 //    public void computeNextExecutionDate(LocalDate today) {
 //
 //        setExecutionDate(firstExecutionDay.plusDays(attempts));
@@ -49,89 +67,87 @@ public class TransferOrder extends StandingOrder {
 //        }
 //
 //        }
-@Override
-public void computeNextExecutionDate(LocalDate today) {
-        if(today.isBefore(startDate)) {
-            setExecutionDate(LocalDate.MAX);
-            return;
+    @Override
+    public void computeNextExecutionDate(LocalDate today) {
+        if (today.isBefore(startDate)) {
+            today = startDate;
         }
-    LocalDate next = LocalDate.of(
-            today.getYear(),
-            today.getMonth(),
-            firstExecutionDay
-    );
+        LocalDate next = LocalDate.of(
+                today.getYear(),
+                today.getMonth(),
+                firstExecutionDay
+        );
         next = next.plusDays(attempts);
 
-    if (next.isBefore(today)) {
-        next = next.plusMonths(frequencyMonths);
+        if (next.isBefore(today)) {
+            next = next.plusMonths(frequencyMonths);
+        }
+
+        setExecutionDate(next);
     }
-
-    setExecutionDate(next);
-}
-
-
-
 
 
     @Override
-    public String getType() { return "TRANSFER_ORDER"; }
+    public String getType() {
+        return "TRANSFER_ORDER";
+    }
 
     @Override
     public boolean executeOrder() {
-        TransactionCheck checks;
-
-        var balance = new BalanceCheck();
-        var daily = new DailyLimitCheck();
-
-        balance.setNext(daily);
-
-        checks = balance;
-        TransferRequest transferRequest = new TransferRequest(getChargeIBAN(),targetIBAN,amount,LOCAL,executorID,description);
-        try {
-            checks.handle(transferRequest);
-        } catch (IllegalStateException e) {
-            setFailureReason(e.getMessage());
-            attempts++;
+        if (amount > maxAmount) {
+            setFailureReason("Amount is greater than max amount");
             return false;
         }
-        double fee = executionFee;
-        // ⭐ Use your TransferBuilder with flow interface
-        Transaction transfer = new TransferBuilder()
-                .setSourceIBAN(transferRequest.getFromIban())
-                .setBankFee(0)
-                .setType("INTRA")
-                .setTargetIBAN(transferRequest.getToIban())
-                .setAmount(transferRequest.getAmount())
-                .setReason(transferRequest.getReason())
-                .setExecutorID(AppMediator.getUser().getUserId())
-                .setStatus(TransactionStatus.PENDING)
-                .setTimestamp(AppMediator.getToday().atTime(LocalTime.now()))
-                .setTransactionId("DefaultID....")
-                .build();
-        TransactionManager.getInstance().Transact(transfer);
-        if(transfer.getStatus() == TransactionStatus.FAILED){
-            setFailureReason("Destination IBAN: "+getTargetIBAN()+" not found");
+        TransferRail transferRail = new TransferRail();
+
+
+        TransferRequest transferRequest = new TransferRequest(getChargeIBAN(), targetIBAN, amount, rail, executorID, description, executionFee);
+
+        Boolean isSuccessfull = transferRail.execute(transferRequest, transferDetails);
+        if (!isSuccessfull) {
+            setFailureReason(transferRail.getMessage());
             attempts++;
-            return false;
+        } else {
+            setAttempts(0);
         }
-        // 3) Mock execution: just compute totals and return a message
-        double debited = transferRequest.getAmount() + fee;
-        setAttempts(0);
-        return true;
-        }
+        return isSuccessfull;
+
+    }
+
 
 
 
 
     @Override
     public String marshal() {
-        return marshalBase() +
-                ",frequencyMonths:" + String.valueOf(frequencyMonths) +
-                ",firstExecution:" + String.valueOf(firstExecutionDay) +
-                ",type:TRANSFER_ORDER" +
-                ",sourceIBAN:" + getChargeIBAN() +
-                ",targetIBAN:" + targetIBAN +
-                ",amount:" + amount;
 
+        StringBuilder sb = new StringBuilder();
+
+        // Base fields (StandingOrder)
+        sb.append(marshalBase());
+
+        // TransferOrder common fields
+        sb.append(",frequencyMonths:").append(frequencyMonths);
+        sb.append(",firstExecution:").append(firstExecutionDay);
+        sb.append(",type:TRANSFER_ORDER");
+        sb.append(",sourceIBAN:").append(getChargeIBAN());
+        sb.append(",targetIBAN:").append(targetIBAN);
+        sb.append(",amount:").append(amount);
+        sb.append(",rail:").append(rail);
+
+        // Rail-specific details
+        if (transferDetails != null && !transferDetails.isEmpty()) {
+            for (HashMap.Entry<String, String> entry : transferDetails.entrySet()) {
+                if (entry.getValue() != null && !entry.getValue().isEmpty()) {
+                    sb.append(",")
+                            .append(entry.getKey())
+                            .append(":")
+                            .append(entry.getValue());
+                }
+            }
+        }
+
+        return sb.toString();
     }
+
 }

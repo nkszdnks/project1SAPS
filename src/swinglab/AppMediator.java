@@ -1,11 +1,12 @@
 package swinglab;
 
+import Entities.Accounts.BusinessAcount;
 import Entities.Users.User;
+import swinglab.BankFrame;
 
 import java.awt.CardLayout;
 import java.time.LocalDate;
 
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 
 public class AppMediator {
@@ -16,7 +17,7 @@ public class AppMediator {
         private static LocalDate today =  LocalDate.now();
 		private static CardLayout cardLayout;
 		private static JPanel cards;  
-		private static String acount_IBAN;
+		private static BusinessAcount BankOfTucAccount = new BusinessAcount("BankOfTucACCID","GR200202503131719410",0.0,100000,LocalDate.now(),0,0);
 
 		public static JPanel getCards() {
 			return cards;
@@ -50,12 +51,8 @@ public class AppMediator {
 			AppMediator.CurrentUser = user;
 		}
 
-		public static String getAcount_IBAN() {
-			return acount_IBAN;
-		}
-
-		public static void setAcount_IBAN(String acount_IBAN) {
-			AppMediator.acount_IBAN = acount_IBAN;
+		public static BusinessAcount getBankOfTucAccount() {
+			return BankOfTucAccount;
 		}
 
         public static void setToday(LocalDate today) {

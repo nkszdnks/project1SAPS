@@ -1,5 +1,7 @@
 package swinglab;
 
+import swinglab.BankFrame;
+
 import javax.swing.SwingUtilities;
 
 public class BankSwingDemo {

@@ -1,17 +1,18 @@
 package swinglab;
 
-import Entities.Transactions.Rails.DepositRail;
 import Entities.Users.Customer;
 import Managers.*;
-import swinglab.AllStatementsPanel;
 import swinglab.Contollers.*;
 import swinglab.View.AdminRequestsPanel;
+
+import swinglab.View.AllStatementsPanel;
 import swinglab.View.SimulateTimePanel;
+import swinglab.View.ViewAllBillsPanel;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalTime;
 
 import javax.swing.*;
 
@@ -19,15 +20,15 @@ class BankFrame extends JFrame implements ActionListener{
 	JMenuItem miLogin,miDashboard,miBusinessDashboard,miAdminDashboard,miAccounts,miTransfers,miPayments,miAbout,miExit,miLogout,miMyBills,miViewAccounts,miViewStatements,miRequests;
 	JMenu nav;
     JLabel date;
-	
-	
+
+
 	public BankFrame() {
         setTitle("Bank of TUC e-Banking");
         setSize(900, 450);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // center on screen
         setVisible(true);
-        
+
         // --- Menu bar ---
         JMenuBar bar = new JMenuBar();
         nav = new JMenu("Navigate");
@@ -46,7 +47,7 @@ class BankFrame extends JFrame implements ActionListener{
         miAdminDashboard = new JMenuItem("Dashboard");
         miBusinessDashboard = new JMenuItem("Dashboard");
         miExit = new JMenuItem("Exit");
-        
+
         miDashboard.setVisible(false);
         miBusinessDashboard.setVisible(false);
         miAdminDashboard.setVisible(false);
@@ -83,6 +84,7 @@ class BankFrame extends JFrame implements ActionListener{
         //
         UserManager.getInstance().restore();
         AccountManager.getInstance().restore();
+        AccountManager.getInstance().getBankAccounts().add(AppMediator.getBankOfTucAccount());
         BillManager.getInstance().restore();
         StatementManager.getInstance().restore();
         AdminRequestsManager.getInstance().restore();
@@ -91,7 +93,7 @@ class BankFrame extends JFrame implements ActionListener{
 
         //
         buildPanels();
-  
+
         AppMediator.setBank(this);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -109,7 +111,7 @@ class BankFrame extends JFrame implements ActionListener{
         });
 
     }
-	
+
 	public void enableUserMenu() {
 		miDashboard.setVisible(true);
         miAccounts.setVisible(true);
@@ -136,7 +138,7 @@ class BankFrame extends JFrame implements ActionListener{
         miLogin.setVisible(false);
         miLogout.setVisible(true);
     }
-	
+
 	public void disableUserMenu() {
 		miDashboard.setVisible(false);
         miAdminDashboard.setVisible(false);
@@ -150,7 +152,7 @@ class BankFrame extends JFrame implements ActionListener{
         miLogin.setVisible(true);
         miLogout.setVisible(false);
 	}
-    
+
     public void buildPanels() {
     	// --- Cards container (pages) ---
     	CardLayout cardLayout = new CardLayout();
@@ -163,9 +165,15 @@ class BankFrame extends JFrame implements ActionListener{
         loginPanel.setBackground(Color.pink);
     	DashboardPanel dashboardPanel = new DashboardPanel();
         BusinessDashboardPanel businessDashboardPanel = new BusinessDashboardPanel();
-        swinglab.AdminDashboardPanel adminDashboardPanel = new swinglab.AdminDashboardPanel();
+        AdminDashboardPanel adminDashboardPanel = new AdminDashboardPanel();
         AccountsPanel accountsPanel = new AccountsPanel();
         AccountsController.getInstance().setView(accountsPanel);
+
+        ActiveStandingOrdersPanel activeStandingOrdersPanel = new ActiveStandingOrdersPanel();
+        ActiveOrdersController.getInstance().setView(activeStandingOrdersPanel);
+        swinglab.FailedOrdersPanel failedOrdersPanel = new swinglab.FailedOrdersPanel();
+        FailedOrdersController.getInstance().setView(failedOrdersPanel);
+
         AdminRequestsPanel adminRequestsPanel = new AdminRequestsPanel();
         AdminRequestsController.getInstance().setView(adminRequestsPanel);
     	AboutPanel aboutPanel = new AboutPanel();
@@ -177,19 +185,30 @@ class BankFrame extends JFrame implements ActionListener{
         TransactionHistoryController.getInstance().setView(transactionPanel);
     	TransfersPanel  transfersPanel = new TransfersPanel();
         IntraBankTransferPanel intraBankTransferPanel= new IntraBankTransferPanel();
-        IntraBankTransferController ic = new IntraBankTransferController(intraBankTransferPanel);
+        InterBankTransferPanel interBankTransferPanel = new InterBankTransferPanel();
+        IntraBankTransferController.getInstance().setViewIntra(intraBankTransferPanel);
+        IntraBankTransferController.getInstance().setViewInter(interBankTransferPanel);
 
         SimulateTimePanel simulateTimePanel = new SimulateTimePanel();
         SimulateTimeController simulateTimeController = new SimulateTimeController(simulateTimePanel);
-
         AllStatementsPanel allStatementsPanel = new AllStatementsPanel();
+        ViewAllBillsPanel allBillsPanel = new ViewAllBillsPanel();
         AllStatementsController.getInstance().setView(allStatementsPanel);
-    	
+        AllStatementsController.getInstance().setViewBills(allBillsPanel);
+
+        StandingTransferOrderPanel standingTransferOrderPanel = new StandingTransferOrderPanel();
+        StandingPaymentOrderPanel standingPaymentOrderPanel = new StandingPaymentOrderPanel();
+        StandingTransferOrderController.getInstance().setViewTransfer(standingTransferOrderPanel);
+        StandingTransferOrderController.getInstance().setViewPayment(standingPaymentOrderPanel);
+
+
+
 
     	// register the panels with names
 
     	cards.add(loginPanel, "login");
         cards.add(allStatementsPanel, "allStatements");
+        cards.add(allBillsPanel, "allBills");
         cards.add(simulateTimePanel, "simulateTime");
         cards.add(adminRequestsPanel, "adminRequests");
         cards.add(businessDashboardPanel, "businessDashboard");
@@ -201,7 +220,7 @@ class BankFrame extends JFrame implements ActionListener{
     	cards.add(newAcountPanel, "newAcount");
     	cards.add(transactionPanel, "transactionsPanel");
     	cards.add(transfersPanel, "transfersPanel");
-    	cards.add(new InterBankTransferPanel(), "interbank");
+    	cards.add( interBankTransferPanel, "interbank");
     	cards.add(intraBankTransferPanel, "intrabank");
         DepositMoneyPanel depositMoneyPanel = new DepositMoneyPanel();
         DepositMoneyController depositMoneyController = new DepositMoneyController(depositMoneyPanel);
@@ -209,25 +228,27 @@ class BankFrame extends JFrame implements ActionListener{
         WithdrawlsController withdrawlsController = new WithdrawlsController(withdrawMoneyPanel);
         cards.add(depositMoneyPanel, "deposit");
         cards.add(withdrawMoneyPanel, "withdraw");
-        cards.add(new StandingTransferOrderPanel(), "standingTransferOrder");
+        cards.add(standingTransferOrderPanel, "standingTransferOrder");
         NewCoOwnerPanel newCoOwnerPanel = new NewCoOwnerPanel();
         NewCoOwnerController.getInstance().setView(newCoOwnerPanel);
     	cards.add(newCoOwnerPanel, "newCoOwner");
     	cards.add(new ChangePasswordPanel(), "changePersonalDetails");
     	cards.add(new PaymentsPanel(), "payments");
         PayBillsPanel  payBillsPanel = new PayBillsPanel();
-        PayBillsController payBillsController = new PayBillsController(payBillsPanel);
+        PayBillsController.getInstance().setView(payBillsPanel);
     	cards.add(payBillsPanel, "payBills");
-    	cards.add(new StandingPaymentOrderPanel(), "standingPaymentOrder");
+    	cards.add( standingPaymentOrderPanel, "standingPaymentOrder");
     	cards.add(new StandingPaymentHistoryPanel(), "standingPaymentHistory");
-    	cards.add(new ActiveStandingOrdersPanel(), "activeStandingOrders");
-    	cards.add(new EditStandingPaymentPanel(), "editStandingPayment");
+    	cards.add(activeStandingOrdersPanel, "activeStandingOrders");
+        cards.add(failedOrdersPanel, "failedOrders");
+
+        cards.add(new EditStandingPaymentPanel(), "editStandingPayment");
     	cards.add(new EditStandingTransferPanel(), "editStandingTransfer");
 
-    	
+
 
     	add(cards); // add to frame content
-    	
+
     	miLogin.addActionListener(this);
     	miDashboard.addActionListener(this);
     	miAccounts.addActionListener(this);
@@ -236,7 +257,7 @@ class BankFrame extends JFrame implements ActionListener{
     	miTransfers.addActionListener(this);
         miLogout.addActionListener(this);
         miExit.addActionListener(this);
-  
+
     }
 
 	@Override
@@ -249,11 +270,11 @@ class BankFrame extends JFrame implements ActionListener{
             AccountsController.getInstance().setModel((Customer) AppMediator.getUser());
             AppMediator.getCardLayout().show(AppMediator.getCards(), "accounts");
         }
-		else if (e.getSource()==miAbout) 
+		else if (e.getSource()==miAbout)
 			AppMediator.getCardLayout().show(AppMediator.getCards(), "about");
-		else if (e.getSource()==miTransfers) 
+		else if (e.getSource()==miTransfers)
 			AppMediator.getCardLayout().show(AppMediator.getCards(), "transfersPanel");
-		else if (e.getSource()==miPayments) 
+		else if (e.getSource()==miPayments)
 			AppMediator.getCardLayout().show(AppMediator.getCards(), "payments");
         else if (e.getSource() == miLogout) {
             // Disable menu items

@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class BusinessAcount extends BankAcount {
     private Business business;
-    private float maintenanceFee;
+    private double maintenanceFee;
 
 
-    public BusinessAcount( String acountID,String IBAN, float interestRate, double accountBalance, LocalDate dateCreated,float maintainanceFee) {
-        super(IBAN, acountID, interestRate, accountBalance, dateCreated);
+    public BusinessAcount( String acountID,String IBAN, double interestRate, double accountBalance, LocalDate dateCreated,double maintainanceFee,double accruedInterest) {
+        super(IBAN, acountID, interestRate, accountBalance, dateCreated,accruedInterest);
         this.maintenanceFee = maintainanceFee;
     }
 
@@ -26,7 +26,7 @@ public class BusinessAcount extends BankAcount {
         this.setCustomer(business);
     }
 
-    public float getMaintenanceFee() {
+    public double getMaintenanceFee() {
         return maintenanceFee;
     }
 
@@ -47,7 +47,8 @@ public class BusinessAcount extends BankAcount {
                 ",AccountType:BUSINESS" +
                 ",MainOwnerID:" + (business != null ? business.getUserId() : "") +
                 ",SecondaryOwnerIDs:" +
-                ",MaintenanceFee:" + maintenanceFee;
+                ",MaintenanceFee:" + maintenanceFee+
+                ",accruedInterest:"+getAccruedInterest();
     }
 
     @Override

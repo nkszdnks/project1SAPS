@@ -1,7 +1,8 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Accounts.Statements.Statement;
 import Entities.Transactions.Transaction;
+import Managers.AccountManager;
 import Managers.TransactionManager;
 
 import java.awt.BorderLayout;
@@ -10,20 +11,21 @@ import java.awt.Font;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class AllStatementsPanel extends JPanel {
 
     private final JTable table;
     private final DefaultTableModel model;
+    private JComboBox<String> dateFilter;
+    private JComboBox<String> amountFilter;
+
+    private JTextField fromDate, toDate;
+    private JTextField minAmount, maxAmount;
+
+    private JButton applyFilter, clearFilter;
+
 
     public JButton details, clearSel, closePan;
 
@@ -39,14 +41,14 @@ public class AllStatementsPanel extends JPanel {
         title.setFont(title.getFont().deriveFont(Font.BOLD, 18f));
         add(title, BorderLayout.NORTH);
 
-        String[] cols = { "Date","Description", "IBANS involved", "Amount","Account Balance 1","Account Balance 2","Status" };
+        String[] cols = { "Date","Description", "IBANS involved", "Amount","Fee","Account Balance 1","Account Balance 2","Status" };
         model = new DefaultTableModel(cols, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
 
         table = new JTable(model);
         table.setFillsViewportHeight(true);
-        table.setRowHeight(20);
+        table.setRowHeight(24);
 
         add(new JScrollPane(table), BorderLayout.CENTER);
 
@@ -75,6 +77,7 @@ public class AllStatementsPanel extends JPanel {
                 t.getDescription(),
                 t.getIbansInvolved()[0] + " → " + (t.getIbansInvolved()[1].isEmpty() ? "—" : t.getIbansInvolved()[1]),
                 euroFormat.format(t.getAmount()),
+                t.getFee(),
                 t.getBalanceAfter()[0],
                 t.getBalanceAfter()[1]==0.0 ?"-":t.getBalanceAfter()[1],
                 "Completed"
@@ -99,12 +102,26 @@ public class AllStatementsPanel extends JPanel {
 
         int modelRow = table.convertRowIndexToModel(viewRow);
 
+        String Date = String.valueOf(model.getValueAt(modelRow, 0));
+        String IBAN  = String.valueOf(model.getValueAt(modelRow, 2));
+        String Amount = String.valueOf(model.getValueAt(modelRow, 3));
+        String Fee = String.valueOf(model.getValueAt(modelRow, 4));
+        String []ibans = IBAN.split("→",2);
+        String SenderName = AccountManager.getInstance().findAccountByIBAN(ibans[0].trim()).getCustomer()!= null ?AccountManager.getInstance().findAccountByIBAN(ibans[0].trim()).getCustomer().getFullName():"Bank Of TUC";
+        String RecipientName = "-";
+        if(!ibans[1].trim().isEmpty() && AccountManager.getInstance().findAccountByIBAN(ibans[1].trim()) != null) {
+            RecipientName = AccountManager.getInstance().findAccountByIBAN(ibans[1].trim()).getCustomer()!= null?AccountManager.getInstance().findAccountByIBAN(ibans[1].trim()).getCustomer().getFullName():"Bank Of TUC";
+        }
+
         String msg =
-                "Date: " + model.getValueAt(modelRow, 0) + "\n" +
-                        "IBAN: " + model.getValueAt(modelRow, 1) + "\n" +
-                        "Description: " + model.getValueAt(modelRow, 2) + "\n" +
-                        "Amount: " + model.getValueAt(modelRow, 3) + "\n" +
-                        "Status: " + model.getValueAt(modelRow, 4);
+                "Date: " + Date+ "\n" +
+                        "IBAN: " + IBAN + "\n" +
+                        "Description: " + model.getValueAt(modelRow, 1) + "\n" +
+                        "Amount: " + Amount + "\n" +
+                        "Fee: " + Fee + "\n" +
+                        "Sender: "+SenderName+"\n"+
+                        "Recipient: "+ RecipientName+"\n" +
+                        "Status: " + model.getValueAt(modelRow, 7);
 
         JOptionPane.showMessageDialog(
                 SwingUtilities.getWindowAncestor(this),

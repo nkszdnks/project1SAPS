@@ -1,10 +1,14 @@
 package Entities.StandingOrders;
 
+import Entities.Transactions.Requests.TransferRequest;
+import swinglab.Observers.StandingOrderObserver;
+
 import java.time.LocalDate;
 import java.util.HashMap;
 
 public abstract class StandingOrder {
 
+    private StandingOrderObserver observer;
     protected String orderId;
     protected String executorID;
     protected String title;
@@ -36,8 +40,16 @@ public abstract class StandingOrder {
         this.executionFee =  executionFee;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setAttempts(int attempts) {
         this.attempts = attempts;
+    }
+
+    public String getExecutorID() {
+        return executorID;
     }
 
     public abstract void computeNextExecutionDate(LocalDate today);
@@ -76,6 +88,18 @@ public abstract class StandingOrder {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+        if(observer!=null) {
+            observer.update(orderId);
+        }
+    }
+    // attach observer
+    public void attach(StandingOrderObserver so) {
+        observer  = so;
+    }
+
+    // dettach observer
+    public void dettach(StandingOrderObserver so) {
+        observer = null;
     }
 
     // Key:value CSV marshal
@@ -120,7 +144,27 @@ public abstract class StandingOrder {
         switch (type) {
 
             case "TRANSFER_ORDER":
-                return new TransferOrder(
+                TransferRequest.Rail rail = TransferRequest.Rail.valueOf(map.get("rail"));
+                HashMap<String,String> transferDetails = new HashMap<>();
+                if (TransferRequest.Rail.SEPA.equals(rail)) {
+                    transferDetails.put("creditorName",map.get("creditorName"));
+                    transferDetails.put("creditorIban",map.get("creditorIban"));
+                    transferDetails.put("creditorBankName",map.get("creditorBankName"));
+                    transferDetails.put("creditorBic",map.get("creditorBic"));
+                    transferDetails.put("charges",map.get("charges"));
+
+                } else if (TransferRequest.Rail.SWIFT.equals(rail)) {
+                    transferDetails.put("currency",map.get("currency"));
+                    transferDetails.put("beneficiaryName",map.get("beneficiaryName"));
+                    transferDetails.put("beneficiaryAddress",map.get("beneficiaryAddress"));
+                    transferDetails.put("beneficiaryAccount",map.get("beneficiaryAccount"));
+                    transferDetails.put("bankName",map.get("bankName"));
+                    transferDetails.put("swiftCode",map.get("swiftCode"));
+                    transferDetails.put("country",map.get("country"));
+                    transferDetails.put("charges",map.get("charges"));
+
+                }
+                TransferOrder transferOrder =  new TransferOrder(
                         executorId,
                         orderId,
                         title,
@@ -135,8 +179,13 @@ public abstract class StandingOrder {
                         Double.parseDouble(map.get("amount")),
                         map.get("sourceIBAN"),
                         attempts,
-                        executionFee
+                        executionFee,
+                        rail
                 );
+                transferOrder.setDetails(transferDetails);
+
+                return transferOrder;
+
 
             case "PAYMENT_ORDER":
                 return new PaymentOrder(
@@ -160,4 +209,7 @@ public abstract class StandingOrder {
     }
 
 
+    public double getExecutionFee() {
+        return executionFee;
+    }
 }

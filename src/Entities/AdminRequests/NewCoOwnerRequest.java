@@ -11,13 +11,19 @@ import Managers.TransactionManager;
 import Managers.UserManager;
 
 import java.time.LocalDateTime;
+import java.util.Random;
+
 
 public class NewCoOwnerRequest extends AdminRequest {
+    private static final Random random = new Random();
     private  PersonalAccount personalAccount;
     private IndividualPerson individualPerson;
 
     public NewCoOwnerRequest(Customer customer,PersonalAccount personalAccount,IndividualPerson individualPerson) {
-        super(customer.getUserId()+"defaultID", "NewCoOwner", "New Co-Owner", customer);
+        super(String.format(
+                "NAID-%s-%04d"+
+                        LocalDateTime.now().toLocalDate().toString().replace("-", "")+
+                        customer.getUserId()+String.valueOf(random.nextInt(1000))), "NewCoOwner", "New Co-Owner", customer);
         this.personalAccount = personalAccount;
         this.individualPerson = individualPerson;
     }

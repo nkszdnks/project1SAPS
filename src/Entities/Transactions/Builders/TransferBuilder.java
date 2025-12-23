@@ -6,7 +6,7 @@ import Entities.Transactions.Transfer;
 public class TransferBuilder extends TransactionBuilder {
     private String sourceIBAN;
     private String targetIBAN;
-    private float bankFee;
+    private double bankFee;
     private String type;
 
 
@@ -27,7 +27,7 @@ public class TransferBuilder extends TransactionBuilder {
         return this;
     }
 
-    public TransferBuilder setBankFee(float bankFee) {
+    public TransferBuilder setBankFee(double bankFee) {
         this.bankFee = bankFee;
         return this;
     }

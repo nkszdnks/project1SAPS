@@ -14,7 +14,6 @@ public class AccountDetailsDialog extends JDialog {
     AccountDetailsDialog(Window owner, String iban, String type, String balance, String interest, BankAcount b) {
         super(owner, "Account Details", ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        AppMediator.setAcount_IBAN(iban);
 
         JPanel content = new JPanel(new GridBagLayout());
         content.setBorder(BorderFactory.createEmptyBorder(20,20,20,20));

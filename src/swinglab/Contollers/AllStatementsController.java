@@ -2,10 +2,13 @@ package swinglab.Contollers;
 
 import Entities.Accounts.Statements.Statement;
 import Entities.Transactions.Transaction;
+import Entities.Users.Bills;
+import Managers.BillManager;
 import Managers.StatementManager;
 import Managers.TransactionManager;
-import swinglab.AllStatementsPanel;
+import swinglab.View.AllStatementsPanel;
 import swinglab.AppMediator;
+import swinglab.View.ViewAllBillsPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +17,7 @@ public class AllStatementsController implements ActionListener {
 
     private static AllStatementsController instance;
     private AllStatementsPanel view;
+    private ViewAllBillsPanel billsPanel;
 
     public static AllStatementsController getInstance() {
         if (instance == null) {
@@ -34,12 +38,26 @@ public class AllStatementsController implements ActionListener {
 
 
     }
+    public void setViewBills(ViewAllBillsPanel view) {
+        this.billsPanel = view;
+
+        view.closePan.addActionListener(this);
+
+
+    }
 
     public void loadStatements() {
         view.clearTable();
 
         for (Statement t : StatementManager.getInstance().getStatements()) {
             view.addStatementRow(t);
+        }
+    }
+    public void loadBills() {
+        billsPanel.clearTable();
+
+        for (Bills t : BillManager.getInstance().getAllBills()) {
+            billsPanel.addBillRow(t);
         }
     }
 

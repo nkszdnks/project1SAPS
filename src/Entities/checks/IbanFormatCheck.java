@@ -14,7 +14,7 @@ public class IbanFormatCheck extends BaseCheck {
     @Override
     protected boolean apply(TransactionRequest req) {
         if(req.getType().equals("Transfer")) {
-            return !(req.getFromIban().equals(((TransferRequest)req).getToIban())) && isValid(req.getFromIban()) && isValid(((TransferRequest)req).getToIban()) && isOwned(req.getFromIban(), req.getExecutorID());
+            return !(req.getFromIban().equals(((TransferRequest)req).getToIban())) && isValid(req.getFromIban()) && isOwned(req.getFromIban(), req.getExecutorID());
         }
         else {
             return isValid(req.getFromIban()) && isOwned(req.getFromIban(), req.getExecutorID()) ;

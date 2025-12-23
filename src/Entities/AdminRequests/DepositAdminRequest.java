@@ -14,6 +14,7 @@ import java.time.LocalTime;
 import java.util.Random;
 
 public class DepositAdminRequest extends AdminRequest {
+    private static final Random random = new Random();
     private BankAcount bankAccount;
     private double amount;
 
@@ -39,7 +40,10 @@ public class DepositAdminRequest extends AdminRequest {
     }
 
     public DepositAdminRequest(String description, Customer customer, BankAcount bankAccount, double amount) {
-        super(description+"default ID", "Deposit", description, customer);
+        super(String.format(
+                "NAID-%s-%04d"+
+                        LocalDateTime.now().toLocalDate().toString().replace("-", "")+
+                        customer.getUserId()+String.valueOf(random.nextInt(1000))), "Deposit", description, customer);
         this.bankAccount = bankAccount;
         this.amount = amount;
     }

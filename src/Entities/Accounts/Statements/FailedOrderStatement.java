@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public class FailedOrderStatement extends Statement {
-
+    private String executorID;
     private String orderId;
     private String orderType;
     private String failureReason;
@@ -12,7 +12,6 @@ public class FailedOrderStatement extends Statement {
     private int attempts;
 
     public FailedOrderStatement(
-            String statementId,
             LocalDateTime timestamp,
             double amount,
             double[] balanceAfter,
@@ -20,11 +19,36 @@ public class FailedOrderStatement extends Statement {
             String title,
             String[] ibansInvolved,
             String orderId,
+            String executorID,
             String orderType,
             String failureReason,
-            int attempts
+            int attempts,
+            double fee
     ) {
-        super(statementId, timestamp, amount, balanceAfter, description, ibansInvolved, orderId);
+        super(timestamp, amount, balanceAfter, description, ibansInvolved, orderId,fee);
+        this.executorID = executorID;
+        this.orderId = orderId;
+        this.orderType = orderType;
+        this.failureReason = failureReason;
+        this.attempts = attempts;
+        this.title = title;
+    }
+    public FailedOrderStatement(String statemendId,
+            LocalDateTime timestamp,
+            double amount,
+            double[] balanceAfter,
+            String description,
+            String title,
+            String[] ibansInvolved,
+            String orderId,
+            String executorID,
+            String orderType,
+            String failureReason,
+            int attempts,
+            double fee
+    ) {
+        super(statemendId,timestamp, amount, balanceAfter, description, ibansInvolved, orderId,fee);
+        this.executorID = executorID;
         this.orderId = orderId;
         this.orderType = orderType;
         this.failureReason = failureReason;
@@ -36,6 +60,10 @@ public class FailedOrderStatement extends Statement {
 
     public String getOrderId() {
         return orderId;
+    }
+
+    public String getExecutorID() {
+        return executorID;
     }
 
     public String getOrderType() {
@@ -61,6 +89,7 @@ public class FailedOrderStatement extends Statement {
         return super.marshal() +
                 ",title:" + title +
                 ",orderType:" + orderType +
+                ",executorID:" + executorID +
                 ",failureReason:" + failureReason +
                 ",attempts:" + attempts +
                 ",statementType:FAILED_ORDER";
@@ -99,9 +128,11 @@ public class FailedOrderStatement extends Statement {
                 map.get("title"),
                 ibans,
                 map.get("transactionId"),
+                map.get("executorID"),
                 map.get("orderType"),
                 map.get("failureReason") == null ?"No Reason":map.get("failureReason"),
-                Integer.parseInt(map.get("attempts"))
+                Integer.parseInt(map.get("attempts")),
+                Double.parseDouble(map.get("fee"))
         );
     }
 }

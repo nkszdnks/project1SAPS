@@ -29,7 +29,7 @@ public class Deposit extends Transaction {
     protected void createStatement(BankAcount Source, BankAcount Target) {
         String[] ibansInvolved = {Source.getIBAN(),""};
         double[] remainingBalances = {Source.getAccountBalance(),0.0};
-        Statement accountStatements = new Statement(super.getTransactionId(), AppMediator.getToday().atTime(LocalTime.now()),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
+        Statement accountStatements = new Statement(super.getTransactionId(), AppMediator.getToday().atTime(LocalTime.now()),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),0.0);
         Source.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);
     }

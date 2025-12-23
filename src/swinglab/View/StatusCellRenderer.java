@@ -31,6 +31,18 @@ public class StatusCellRenderer extends DefaultTableCellRenderer {
                 case "REJECTED":
                     setForeground(Color.RED.darker());
                     break;
+                case "PAID":
+                    setForeground(new Color(0, 140, 0));
+                    break;
+                case "EXPIRED":
+                    setForeground(Color.RED.darker());
+                    break;
+                case "PAUSED":
+                    setForeground(new Color(180, 140, 100));
+                    break;
+                case "ACTIVE":
+                    setForeground(new Color(0, 140, 0));   // green
+                    break;
                 default:
                     setForeground(Color.BLACK);
             }

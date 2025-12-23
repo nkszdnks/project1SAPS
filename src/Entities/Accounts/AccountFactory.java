@@ -17,7 +17,8 @@ public class AccountFactory {
                     map.get("IBAN"),
                     Float.parseFloat(map.getOrDefault("InterestRate", "0")),
                     Double.parseDouble(map.getOrDefault("Balance", "0")),
-                    LocalDate.parse(map.get("DateCreated"))
+                    LocalDate.parse(map.get("DateCreated")),
+                    Double.parseDouble(map.getOrDefault("accruedInterest", "0"))
             );
 
 
@@ -52,7 +53,8 @@ public class AccountFactory {
                     Float.parseFloat(map.get("InterestRate")),
                     Double.parseDouble(map.get("Balance")),
                     LocalDate.parse(map.get("DateCreated")),
-                    Float.parseFloat(map.get("MaintenanceFee"))
+                    Float.parseFloat(map.get("MaintenanceFee")),
+                    Double.parseDouble(map.getOrDefault("accruedInterest", "0"))
             );
 
             // Business Owner (same field as main owner)

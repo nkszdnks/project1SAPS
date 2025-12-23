@@ -1,11 +1,14 @@
 package swinglab;
 
+import Entities.Accounts.BankAcount;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
-public class PayBillsPanel extends JPanel {
+public class PayBillsPanel extends JPanel implements hasIbanField{
 
-    private final JTextField fromIban = new JTextField(22);
+    private final JComboBox<String> fromIbans = new JComboBox<>();
     private final JTextField rfCode = new JTextField(25);
     private final JComboBox<String> businessList = new JComboBox<>();
 
@@ -31,7 +34,7 @@ public class PayBillsPanel extends JPanel {
 
         // Form fields
         c.gridx=0; c.gridy=1; add(new JLabel("From IBAN:"), c);
-        c.gridx=1; add(fromIban, c);
+        c.gridx=1; add(fromIbans, c);
 
         c.gridx=0; c.gridy=2; add(new JLabel("RF Code:"), c);
         c.gridx=1; add(rfCode, c);
@@ -51,7 +54,7 @@ public class PayBillsPanel extends JPanel {
 
     // ----- Getters for Controller -----
 
-    public String getFromIban() { return fromIban.getText(); }
+    public String getFromIban() { return String.valueOf(fromIbans.getSelectedItem()); }
     public String getRfCode() { return rfCode.getText(); }
 
     public String getSelectedBusiness() {
@@ -72,5 +75,12 @@ public class PayBillsPanel extends JPanel {
 
     public void addCloseListener(java.awt.event.ActionListener l) {
         btnClose.addActionListener(l);
+    }
+
+    @Override
+    public void setIbans(ArrayList<BankAcount> accounts) {
+        fromIbans.removeAllItems();
+        for (BankAcount b : accounts)
+            fromIbans.addItem(b.getIBAN());
     }
 }

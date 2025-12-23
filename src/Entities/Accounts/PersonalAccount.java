@@ -8,8 +8,8 @@ public class PersonalAccount extends BankAcount {
     private IndividualPerson mainOwner;//Maybe we can keep only the Customer from super class
     private ArrayList<IndividualPerson> secondaryOwners = new ArrayList<>();
 
-    public PersonalAccount(String acountID, String IBAN, float interestRate, double accountBalance, LocalDate dateCreated) {
-        super(IBAN,acountID,interestRate, accountBalance, dateCreated);
+    public PersonalAccount(String acountID, String IBAN, double interestRate, double accountBalance, LocalDate dateCreated,double accruedInterest) {
+        super(IBAN,acountID,interestRate, accountBalance, dateCreated,accruedInterest);
     }
 
     public IndividualPerson getMainOwner() {
@@ -49,7 +49,7 @@ public class PersonalAccount extends BankAcount {
                 ",AccountType:PERSONAL" +
                 ",MainOwnerID:" + (mainOwner != null ? mainOwner.getUserId() : "") +
                 ",SecondaryOwnerIDs:" + secOwners +
-                ",MaintenanceFee:";
+                ",accruedInterest:"+getAccruedInterest();
     }
 
     @Override

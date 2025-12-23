@@ -1,5 +1,9 @@
 package swinglab;
 
+import Entities.Users.Customer;
+import swinglab.Contollers.PayBillsController;
+import swinglab.Contollers.StandingTransferOrderController;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -50,9 +54,11 @@ class PaymentsPanel extends JPanel implements ActionListener {
             AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
         }
         else if (src == btnPayBill) {
+            PayBillsController.getInstance().setAccounts();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "payBills");
         }
         else if (src == btnStandingPayment) {
+            StandingTransferOrderController.getInstance().setModel((Customer) AppMediator.getUser());
             AppMediator.getCardLayout().show(AppMediator.getCards(), "standingPaymentOrder");
         }
     }

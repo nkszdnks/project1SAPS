@@ -78,7 +78,7 @@ public class CoOwnersController extends WindowAdapter implements ActionListener 
                 break;
 
             case "Close":
-                AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
+                AppMediator.getCardLayout().show(AppMediator.getCards(), "accounts");
                 break;
 
             default:

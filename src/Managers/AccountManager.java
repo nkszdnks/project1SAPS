@@ -1,5 +1,8 @@
 package Managers;
 
+import Commands.AccrueDailyInterestCommand;
+import Commands.MaintenanceFeeCommand;
+import Commands.PostMonthlyInterestCommand;
 import DataAccessObjects.AcountsDAO;
 import DataAccessObjects.FactoryDAO;
 import DataAccessObjects.UsersDAO;
@@ -36,7 +39,15 @@ public class AccountManager implements Manager {
     public ArrayList<BankAcount> getBankAccounts() {
         return (ArrayList<BankAcount>) bankAccounts;
     }
-
+    public ArrayList<BusinessAcount> getBusinessAccounts(){
+        ArrayList<BusinessAcount> businessAccounts = new ArrayList<>();
+        for (BankAcount account: bankAccounts) {
+            if (account.getAccountType().equals("Business Account")) {
+                businessAccounts.add((BusinessAcount) account);
+            }
+        }
+        return businessAccounts;
+    }
     public ArrayList<BankAcount> getMyAccounts(Customer owner) {
         ArrayList<BankAcount> myAccounts = new ArrayList<>();
         for(BankAcount account: bankAccounts){
@@ -49,9 +60,27 @@ public class AccountManager implements Manager {
         return myAccounts;
     }
 
-    public void AssignInterest(String iban , int interest) {
-        BankAcount bankAccount = findAccountByIBAN(iban);
-        bankAccount.setInterestRate(interest);
+    public void ComputeDailyInterests() {
+        for (BankAcount account: bankAccounts) {
+            AccrueDailyInterestCommand ac = new AccrueDailyInterestCommand(account);
+            ac.execute();
+        }
+
+    }
+
+    public void PostMonthlyInterests() {
+        for (BankAcount account: bankAccounts) {
+            PostMonthlyInterestCommand mc = new PostMonthlyInterestCommand(account);
+            mc.execute();
+        }
+
+    }
+
+    public void PostMaintenanceFee() {
+        for (BusinessAcount account: getBusinessAccounts()) {
+            MaintenanceFeeCommand mc = new MaintenanceFeeCommand(account);
+            mc.execute();
+        }
 
     }
 

@@ -9,14 +9,14 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-class LoginPanel extends JPanel implements ActionListener {
+public class LoginPanel extends JPanel implements ActionListener {
     private final JTextField userField = new JTextField(14);
     private final JPasswordField passField = new JPasswordField(14);
     private final JButton btnLogin = new JButton("Login");
     private final JButton btnClear = new JButton("Clear");
 
     // onSuccess switches to dashboard
-    LoginPanel() {
+    public LoginPanel() {
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();

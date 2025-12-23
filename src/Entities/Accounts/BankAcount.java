@@ -15,10 +15,11 @@ public abstract class BankAcount {
     private ArrayList<Statement> accountStatements = new ArrayList<>();
     private String IBAN;
     private String AcountID ;
-    private float interestRate;
+    private double interestRate;
     private double accountBalance;
     private LocalDate dateCreated;
     private Customer customer;
+    private double accruedInterest;
 
     public Customer getCustomer() {
         return customer;
@@ -28,13 +29,29 @@ public abstract class BankAcount {
         this.customer = customer;
     }
 
-    public BankAcount(String IBAN, String acountID, float interestRate, double accountBalance, LocalDate dateCreated) {
+    public BankAcount(String IBAN, String acountID, double interestRate, double accountBalance, LocalDate dateCreated,double accruedInterest) {
         this.IBAN = IBAN;
         this.AcountID = acountID;
         this.interestRate = interestRate;
         this.accountBalance = accountBalance;
         this.dateCreated = dateCreated;
+        this.accruedInterest = accruedInterest;
     }
+    public void accrueDailyInterest(double accruedToday){
+        accruedInterest+=accruedToday;
+    }
+    public double calculateDailyInterest() {
+        return accountBalance*(interestRate/100)/365;
+    }
+
+    public double getAccruedInterest() {
+        return accruedInterest;
+    }
+    public void resetAccruedInterest(){
+        accruedInterest = 0.0;
+    }
+
+    
 
     public static BankAcount unmarshal(String csvLine) {
 
@@ -61,12 +78,6 @@ public abstract class BankAcount {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
-        this.dateCreated = dateCreated;
-    }
-
-
-
 
 
     public String getIBAN() {
@@ -82,7 +93,7 @@ public abstract class BankAcount {
     }
 
 
-    public float getInterestRate() {
+    public double getInterestRate() {
         return interestRate;
     }
 
@@ -113,6 +124,7 @@ public abstract class BankAcount {
     public abstract String marshal();
 
     public abstract String getAccountType();
+
 
 
 }

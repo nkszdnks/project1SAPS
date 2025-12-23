@@ -10,6 +10,7 @@ import Entities.StandingOrders.OrderStatus;
 import Entities.StandingOrders.PaymentOrder;
 import Entities.StandingOrders.StandingOrder;
 import Entities.StandingOrders.TransferOrder;
+import Entities.Users.Customer;
 import swinglab.AppMediator;
 
 import java.time.LocalTime;
@@ -24,6 +25,7 @@ public class StandingOrderManager implements Manager {
     private ArrayList<StandingOrder> active = new ArrayList<>();
     private ArrayList<StandingOrder> expired = new ArrayList<>();
     private ArrayList<FailedOrderStatement> failed = new ArrayList<>();
+    private ArrayList<StandingOrder> paused = new ArrayList<>();
 
     private StandingOrderManager() {
         factoryDAO = FactoryDAO.getInstance();
@@ -36,6 +38,41 @@ public class StandingOrderManager implements Manager {
             return INSTANCE;
         }
         return INSTANCE;
+    }
+//    public void pauseStandingOrder(StandingOrder standingOrder) {
+//        paused.add(standingOrder);
+//        active.remove(standingOrder);
+//    }
+
+    public ArrayList<StandingOrder> getMyActive(Customer customer) {
+        ArrayList<StandingOrder> myActive = new ArrayList<>();
+        for (StandingOrder s : active) {
+            if (s.getExecutorID().equals(customer.getUserId())) {
+                myActive.add(s);
+            }
+        }
+        return myActive;
+    }
+
+    public ArrayList<StandingOrder> getMyExpired(Customer customer) {
+        ArrayList<StandingOrder> myExpired = new ArrayList<>();
+        for (StandingOrder s : expired) {
+            if (s.getExecutorID().equals(customer.getUserId())) {
+                myExpired.add(s);
+            }
+        }
+        return myExpired;
+    }
+
+
+    public ArrayList<FailedOrderStatement> getMyFailed(Customer customer) {
+        ArrayList<FailedOrderStatement> myFailed = new ArrayList<>();
+        for (FailedOrderStatement f : failed) {
+            if (f.getExecutorID().equals(customer.getUserId())) {
+                myFailed.add(f);
+            }
+        }
+        return myFailed;
     }
 
     public ArrayList<StandingOrder> getActive() {
@@ -89,7 +126,11 @@ public class StandingOrderManager implements Manager {
         for (StandingOrder standingOrder : active) {
             if(standingOrder.getEndDate().equals(AppMediator.getToday())){
                 toRemove.add(standingOrder);
+                standingOrder.setStatus(OrderStatus.EXPIRED);
                 expired.add(standingOrder);
+                continue;
+            }
+            if(standingOrder.getStatus().equals(OrderStatus.PAUSED)){
                 continue;
             }
             standingOrder.computeNextExecutionDate(AppMediator.getToday());
@@ -148,6 +189,20 @@ public class StandingOrderManager implements Manager {
         BankAcount chargeAccount = AccountManager.getInstance().findAccountByIBAN(standingOrder.getChargeIBAN());
         double []balances = {chargeAccount.getAccountBalance(),0.0};
         String []ibansInvolved = {standingOrder.getChargeIBAN(),""};
-        return new FailedOrderStatement("gayMan",AppMediator.getToday().atTime(LocalTime.now()),standingOrder.getAmount(),balances, standingOrder.getDescription(),standingOrder.getTitle(),ibansInvolved,standingOrder.getOrderId(),standingOrder.getType(),standingOrder.getFailureReason(),standingOrder.getAttempts() );
+        return new FailedOrderStatement(AppMediator.getToday().atTime(LocalTime.now()),standingOrder.getAmount(),balances, standingOrder.getDescription(),standingOrder.getTitle(),ibansInvolved,standingOrder.getOrderId(),standingOrder.getExecutorID(),standingOrder.getType(),standingOrder.getFailureReason(),standingOrder.getAttempts() ,standingOrder.getExecutionFee());
+    }
+
+    public StandingOrder findOrderByID(String orderID) {
+        for(StandingOrder s : active){
+            if(s.getOrderId().equals(orderID)){
+                return s;
+            }
+        }
+        for(StandingOrder s : expired){
+            if(s.getOrderId().equals(orderID)){
+                return s;
+            }
+        }
+        return null;
     }
 }

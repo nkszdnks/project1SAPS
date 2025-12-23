@@ -15,14 +15,16 @@ public class Payment extends Transaction {
 
     private String sourceIBAN;
     private String BillRFCode;
+    private double bankFee;
 
 
     public Payment(String transactionId, LocalDateTime timestamp, double amount,
                    String reason, String executorID, TransactionStatus status,
-                   String sourceIBAN, String BIRFCode) {
+                   String sourceIBAN, String BIRFCode,double bankFee) {
         super(transactionId, timestamp, amount, reason, executorID, status);
         this.sourceIBAN = sourceIBAN;
         this.BillRFCode = BIRFCode;
+        this.bankFee = bankFee;
     }
 
     public String getSourceIBAN() { return sourceIBAN; }
@@ -36,7 +38,7 @@ public class Payment extends Transaction {
     protected void createStatement(BankAcount source, BankAcount target) {
         String[] ibansInvolved = {sourceIBAN, target.getIBAN()};
         double[] remainingBalances = {source.getAccountBalance(), target.getAccountBalance()};
-        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId());
+        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),bankFee);
         source.addStatements(accountStatements);
         target.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);
@@ -49,7 +51,7 @@ public class Payment extends Transaction {
         BankAcount source = AccountManager.getInstance().findAccountByIBAN(sourceIBAN);
         Bills bill = BillManager.getInstance().findBill(BillRFCode);
         BusinessAcount target = bill.getIssuer().getCorporateAcount();
-        source.setAccountBalance(source.getAccountBalance() - bill.getAmount());
+        source.setAccountBalance(source.getAccountBalance() - bill.getAmount() -bankFee);
         target.setAccountBalance(target.getAccountBalance() + bill.getAmount());
         bill.setStatus(BillStatus.PAID);
         setStatus(TransactionStatus.COMPLETED);

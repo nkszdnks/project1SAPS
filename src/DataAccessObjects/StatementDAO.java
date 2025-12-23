@@ -34,7 +34,8 @@ public class StatementDAO {
                 Statement s = Statement.unmarshal(line);
                 AccountManager.getInstance().findAccountByIBAN(s.getIbansInvolved()[0]).addStatements(s);
                 if(!s.getIbansInvolved()[1].isEmpty()) {
-                    AccountManager.getInstance().findAccountByIBAN(s.getIbansInvolved()[1]).addStatements(s);
+                    if(AccountManager.getInstance().findAccountByIBAN(s.getIbansInvolved()[1])!=null)
+                        AccountManager.getInstance().findAccountByIBAN(s.getIbansInvolved()[1]).addStatements(s);
                 }
                 list.add(s);
             }

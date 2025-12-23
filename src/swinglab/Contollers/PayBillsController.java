@@ -13,17 +13,30 @@ import java.awt.event.ActionListener;
 
 public class PayBillsController implements ActionListener {
 
-    private final PayBillsPanel view;
+    private  PayBillsPanel view;
+    private static PayBillsController instance;
 
-    public PayBillsController(PayBillsPanel view) {
+    public void setView(PayBillsPanel view) {
         this.view = view;
-
-        // Fill combo box
         view.setBusinesses(UserManager.getInstance().getBusinessesNames());
 
         // Listeners
         view.addPayListener(this);
         view.addCloseListener(this);
+    }
+
+    private PayBillsController() {
+
+    }
+    public static PayBillsController getInstance() {
+        if(instance  == null){
+            instance = new PayBillsController();
+            return instance;
+        }
+        return instance;
+    }
+    public void setAccounts(){
+        JComboBoxController.getInstance().fillAccountsJComboBox(view);
     }
 
     @Override
@@ -66,9 +79,12 @@ public class PayBillsController implements ActionListener {
             var svc = new PaymentRail();
 
             var okLocal = new PaymentRequest(iban,rf,AppMediator.getUser().getUserId());
-            String message = svc.execute(okLocal);
+            Boolean ok= svc.execute(okLocal);
+            if(!ok){
+                throw new Exception(svc.getMessage());
+            }
             JOptionPane.showMessageDialog(view,
-                    message,"Success",
+                    svc.getMessage(),"Success",
                     JOptionPane.INFORMATION_MESSAGE);
             // For RF payments: amount is encoded in RF code or retrieved from backend
 

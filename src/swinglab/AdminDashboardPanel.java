@@ -1,5 +1,7 @@
 package swinglab;
 
+import swinglab.Contollers.AccountsController;
+import swinglab.Contollers.ActiveOrdersController;
 import swinglab.Contollers.AdminRequestsController;
 import swinglab.Contollers.AllStatementsController;
 
@@ -18,7 +20,7 @@ import javax.swing.SwingConstants;
 
 class AdminDashboardPanel extends JPanel implements ActionListener{
 
-    JButton btnViewAccounts, btnAbout, btnLogout,btnViewStatements,btnRequests,btnSimulateTime;
+    JButton btnViewAccounts,getBtnViewBills, btnViewStandingOrders, btnLogout,btnViewStatements,btnRequests,btnSimulateTime;
 
     AdminDashboardPanel() {
         setLayout(new BorderLayout(10,10)); //(int hgap, int vgap)
@@ -30,16 +32,16 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
 
         JPanel center = new JPanel(new GridLayout(2, 3, 10, 10)); // (rows, cols, hgap, vgap)
         btnViewAccounts = new JButton("View Accounts");
-        btnAbout = new JButton("About");
-        btnLogout = new JButton("Logout");
+        btnViewStandingOrders = new JButton("View Standing Orders");
+        getBtnViewBills = new JButton("View All Bills");
         btnViewStatements = new JButton("View Statements");
         btnRequests = new JButton("Requests");
         btnSimulateTime = new JButton("Simulate Time");
 
 
         center.add(btnViewAccounts);
-        center.add(btnAbout);
-        center.add(btnLogout);
+        center.add(btnViewStandingOrders);
+        center.add(getBtnViewBills);
         center.add(btnViewStatements);
         center.add(btnRequests);
         center.add(btnSimulateTime);
@@ -51,8 +53,8 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
 
         // events
         btnViewAccounts.addActionListener(this);
-        btnAbout.addActionListener(this);
-        btnLogout.addActionListener(this);
+        btnViewStandingOrders.addActionListener(this);
+        getBtnViewBills.addActionListener(this);
         btnViewStatements.addActionListener(this);
         btnRequests.addActionListener(this);
         btnSimulateTime.addActionListener(this);
@@ -62,11 +64,10 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource()==btnViewAccounts) {
-//            AccountsController.getInstance().setModel((Customer) AppMediator.getUser());
-//            AppMediator.getCardLayout().show(AppMediator.getCards(), "accounts");
+            AccountsController.getInstance().setModel(null);
+            AccountsController.getInstance().loadAllAccounts();
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "accounts");
         }
-        else if (e.getSource()==btnAbout)
-            AppMediator.getCardLayout().show(AppMediator.getCards(), "about");
         else if (e.getSource()==btnRequests) {
             AdminRequestsController.getInstance().loadPendingRequests();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "adminRequests");
@@ -78,8 +79,16 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
             AllStatementsController.getInstance().loadStatements();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "allStatements");
         }
-//        else if (e.getSource()==btnPayments)
-//            AppMediator.getCardLayout().show(AppMediator.getCards(), "payments");
+      else if (e.getSource()==btnViewStandingOrders){
+          ActiveOrdersController.getInstance().setModel(null);
+            ActiveOrdersController.getInstance().loadAllOrders();
+           AppMediator.getCardLayout().show(AppMediator.getCards(), "activeStandingOrders");
+      }
+        else if (e.getSource()==getBtnViewBills){
+            AllStatementsController.getInstance().loadBills();
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "allBills");
+        }
+
 //        else if (e.getSource()==btnESO)
 //            AppMediator.getCardLayout().show(AppMediator.getCards(), "activeStandingOrders");
         else if (e.getSource()==btnLogout) {

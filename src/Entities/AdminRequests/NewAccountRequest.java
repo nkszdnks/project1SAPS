@@ -6,6 +6,7 @@ import Entities.Users.IndividualPerson;
 import Managers.AccountManager;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -17,8 +18,12 @@ public class NewAccountRequest extends AdminRequest{
         private ArrayList<IndividualPerson> coOwners = new ArrayList<IndividualPerson>();
 
 
-        public NewAccountRequest(Customer customer, double initialDeposit, ArrayList<IndividualPerson> coOwners ) {
-            super(customer.getUserId()+"defaultID"+String.valueOf(random.nextInt(1000)), "NewAccount", "New Account", customer);
+
+    public NewAccountRequest(Customer customer, double initialDeposit, ArrayList<IndividualPerson> coOwners ) {
+            super( String.format(
+                    "NAID-%s-%04d"+
+                    LocalDateTime.now().toLocalDate().toString().replace("-", "")+
+                    customer.getUserId()+String.valueOf(random.nextInt(1000))), "NewAccount", "New Account", customer);
             this.initialDeposit = initialDeposit;
             this.coOwners = coOwners;
 
@@ -56,16 +61,16 @@ public class NewAccountRequest extends AdminRequest{
         private PersonalAccount CreateNewAccount(){
              String iban = generateIBAN("100");
              String accountID = generateAccountID();
-             return new PersonalAccount(accountID,iban,1,0.0, LocalDate.now());
+             return new PersonalAccount(accountID,iban,1,0.0, LocalDate.now(),0);
         }
 
     private static String generateIBAN(String accountType) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("GR");          // Country
+        sb.append("GR");// Country
         sb.append(accountType);   // Account type
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 15; i++) {
             sb.append(random.nextInt(10));
         }
 

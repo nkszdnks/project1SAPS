@@ -2,6 +2,7 @@ package swinglab;
 
 import Entities.Users.Customer;
 import swinglab.Contollers.AccountsController;
+import swinglab.Contollers.ActiveOrdersController;
 
 import java.awt.BorderLayout;
 import javax.swing.*;
@@ -17,11 +18,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-class DashboardPanel extends JPanel implements ActionListener{
+public class DashboardPanel extends JPanel implements ActionListener{
 	
 	JButton btnAccounts, btnAbout, btnLogout,btnTransfers,btnPayments,btnCPD,btnESO;
     
-    DashboardPanel() {
+    public DashboardPanel() {
         setLayout(new BorderLayout(10,10)); //(int hgap, int vgap)
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
 
@@ -76,8 +77,10 @@ class DashboardPanel extends JPanel implements ActionListener{
 			AppMediator.getCardLayout().show(AppMediator.getCards(), "changePersonalDetails");
 		else if (e.getSource()==btnPayments)
 			AppMediator.getCardLayout().show(AppMediator.getCards(), "payments");
-		else if (e.getSource()==btnESO)
-			AppMediator.getCardLayout().show(AppMediator.getCards(), "activeStandingOrders");
+		else if (e.getSource()==btnESO) {
+            ActiveOrdersController.getInstance().setModel((Customer) AppMediator.getUser());
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "activeStandingOrders");
+        }
 		else if (e.getSource()==btnLogout) {
 			AppMediator.getCardLayout().show(AppMediator.getCards(), "login");
 			AppMediator.getBank().disableUserMenu();

@@ -1,5 +1,6 @@
 package swinglab.Contollers;
 
+import Managers.AccountManager;
 import Managers.BillManager;
 import Managers.StandingOrderManager;
 import swinglab.AppMediator;
@@ -12,7 +13,6 @@ import java.time.LocalDate;
 
 public class SimulateTimeController implements ActionListener {
 
-    private static SimulateTimeController instance;
     private static SimulateTimePanel view;
 
     public SimulateTimeController(SimulateTimePanel view) {
@@ -45,6 +45,16 @@ public class SimulateTimeController implements ActionListener {
             AppMediator.setToday(today);
             BillManager.getInstance().restoreEachDay(today);
             StandingOrderManager.getInstance().executeOrders();
+
+            AccountManager.getInstance().ComputeDailyInterests();
+
+            if (today.plusDays(1).getDayOfMonth() == 1) {
+                AccountManager.getInstance().PostMonthlyInterests();
+                AccountManager.getInstance().PostMaintenanceFee();
+            }
+
+
+            //}
 
             // Restore / process daily operations
 //            AppMediator.getBank().restoreEachDay(today);
