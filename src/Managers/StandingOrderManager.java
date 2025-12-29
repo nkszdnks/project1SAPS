@@ -2,21 +2,19 @@ package Managers;
 
 
 
+import Commands.ScheduledTransferCommand;
 import DataAccessObjects.FactoryDAO;
 import DataAccessObjects.StandingOrdersDAO;
 import Entities.Accounts.BankAcount;
 import Entities.Accounts.Statements.FailedOrderStatement;
 import Entities.StandingOrders.OrderStatus;
-import Entities.StandingOrders.PaymentOrder;
 import Entities.StandingOrders.StandingOrder;
-import Entities.StandingOrders.TransferOrder;
+import Entities.Transactions.TransactionStatus;
 import Entities.Users.Customer;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.ArrayList;
-import java.util.List;
 
 public class StandingOrderManager implements Manager {
     private static StandingOrderManager INSTANCE;
@@ -25,7 +23,11 @@ public class StandingOrderManager implements Manager {
     private ArrayList<StandingOrder> active = new ArrayList<>();
     private ArrayList<StandingOrder> expired = new ArrayList<>();
     private ArrayList<FailedOrderStatement> failed = new ArrayList<>();
-    private ArrayList<StandingOrder> paused = new ArrayList<>();
+    private ArrayList<ScheduledTransferCommand> scheduledTransfers = new ArrayList<>();
+
+    public ArrayList<ScheduledTransferCommand> getScheduledTransfers() {
+        return scheduledTransfers;
+    }
 
     private StandingOrderManager() {
         factoryDAO = FactoryDAO.getInstance();
@@ -118,6 +120,20 @@ public class StandingOrderManager implements Manager {
 //        expired.remove(standingOrder);
 //        failed.remove(standingOrder);
 //    }
+    public void executeScheduledTransfers(){
+        ArrayList<ScheduledTransferCommand> toRemove = new ArrayList<>();
+        for (ScheduledTransferCommand scheduledTransferCommand : scheduledTransfers) {
+            if(scheduledTransferCommand.getScheduledDate().equals(AppMediator.getToday())){
+                scheduledTransferCommand.execute();
+                if(scheduledTransferCommand.getStatus().equals(TransactionStatus.COMPLETED)){
+                    toRemove.add(scheduledTransferCommand);
+                }
+            }
+        }
+        for(ScheduledTransferCommand s:toRemove){
+            scheduledTransfers.remove(s);
+        }
+    }
 
     public void executeOrders() {
         ArrayList<StandingOrder> toRemove = new ArrayList<>();
@@ -151,38 +167,6 @@ public class StandingOrderManager implements Manager {
         for(StandingOrder standingOrder : toRemove){
            active.remove(standingOrder);
             }
-//            if(standingOrder.getType().equals("PaymentOrder")){
-//                paymentOrder = (PaymentOrder) standingOrder;
-//                if (BillManager.getInstance().findBill(paymentOrder.getRF()) == null)
-//                    continue;
-//                if(paymentOrder.getExpirationDate().equals(MainMenu.today)||paymentOrder.getExpirationDate().isBefore(MainMenu.today)){
-//                    do {
-//                        isSuccesful = paymentOrder.attemptOrder();
-//                    } while (paymentOrder.getAttempts() < 3 && !isSuccesful);
-//                    if(paymentOrder.getAttempts()>=3&&!isSuccesful){
-//                        failed.getList().add(standingOrder);
-//                    }
-//                    toRemove.add(standingOrder);
-//                }
-//            }
-//            else if(standingOrder.getType().equals("TransferOrder")){
-//                transferOrder = (TransferOrder) standingOrder;
-//                long monthsPast = transferOrder.getStartDate().until(MainMenu.today).toTotalMonths();
-//                if(transferOrder.getDayOfMonth()==MainMenu.today.getDayOfMonth() && monthsPast>0 && monthsPast%transferOrder.getTransferFrequency()==0){
-//                    do {
-//                        isSuccesful = transferOrder.attemptOrder();
-//                    }while (transferOrder.getAttempts() < 3 && !isSuccesful);
-//                    if(transferOrder.getAttempts()>=3&&!isSuccesful) {
-//                        failed.getList().add(standingOrder);
-//                        toRemove.add(standingOrder);  // newLine
-//                    }
-//                }
-//            }
-//        }
-//        for(StandingOrder standingOrder : toRemove){
-//            active.getList().remove(standingOrder);
-//        }
-//    }
     }
 
     private FailedOrderStatement creteFailedStatement(StandingOrder standingOrder) {

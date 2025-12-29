@@ -34,7 +34,7 @@ public class TransferBuilder extends TransactionBuilder {
 
     @Override
     public Transaction build() {
-        Transfer transfer = new Transfer(transactionId,timestamp,amount,reason,executorID,status,sourceIBAN,targetIBAN,bankFee,type);
+        Transfer transfer = new Transfer(timestamp,amount,reason,executorID,status,sourceIBAN,targetIBAN,bankFee,type);
         return transfer;
     }
 }

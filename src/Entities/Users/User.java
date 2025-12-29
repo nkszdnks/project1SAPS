@@ -1,6 +1,7 @@
 package Entities.Users;
 
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 public abstract class User {
@@ -9,6 +10,15 @@ public abstract class User {
     private String username;
     private String passwordHash;
     private UserRole role;
+    private LocalDateTime lastLogin;
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
 
     public User(String userId, String username, String passwordHash, UserRole role) {
         this.userId = userId;
@@ -45,7 +55,7 @@ public abstract class User {
 
         switch (role) {
             case PERSON:
-                return new IndividualPerson(
+                IndividualPerson person = new IndividualPerson(
                         map.get("userId"),
                         map.get("username"),
                         map.get("passwordHash"),
@@ -56,9 +66,11 @@ public abstract class User {
                         map.get("afm"),
                         map.get("vatNumber")
                 );
+                person.setLastLogin(LocalDateTime.parse(map.get("lastLogin")));
+                return person;
 
             case BUSINESS:
-                return new Business(
+                Business business = new Business(
                         map.get("userId"),
                         map.get("username"),
                         map.get("passwordHash"),
@@ -68,14 +80,18 @@ public abstract class User {
                         map.get("afm"),
                         map.get("vatNumber")
                 );
+                business.setLastLogin(LocalDateTime.parse(map.get("lastLogin")));
+                return business;
 
             case ADMIN:
-                return new Admin(
+                Admin admin = new Admin(
                         map.get("userId"),
                         map.get("username"),
                         map.get("passwordHash"),
                         map.get("employeeId")
                 );
+                admin.setLastLogin(LocalDateTime.parse(map.get("lastLogin")));
+                return admin;
 
             default:
                 throw new RuntimeException("Unknown role in CSV: " + role);

@@ -7,18 +7,13 @@ import java.time.LocalDateTime;
 
 public abstract class TransactionBuilder {
 
-    protected String transactionId;
     protected LocalDateTime timestamp;
     protected double amount;
     protected String reason;
     protected String executorID;
     protected TransactionStatus status;
 
-       //Generate all the setters
-    public TransactionBuilder setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-        return this;
-    }
+
     public TransactionBuilder setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
         return this;

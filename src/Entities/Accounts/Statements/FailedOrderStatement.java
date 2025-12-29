@@ -25,7 +25,7 @@ public class FailedOrderStatement extends Statement {
             int attempts,
             double fee
     ) {
-        super(timestamp, amount, balanceAfter, description, ibansInvolved, orderId,fee);
+        super(timestamp, amount, balanceAfter, description, ibansInvolved, orderId,fee,"STANDING ORDER");
         this.executorID = executorID;
         this.orderId = orderId;
         this.orderType = orderType;
@@ -47,7 +47,7 @@ public class FailedOrderStatement extends Statement {
             int attempts,
             double fee
     ) {
-        super(statemendId,timestamp, amount, balanceAfter, description, ibansInvolved, orderId,fee);
+        super(statemendId,timestamp, amount, balanceAfter, description, ibansInvolved, orderId,fee,"STANDING ORDER");
         this.executorID = executorID;
         this.orderId = orderId;
         this.orderType = orderType;

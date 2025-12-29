@@ -35,7 +35,7 @@ public class StandingOrderDetailsDialog extends JDialog {
         c.gridx = 0; c.gridy = 2;
         content.add(new JLabel("Amount (€):"), c);
         c.gridx = 1;
-        content.add(createField(String.valueOf(s.getAmount())), c);
+        content.add(createField(String.valueOf(AppMediator.euroFormat.format(s.getAmount()))), c);
 
         /* -------- Row 3 -------- */
         c.gridx = 0; c.gridy = 3;
@@ -53,7 +53,7 @@ public class StandingOrderDetailsDialog extends JDialog {
         c.gridx = 0; c.gridy = 5;
         content.add(new JLabel("Next Execution:"), c);
         c.gridx = 1;
-        content.add(createField(String.valueOf(s.getExecutionDate())), c);
+        content.add(createField(String.valueOf(s.getStatus().equals(OrderStatus.EXPIRED)?"-":s.getExecutionDate())), c);
 
         /* -------- Row 6 -------- */
         c.gridx = 0; c.gridy = 6;
@@ -79,10 +79,13 @@ public class StandingOrderDetailsDialog extends JDialog {
         buttons.add(btnActivate);
 
         // Status-based visibility
-        if (s.getStatus() == OrderStatus.ACTIVE) {
+        if (s.getStatus() == OrderStatus.EXPIRED ) {
             btnActivate.setVisible(false);
-        } else {
             btnPause.setVisible(false);
+        } else if(s.getStatus() == OrderStatus.PAUSED ){
+            btnPause.setVisible(false);
+        }else {
+            btnActivate.setVisible(false);
         }
 
         c.gridx = 0;

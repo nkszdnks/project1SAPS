@@ -3,7 +3,7 @@ package swinglab.Contollers;
 import Managers.AccountManager;
 import Managers.BillManager;
 import Managers.StandingOrderManager;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 import swinglab.View.SimulateTimePanel;
 
 import javax.swing.*;
@@ -45,6 +45,7 @@ public class SimulateTimeController implements ActionListener {
             AppMediator.setToday(today);
             BillManager.getInstance().restoreEachDay(today);
             StandingOrderManager.getInstance().executeOrders();
+            StandingOrderManager.getInstance().executeScheduledTransfers();
 
             AccountManager.getInstance().ComputeDailyInterests();
 

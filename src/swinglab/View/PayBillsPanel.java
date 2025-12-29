@@ -1,4 +1,4 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Accounts.BankAcount;
 
@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class PayBillsPanel extends JPanel implements hasIbanField{
+public class PayBillsPanel extends JPanel implements hasIbanField {
 
     private final JComboBox<String> fromIbans = new JComboBox<>();
     private final JTextField rfCode = new JTextField(25);

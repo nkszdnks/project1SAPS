@@ -3,33 +3,40 @@ package swinglab.Contollers;
 import Entities.Accounts.BankAcount;
 import Entities.AdminRequests.DepositAdminRequest;
 import Entities.Transactions.Rails.DepositRail;
-import Entities.Transactions.Rails.PaymentRail;
-import Entities.Transactions.Requests.PaymentRequest;
 import Entities.Users.Customer;
 import Managers.AccountManager;
-import Managers.BillManager;
-import Managers.UserManager;
-import swinglab.AppMediator;
-import swinglab.DepositMoneyPanel;
-import swinglab.PayBillsPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.DepositMoneyPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DepositMoneyController implements ActionListener {
+    private static DepositMoneyController instance;
+    private DepositMoneyPanel view;
 
-    private final DepositMoneyPanel view;
-
-    public DepositMoneyController(DepositMoneyPanel view) {
+    public void setView(DepositMoneyPanel view) {
         this.view = view;
-
-        // Fill combo box
-
-        // Listeners
         view.addFinishListener(this);
         view.addCloseListener(this);
     }
+
+    private DepositMoneyController() {
+
+    }
+    public static DepositMoneyController getInstance() {
+        if(instance  == null){
+            instance = new DepositMoneyController();
+            return instance;
+        }
+        return instance;
+    }
+    public void setAccounts(){
+        JComboBoxController.getInstance().fillAccountsJComboBox(view);
+    }
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -42,7 +49,7 @@ public class DepositMoneyController implements ActionListener {
                 break;
 
             case "Close":
-                AppMediator.getCardLayout().show(AppMediator.getCards(), "payments");
+                AppMediator.getCardLayout().show(AppMediator.getCards(), "transfersPanel");
                 break;
         }
     }
@@ -50,9 +57,9 @@ public class DepositMoneyController implements ActionListener {
     private void handleDeposit() {
 
         try {
-            String iban = view.getIbanField().getText().trim();
-            String amount = view.getAmountField().getText().trim();
-            String description = view.getDescriptionField().getText().trim();
+            String iban = view.getIbanField();
+            String amount = view.getAmountField();
+            String description = view.getDescriptionField();
 
 
             if (iban.isEmpty() || amount.isEmpty()) {
@@ -61,9 +68,6 @@ public class DepositMoneyController implements ActionListener {
 
             BankAcount b = AccountManager.getInstance().findAccountByIBAN(iban);
 
-            if(b == null) {
-                throw new Exception("This IBAN does not exist.");
-            }
 
             var svc = new DepositRail();
 

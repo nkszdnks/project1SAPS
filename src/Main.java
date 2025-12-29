@@ -25,7 +25,7 @@ public class Main {
 
 
         BankTransferApiClient bankTransferApiClient = new BankTransferApiClient();
-        Transfer transfer = new Transfer("defaultID", LocalDateTime.now(),100,"Test","4058954", TransactionStatus.PENDING,"GR100202503111546001","DU552202603111549009",2.4,"Transfer");
+        Transfer transfer = new Transfer( LocalDateTime.now(),100,"Test","4058954", TransactionStatus.PENDING,"GR100202503111546001","DU552202603111549009",2.4,"Transfer");
         ExecutionContext executionContext = new ExecutionContext(transfer);
         SepaTransferRequest  sepaTransferRequest = executionContext.toSepaRequest();
         SepaExecutor sepaExecutor = new SepaExecutor(bankTransferApiClient);

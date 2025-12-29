@@ -13,10 +13,17 @@ public abstract class Transaction {
     private String reason;
     private String executorID;
     private TransactionStatus status;
+    private static long COUNTER = 0;
 
-    public Transaction(String transactionId, LocalDateTime timestamp, double amount,
+
+    public Transaction( LocalDateTime timestamp, double amount,
                        String reason, String executorID, TransactionStatus status) {
-        this.transactionId = transactionId;
+
+        this.transactionId =  String.format(
+                "TR_ID-%s-%04d",
+                LocalDateTime.now().toString().replace("-", ""),
+                ++COUNTER
+        );
         this.timestamp = timestamp;
         this.amount = amount;
         this.reason = reason;

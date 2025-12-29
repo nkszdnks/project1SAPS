@@ -47,6 +47,7 @@ public class Business extends Customer {
                 ",firstName:" +
                 ",lastName:" +
                 ",afm:" +
+                ",lastLogin:"+String.valueOf(getLastLogin()) +
                 ",businessName:" + getBusinessName() +
                 ",employeeId:" +
                 ",vatNumber:" + getVAT();

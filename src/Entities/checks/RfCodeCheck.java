@@ -1,30 +1,61 @@
 package Entities.checks;
 
-
 import Entities.Transactions.Requests.PaymentRequest;
 import Entities.Transactions.Requests.TransactionRequest;
-import Entities.Transactions.TransactionStatus;
-import Entities.Users.BillStatus;
 import Entities.Users.Bills;
 import Managers.BillManager;
 import Managers.UserManager;
 
 public class RfCodeCheck extends BaseCheck {
-    private StringBuilder errorMessage;
-    private boolean isValid(String RfCode){
-        Bills bill = BillManager.getInstance().findBill(RfCode);
-        return RfCode != null && RfCode.startsWith("RF") && bill != null && bill.getCustomer() != null ;
-    }
+
+    private String errorMessage = "";
+
     @Override
     protected boolean apply(TransactionRequest req) {
-        String rf = ((PaymentRequest)req).getRfCode();
-        if(isValid(((PaymentRequest)req).getRfCode())){
-            ((PaymentRequest)req).setAmount(BillManager.getInstance().findBill(rf).getAmount());
+
+        PaymentRequest paymentReq = (PaymentRequest) req;
+        String rfCode = paymentReq.getRfCode();
+
+        // 1. RF code exists
+        if (rfCode == null || rfCode.isBlank()) {
+            errorMessage = "RF code is missing";
+            return false;
         }
 
-        return isValid(((PaymentRequest)req).getRfCode()) && BillManager.getInstance().findBill(((PaymentRequest) req).getRfCode()).getCustomer().equals(UserManager.getInstance().findCustomerByID(req.getExecutorID())) ;
+        // 2. RF format
+        if (!rfCode.startsWith("RF")) {
+            errorMessage = "Invalid RF code format";
+            return false;
+        }
+
+        // 3. Bill exists
+        Bills bill = BillManager.getInstance().findBill(rfCode);
+        if (bill == null) {
+            errorMessage = "RF code does not correspond to an existing bill";
+            return false;
+        }
+
+        // 4. Bill has customer
+        if (bill.getCustomer() == null) {
+            errorMessage = "Bill is not associated with a customer";
+            return false;
+        }
+
+        // 5. Executor is the bill owner
+        if (!bill.getCustomer()
+                .equals(UserManager.getInstance().findCustomerByID(req.getExecutorID()))) {
+            errorMessage = "RF code does not belong to the executing customer";
+            return false;
+        }
+
+        // 6. Set amount from bill
+        paymentReq.setAmount(bill.getAmount());
+
+        return true;
     }
 
-@Override
-protected String failMessage() { return "Invalid RF code:"; }
+    @Override
+    protected String failMessage() {
+        return errorMessage;
+    }
 }

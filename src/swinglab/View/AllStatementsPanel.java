@@ -1,15 +1,11 @@
 package swinglab.View;
 
 import Entities.Accounts.Statements.Statement;
-import Entities.Transactions.Transaction;
 import Managers.AccountManager;
-import Managers.TransactionManager;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -29,8 +25,7 @@ public class AllStatementsPanel extends JPanel {
 
     public JButton details, clearSel, closePan;
 
-    private final NumberFormat euroFormat =
-            NumberFormat.getCurrencyInstance(Locale.GERMANY);
+
 
     public AllStatementsPanel() {
 
@@ -76,10 +71,10 @@ public class AllStatementsPanel extends JPanel {
                 t.getTimestamp(),
                 t.getDescription(),
                 t.getIbansInvolved()[0] + " → " + (t.getIbansInvolved()[1].isEmpty() ? "—" : t.getIbansInvolved()[1]),
-                euroFormat.format(t.getAmount()),
-                t.getFee(),
-                t.getBalanceAfter()[0],
-                t.getBalanceAfter()[1]==0.0 ?"-":t.getBalanceAfter()[1],
+                AppMediator.euroFormat.format(t.getAmount()),
+                AppMediator.euroFormat.format(t.getFee()),
+                AppMediator.euroFormat.format(t.getBalanceAfter()[0]),
+                t.getBalanceAfter()[1]==0.0 ?"-":AppMediator.euroFormat.format(t.getBalanceAfter()[1]),
                 "Completed"
         });
     }

@@ -1,4 +1,4 @@
-package swinglab;
+package swinglab.View;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-class AboutPanel extends JPanel implements ActionListener {
+public class AboutPanel extends JPanel implements ActionListener {
 
     public AboutPanel() {
         setLayout(new BorderLayout());
@@ -34,7 +34,7 @@ class AboutPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (AppMediator.getUser() != null)
-            AppMediator.getCardLayout().show(AppMediator.getCards(),"dashboard");
+            AppMediator.goToHomeDashboard();
         else
             AppMediator.getCardLayout().show(AppMediator.getCards(),"login");
     }

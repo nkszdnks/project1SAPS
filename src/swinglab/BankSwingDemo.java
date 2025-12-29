@@ -1,6 +1,6 @@
 package swinglab;
 
-import swinglab.BankFrame;
+import swinglab.View.BankFrame;
 
 import javax.swing.SwingUtilities;
 

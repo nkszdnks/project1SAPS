@@ -1,11 +1,13 @@
-package swinglab;
+package swinglab.View;
+
+import Entities.Accounts.BankAcount;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
-public class WithdrawMoneyPanel extends JPanel {
-    private final JTextField ibanField = new JTextField(20);
+public class WithdrawMoneyPanel extends JPanel implements hasIbanField {
+    public final JComboBox<String> fromIbans = new JComboBox<>();
     private final JTextField amountField = new JTextField(10);
     private final JButton btnFinish = new JButton("Finish");
     private final JButton btnClose = new JButton("Close");
@@ -18,7 +20,7 @@ public class WithdrawMoneyPanel extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
 
         c.gridx=0; c.gridy=0; add(new JLabel("Account IBAN:"), c);
-        c.gridx=1; add(ibanField, c);
+        c.gridx=1; add(fromIbans, c);
         c.gridx=0; c.gridy=1; add(new JLabel("Withdrawal Amount (€):"), c);
         c.gridx=1; add(amountField, c);
 
@@ -34,7 +36,7 @@ public class WithdrawMoneyPanel extends JPanel {
 
     // ----- Getters for Controller -----
 
-    public String getFromIban() { return ibanField.getText(); }
+    public String getFromIban() { return String.valueOf(fromIbans.getSelectedItem()); }
     public String getAmount() { return amountField.getText(); }
     // ----- Listener registration -----
     public void addCloseListener(java.awt.event.ActionListener l) {
@@ -43,5 +45,12 @@ public class WithdrawMoneyPanel extends JPanel {
 
     public void addFinishListener(java.awt.event.ActionListener l) {
         btnFinish.addActionListener(l);
+    }
+
+    @Override
+    public void setIbans(ArrayList<BankAcount> accounts) {
+        fromIbans.removeAllItems();
+        for (BankAcount b : accounts)
+            fromIbans.addItem(b.getIBAN());
     }
 }

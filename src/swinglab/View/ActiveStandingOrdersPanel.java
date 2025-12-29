@@ -1,13 +1,6 @@
-package swinglab;
-
-import Entities.Accounts.BankAcount;
-import Entities.StandingOrders.StandingOrder;
-import Managers.AccountManager;
-import Managers.StandingOrderManager;
-import swinglab.View.StatusCellRenderer;
+package swinglab.View;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -90,7 +83,7 @@ public class ActiveStandingOrdersPanel extends JPanel  {
     }
 
     public void addAccountRow(String orderID,String Title,String Type, String StartDate,String EndDate,String NextExecution,String SourceIban,String Status ) {
-        model.addRow(new Object[] { orderID,Title, Type, StartDate, EndDate,NextExecution,SourceIban,Status });
+        model.addRow(new Object[] { orderID,Title, Type, StartDate, EndDate,Status.equals("EXPIRED")?"-":NextExecution,SourceIban,Status });
         TableColumn idColumn = table.getColumnModel().getColumn(0);
         idColumn.setMinWidth(0);
         idColumn.setMaxWidth(0);

@@ -2,26 +2,41 @@ package swinglab.Contollers;
 
 import Entities.Transactions.Rails.WithdrawlRail;
 import Entities.Transactions.Requests.WithdrawlRequest;
-import swinglab.AppMediator;
-import swinglab.WithdrawMoneyPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.WithdrawMoneyPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class WithdrawlsController implements ActionListener {
+    private static WithdrawlsController instance;
+    private  WithdrawMoneyPanel view;
 
-    private final WithdrawMoneyPanel view;
-
-
-
-
-    public WithdrawlsController(WithdrawMoneyPanel view) {
+    public void setView(WithdrawMoneyPanel view) {
         this.view = view;
         view.addFinishListener(this);
         view.addCloseListener(this);
+    }
+
+    private WithdrawlsController() {
 
     }
+    public static WithdrawlsController getInstance() {
+        if(instance  == null){
+            instance = new WithdrawlsController();
+            return instance;
+        }
+        return instance;
+    }
+    public void setAccounts(){
+        JComboBoxController.getInstance().fillAccountsJComboBox(view);
+    }
+
+
+
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -45,12 +60,12 @@ public class WithdrawlsController implements ActionListener {
 
         try {
             String iban = view.getFromIban().trim();
-            double amount = Double.parseDouble(view.getAmount().trim());
+            String stringAmount = view.getAmount().trim();
 
-            if (iban.isEmpty() || String.valueOf(amount).isEmpty() ) {
+            if (iban.isEmpty() || String.valueOf(stringAmount).isEmpty() ) {
                 throw new Exception("IBAN and Amount  is required.");
             }
-
+            double amount = Double.parseDouble(stringAmount);
             if (amount <= 0) {
                 JOptionPane.showMessageDialog(view,
                         "Amount must be positive.",

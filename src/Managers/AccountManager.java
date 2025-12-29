@@ -69,15 +69,7 @@ public ArrayList<BusinessAcount> getMyBusinessAccounts(Business b) {
     }
     return list;
 }
-    public ArrayList<BusinessAcount> getBusinessAccounts() {
-        ArrayList<BusinessAcount> businessAccounts = new ArrayList<>();
-        for(BankAcount account: bankAccounts){
-            if(account instanceof BusinessAcount businessAccount){
-                businessAccounts.add(businessAccount);
-            }
-        }
-        return businessAccounts;
-    }
+
 
     public void ComputeDailyInterests() {
         for (BankAcount account: bankAccounts) {
@@ -103,57 +95,57 @@ public ArrayList<BusinessAcount> getMyBusinessAccounts(Business b) {
 
     }
 
-public void TaxPay(String iban) {
-        BankAcount acc = findAccountByIBAN(iban);
-        if (!(acc instanceof BusinessAcount account)) {
-            throw new IllegalArgumentException("IBAN does not belong to a Business Account");
-        }
-
-        float fee = account.getMaintenanceFee();
-        if (fee <= 0) return; // τίποτα να χρεωθεί
-
-        if (account.getAccountBalance() < fee) {
-            throw new IllegalStateException("Insufficient balance for maintenance fee");
-        }
-         String txId = account.getIBAN();
-        //Chang to the bank's IBAN
-        String bankOfTucIBAN = "1234567890";
-
-        Transfer maintenancePayment = new Transfer(
-                txId,
-                LocalDateTime.now(),
-                fee,
-                "Maintenance Tax Payment",
-                account.getAcountID(),        // executor
-                TransactionStatus.PENDING,    // αφήνουμε το Transact() να το περάσει COMPLETED
-                account.getIBAN(),            // source
-                bankOfTucIBAN,                // target
-                0f,                           // bankFee
-                "TRANSFER"
-        );
-        maintenancePayment.Transact();
-    }
+//public void TaxPay(String iban) {
+//        BankAcount acc = findAccountByIBAN(iban);
+//        if (!(acc instanceof BusinessAcount account)) {
+//            throw new IllegalArgumentException("IBAN does not belong to a Business Account");
+//        }
+//
+//        float fee = account.getMaintenanceFee();
+//        if (fee <= 0) return; // τίποτα να χρεωθεί
+//
+//        if (account.getAccountBalance() < fee) {
+//            throw new IllegalStateException("Insufficient balance for maintenance fee");
+//        }
+//         String txId = account.getIBAN();
+//        //Chang to the bank's IBAN
+//        String bankOfTucIBAN = "1234567890";
+//
+//        Transfer maintenancePayment = new Transfer(
+//                txId,
+//                LocalDateTime.now(),
+//                fee,
+//                "Maintenance Tax Payment",
+//                account.getAcountID(),        // executor
+//                TransactionStatus.PENDING,    // αφήνουμε το Transact() να το περάσει COMPLETED
+//                account.getIBAN(),            // source
+//                bankOfTucIBAN,                // target
+//                0f,                           // bankFee
+//                "TRANSFER"
+//        );
+//        maintenancePayment.Transact();
+//    }
 
         
        
-    public void TaxPayAllBusinesses() {
-        for (BusinessAcount acc : getBusinessAccounts()) {
-            if (acc instanceof BusinessAcount) {
-                TaxPay(acc.getIBAN());          // ήδη υπάρχουσα μέθοδος
-            }
-        }
-    }
-
-    public void payInterest(){
-        for(BankAcount acc : bankAccounts){
-            double interestAmount = acc.getAccountBalance() * (acc.getInterestRate() / 100);
-            acc.setAccountBalance(acc.getAccountBalance() + interestAmount);
-        }
-        for(BusinessAcount acc : getBusinessAccounts()){
-            double interestAmount = acc.getAccountBalance() * (acc.getInterestRate() / 100);
-            acc.setAccountBalance(acc.getAccountBalance() + interestAmount);
-        }
-    }
+//    public void TaxPayAllBusinesses() {
+//        for (BusinessAcount acc : getBusinessAccounts()) {
+//            if (acc instanceof BusinessAcount) {
+//                TaxPay(acc.getIBAN());          // ήδη υπάρχουσα μέθοδος
+//            }
+//        }
+//
+//
+//    public void payInterest(){
+//        for(BankAcount acc : bankAccounts){
+//            double interestAmount = acc.getAccountBalance() * (acc.getInterestRate() / 100);
+//            acc.setAccountBalance(acc.getAccountBalance() + interestAmount);
+//        }
+//        for(BusinessAcount acc : getBusinessAccounts()){
+//            double interestAmount = acc.getAccountBalance() * (acc.getInterestRate() / 100);
+//            acc.setAccountBalance(acc.getAccountBalance() + interestAmount);
+//        }
+//    }
 
     public BankAcount findAccountByIBAN(String iban) {
         for (BankAcount bankAccount : bankAccounts) {
@@ -176,7 +168,7 @@ public void TaxPay(String iban) {
     public ArrayList<PersonalAccount> getMySecondaryAccounts(IndividualPerson coOwner){
         ArrayList<PersonalAccount> secondaryAccounts = new ArrayList<>();
         for (BankAcount bankAccount : bankAccounts) {
-            if(bankAccount.getAccountType().equals("PersonalAccount")){
+            if(bankAccount.getAccountType().equals("Personal Account")){
                 PersonalAccount account = (PersonalAccount) bankAccount;
                 for(IndividualPerson owner2: account.getSecondaryOwners()){
                     if(owner2.equals(coOwner)){

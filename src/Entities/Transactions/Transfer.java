@@ -29,10 +29,10 @@ public class Transfer extends Transaction {
         return transferDetails;
     }
 
-    public Transfer(String transactionId, LocalDateTime timestamp, double amount,
+    public Transfer(LocalDateTime timestamp, double amount,
                     String reason, String executorID, TransactionStatus status,
                     String sourceIBAN, String targetIBAN, double bankFee, String type) {
-        super(transactionId, timestamp, amount, reason, executorID, status);
+        super(timestamp, amount, reason, executorID, status);
         this.sourceIBAN = sourceIBAN;
         this.targetIBAN = targetIBAN;
         this.bankFee = bankFee;
@@ -57,7 +57,7 @@ public class Transfer extends Transaction {
     protected void createStatement(BankAcount source, BankAcount target) {
         String[] ibansInvolved = {sourceIBAN, targetIBAN};
         double[] remainingBalances = {source.getAccountBalance(), target==null?0.0:target.getAccountBalance()};
-        Statement accountStatements = new Statement(getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),bankFee);
+        Statement accountStatements = new Statement(getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),bankFee,getType());
         StatementManager.getInstance().createStatement(accountStatements);
         source.addStatements(accountStatements);
         if(target != null) {

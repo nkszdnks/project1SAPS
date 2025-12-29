@@ -2,9 +2,8 @@ package Entities.Transactions;
 
 import Entities.Accounts.BankAcount;
 import Entities.Accounts.Statements.Statement;
-import Managers.AccountManager;
 import Managers.StatementManager;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -13,10 +12,10 @@ public class Deposit extends Transaction {
 
     private BankAcount sourceAccount;
 
-    public Deposit(String transactionId, LocalDateTime timestamp, double amount,
+    public Deposit(LocalDateTime timestamp, double amount,
                    String reason, String executorId, TransactionStatus status,
                    BankAcount sourceAccount) {
-        super(transactionId, timestamp, amount, reason, executorId, status);
+        super(timestamp, amount, reason, executorId, status);
         this.sourceAccount = sourceAccount;
     }
 
@@ -29,7 +28,7 @@ public class Deposit extends Transaction {
     protected void createStatement(BankAcount Source, BankAcount Target) {
         String[] ibansInvolved = {Source.getIBAN(),""};
         double[] remainingBalances = {Source.getAccountBalance(),0.0};
-        Statement accountStatements = new Statement(super.getTransactionId(), AppMediator.getToday().atTime(LocalTime.now()),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),0.0);
+        Statement accountStatements = new Statement(super.getTransactionId(), AppMediator.getToday().atTime(LocalTime.now()),getAmount(),  remainingBalances,"DEPOSIT: "+getReason(),ibansInvolved,getTransactionId(),0.0,getType());
         Source.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);
     }

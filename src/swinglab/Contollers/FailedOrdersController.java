@@ -3,7 +3,7 @@ package swinglab.Contollers;
 import Entities.Accounts.Statements.FailedOrderStatement;
 import Entities.Users.Customer;
 import Managers.StandingOrderManager;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 import swinglab.FailedOrdersPanel;
 
 import java.awt.event.ActionEvent;

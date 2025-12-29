@@ -22,7 +22,6 @@ public class WithdrawalBuilder extends TransactionBuilder {
             reason ="-";
         }
         return new Withdrawal(
-                transactionId,
                 timestamp,
                 amount,
                 reason,

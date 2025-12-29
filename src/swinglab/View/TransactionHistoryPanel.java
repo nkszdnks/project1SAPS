@@ -1,28 +1,22 @@
-package swinglab;
+package swinglab.View;
 
-import Entities.Accounts.BankAcount;
 import Entities.Accounts.Statements.Statement;
 import swinglab.Contollers.TransactionHistoryController;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 public class TransactionHistoryPanel extends JPanel {
@@ -38,7 +32,7 @@ public class TransactionHistoryPanel extends JPanel {
         title.setFont(title.getFont().deriveFont(Font.BOLD, 18f));
         add(title, BorderLayout.NORTH);
 
-        String[] cols = { "Date/Time","Type"," From → To", " Amount" , " Balance" ," Status"};
+        String[] cols = { "Date/Time","Type"," From → To", " Amount" , "Fee"," Balance" ," Status"};
         Object[][] data = {};
 
         model = new DefaultTableModel(data, cols) {
@@ -68,36 +62,37 @@ public class TransactionHistoryPanel extends JPanel {
 
     public void fillTable(java.util.List<Statement> statements) {
         model.setRowCount(0); // clear old rows
-
+        //PUT AN ATTRIBUTE "TYPE" IN STATEMENT AND CHECK IT TO FIND IF IT IS DEPOSIT TO PUT THE "+".
         for (Statement st : statements) {
             model.addRow(new Object[]{
                     st.getTimestamp(),
                     st.getDescription(),
                     st.getIbansInvolved()[0] + " → " + (st.getIbansInvolved()[1].isEmpty() ? "—" : st.getIbansInvolved()[1]),
-                    formatAmount(st.getAmount(),st.getIbansInvolved()),
+                    formatAmount(st),
+                    AppMediator.euroFormat.format(st.getFee()),
                     formatBalance(st.getBalanceAfter(),st.getIbansInvolved()),
                     "Completed"
             });
         }
     }
 
-    private String formatAmount(double amount,String[] ibansInvolved) {
-        if (TransactionHistoryController.getInstance().getModel().getIBAN().equals(ibansInvolved[0])) {
-        return String.format("-"+"%.2f", amount);
+    private String formatAmount(Statement st) {
+        if (TransactionHistoryController.getInstance().getModel().getIBAN().equals(st.getIbansInvolved()[0])&& !st.getTransactionType().equals("DEPOSIT")) {
+        return String.format("-"+AppMediator.euroFormat.format(st.getAmount()));
     }
     else {
-            return String.format("%+.2f", amount);
+            return String.format("+"+AppMediator.euroFormat.format(st.getAmount()));
 
         }
     }
 
     private String formatBalance(double[] b,String[] ibansInvolved) {
         if (b[1] == 0)
-            return String.format("%.2f", b[0]);
+            return String.format(AppMediator.euroFormat.format(b[0]));
         if(TransactionHistoryController.getInstance().getModel().getIBAN().equals(ibansInvolved[0])) {
-            return String.format("%.2f", b[0]);
+            return String.format(AppMediator.euroFormat.format(b[0]));
         }
-        return String.format("%.2f", b[1]);
+        return String.format(AppMediator.euroFormat.format(b[1]));
     }
 
 	/**

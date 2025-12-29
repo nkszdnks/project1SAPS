@@ -39,6 +39,7 @@ public class AcountsDAO {
         try (PrintWriter pw = new PrintWriter(new FileWriter(acountsFile))) {
             //pw.println("AccountID,IBAN,InterestRate,Balance,DateCreated,AccountType,MainOwnerID,SecondaryOwnerIDs,MaintenanceFee");
             for (BankAcount a : accounts) {
+                if(a.getAcountID().equals("BankOfTucACCID")) continue;
                 pw.println(a.marshal());
             }
         } catch (IOException e) {

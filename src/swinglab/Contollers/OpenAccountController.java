@@ -3,15 +3,14 @@ package swinglab.Contollers;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 
 import Entities.AdminRequests.NewAccountRequest;
 import Entities.Users.Customer;
 import Entities.Users.IndividualPerson;
 import Managers.AdminRequestsManager;
 import Managers.UserManager;
-import swinglab.AppMediator;
-import swinglab.OpenAcountPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.OpenAcountPanel;
 
 public class OpenAccountController {
 

@@ -2,9 +2,11 @@ package swinglab.Contollers;
 
 import Entities.Accounts.BankAcount;
 import Entities.Users.Customer;
+import Entities.Users.IndividualPerson;
+import Entities.Users.UserRole;
 import Managers.AccountManager;
-import swinglab.AccountsPanel;
-import swinglab.AppMediator;
+import swinglab.View.AccountsPanel;
+import swinglab.View.AppMediator;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,6 +64,15 @@ public class AccountsController extends WindowAdapter implements ActionListener 
                     account.getAccountBalance()
             );
         }
+        if(model.getRole().equals(UserRole.PERSON)){
+            for (BankAcount account : AccountManager.getInstance().getMySecondaryAccounts((IndividualPerson) model)) {
+                view.addAccountRow(
+                        account.getIBAN(),
+                        account.getCustomer().getFullName(),
+                        account.getAccountBalance()
+                );
+            }
+        }
         view.newAcount.setEnabled(true);
     }
     public void loadAllAccounts() {
@@ -98,7 +109,10 @@ public class AccountsController extends WindowAdapter implements ActionListener 
                     AppMediator.getCardLayout().show(AppMediator.getCards(),"adminDashboard");
                     break;
                 }
-                AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
+                String card = AppMediator.getUser().getRole() == UserRole.BUSINESS ? "businessDashboard"
+                        : AppMediator.getUser().getRole() == UserRole.ADMIN    ? "adminDashboard"
+                        : "dashboard";
+                AppMediator.getCardLayout().show(AppMediator.getCards(), card);
                 break;
 
             case "Open New Acount":

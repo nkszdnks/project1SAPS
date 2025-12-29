@@ -18,10 +18,10 @@ public class Payment extends Transaction {
     private double bankFee;
 
 
-    public Payment(String transactionId, LocalDateTime timestamp, double amount,
+    public Payment( LocalDateTime timestamp, double amount,
                    String reason, String executorID, TransactionStatus status,
                    String sourceIBAN, String BIRFCode,double bankFee) {
-        super(transactionId, timestamp, amount, reason, executorID, status);
+        super( timestamp, amount, reason, executorID, status);
         this.sourceIBAN = sourceIBAN;
         this.BillRFCode = BIRFCode;
         this.bankFee = bankFee;
@@ -38,7 +38,7 @@ public class Payment extends Transaction {
     protected void createStatement(BankAcount source, BankAcount target) {
         String[] ibansInvolved = {sourceIBAN, target.getIBAN()};
         double[] remainingBalances = {source.getAccountBalance(), target.getAccountBalance()};
-        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),bankFee);
+        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),bankFee,getType());
         source.addStatements(accountStatements);
         target.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);

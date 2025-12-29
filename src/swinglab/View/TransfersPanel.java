@@ -1,9 +1,7 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Users.Customer;
-import swinglab.Contollers.IntraBankTransferController;
-import swinglab.Contollers.JComboBoxController;
-import swinglab.Contollers.StandingTransferOrderController;
+import swinglab.Contollers.*;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -65,8 +63,8 @@ class TransfersPanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src == btnClose) {
-            // return to dashboard
-            AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
+            AppMediator.goToHomeDashboard();
+
         }
         else if (src == btnInterbank) {
             IntraBankTransferController.getInstance().setIbanFields();
@@ -76,10 +74,14 @@ class TransfersPanel extends JPanel implements ActionListener {
             IntraBankTransferController.getInstance().setIbanFields();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "intrabank");
         }
-        else if (src == btnDeposit)
+        else if (src == btnDeposit) {
+            DepositMoneyController.getInstance().setAccounts();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "deposit");
-        else if (src == btnWithdraw)
+        }
+        else if (src == btnWithdraw) {
+            WithdrawlsController.getInstance().setAccounts();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "withdraw");
+        }
         else if (src == btnStandingOrder) {
             StandingTransferOrderController.getInstance().setModel((Customer) AppMediator.getUser());
             AppMediator.getCardLayout().show(AppMediator.getCards(), "standingTransferOrder");

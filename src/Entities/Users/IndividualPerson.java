@@ -32,6 +32,7 @@ public class IndividualPerson extends Customer {
                 ",firstName:" + getFirstName() +
                 ",lastName:" + getLastName() +
                 ",afm:" + getAfm() +
+                ",lastLogin:"+String.valueOf(getLastLogin()) +
                 ",businessName:" +
                 ",employeeId:" +
                 ",vatNumber:" + getVAT();

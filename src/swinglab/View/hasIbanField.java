@@ -1,4 +1,4 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Accounts.BankAcount;
 

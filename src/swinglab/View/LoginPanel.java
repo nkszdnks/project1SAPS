@@ -1,13 +1,12 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Users.*;
-import Managers.AccountManager;
 import Managers.UserManager;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalTime;
 import javax.swing.*;
-import javax.swing.table.*;
 
 public class LoginPanel extends JPanel implements ActionListener {
     private final JTextField userField = new JTextField(14);
@@ -30,7 +29,7 @@ public class LoginPanel extends JPanel implements ActionListener {
         c.gridx = 1; c.gridy = 1; add(passField, c);
 
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttons.setBackground(Color.pink);
+        buttons.setBackground(new Color(250, 230, 235));
         buttons.add(btnClear);
         buttons.add(btnLogin);
 
@@ -78,7 +77,7 @@ public class LoginPanel extends JPanel implements ActionListener {
                 default:
                     break;
             }
-
+            us.setLastLogin(AppMediator.getToday().atTime(LocalTime.now()));
             userField.setText("");
             passField.setText("");
 		} else if (e.getSource() == btnClear) {

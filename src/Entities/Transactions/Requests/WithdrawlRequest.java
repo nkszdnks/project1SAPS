@@ -4,7 +4,7 @@ public class WithdrawlRequest extends TransactionRequest {
 
 
     public  WithdrawlRequest(String fromIban, double amount, String ExecutorID, String reason) {
-        super(fromIban,amount,reason,"Withdrawl",ExecutorID);
+        super(fromIban,amount,"WITHDRAWAL: "+reason,"Withdrawl",ExecutorID);
     }
 
 

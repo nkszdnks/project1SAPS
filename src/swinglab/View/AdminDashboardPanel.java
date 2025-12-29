@@ -1,9 +1,6 @@
 package swinglab.View;
 
-import swinglab.Contollers.AccountsController;
-import swinglab.Contollers.ActiveOrdersController;
-import swinglab.Contollers.AdminRequestsController;
-import swinglab.Contollers.AllStatementsController;
+import swinglab.Contollers.*;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -18,11 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-class AdminDashboardPanel extends JPanel implements ActionListener{
+public class AdminDashboardPanel extends JPanel implements ActionListener{
 
-    JButton btnViewAccounts,getBtnViewBills, btnViewStandingOrders, btnLogout,btnViewStatements,btnRequests,btnSimulateTime;
+    JButton btnViewAllUsers,btnViewAccounts,getBtnViewBills, btnViewStandingOrders, btnLogout,btnViewStatements,btnRequests,btnSimulateTime;
 
-    AdminDashboardPanel() {
+    public AdminDashboardPanel() {
         setLayout(new BorderLayout(10,10)); //(int hgap, int vgap)
         setBorder(BorderFactory.createEmptyBorder(16,16,16,16));
 
@@ -32,6 +29,7 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
 
         JPanel center = new JPanel(new GridLayout(2, 3, 10, 10)); // (rows, cols, hgap, vgap)
         btnViewAccounts = new JButton("View Accounts");
+        btnViewAllUsers = new JButton("View All Users");
         btnViewStandingOrders = new JButton("View Standing Orders");
         getBtnViewBills = new JButton("View All Bills");
         btnViewStatements = new JButton("View Statements");
@@ -40,6 +38,7 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
 
 
         center.add(btnViewAccounts);
+        center.add(btnViewAllUsers);
         center.add(btnViewStandingOrders);
         center.add(getBtnViewBills);
         center.add(btnViewStatements);
@@ -52,6 +51,7 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
         add(center, BorderLayout.CENTER);
 
         // events
+        btnViewAllUsers.addActionListener(this);
         btnViewAccounts.addActionListener(this);
         btnViewStandingOrders.addActionListener(this);
         getBtnViewBills.addActionListener(this);
@@ -78,6 +78,10 @@ class AdminDashboardPanel extends JPanel implements ActionListener{
         else if (e.getSource()==btnViewStatements) {
             AllStatementsController.getInstance().loadStatements();
             AppMediator.getCardLayout().show(AppMediator.getCards(), "allStatements");
+        }
+        else if (e.getSource()==btnViewAllUsers) {
+            UsersController.getInstance().loadAllUsers();
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "allUsers");
         }
       else if (e.getSource()==btnViewStandingOrders){
           ActiveOrdersController.getInstance().setModel(null);

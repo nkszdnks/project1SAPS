@@ -2,8 +2,8 @@ package swinglab.Contollers;
 
 import Entities.Accounts.BankAcount;
 import Entities.Accounts.Statements.Statement;
-import swinglab.AppMediator;
-import swinglab.TransactionHistoryPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.TransactionHistoryPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

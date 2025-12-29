@@ -1,17 +1,11 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Accounts.BankAcount;
-import Entities.Users.Customer;
-import Entities.Users.User;
 import Managers.AccountManager;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -27,8 +21,7 @@ public class AccountsPanel extends JPanel {
     private final JTable table;
     private final DefaultTableModel model;
     public JButton details, clearSel, closePan,newAcount;
-    private final NumberFormat euroFormat =
-            NumberFormat.getCurrencyInstance(Locale.GERMANY);
+
 
     public AccountsPanel() {
 
@@ -104,7 +97,7 @@ public class AccountsPanel extends JPanel {
     }
 
     public void addAccountRow(String iban, String owner, double balance) {
-        model.addRow(new Object[] { iban, owner, euroFormat.format(balance) });
+        model.addRow(new Object[] { iban, owner, AppMediator.euroFormat.format(balance) });
     }
 
     public void clearSelection() {

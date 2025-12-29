@@ -11,10 +11,10 @@ public class Withdrawal extends Transaction {
 
     private String sourceIBAN;
 
-    public Withdrawal(String transactionId, LocalDateTime timestamp, double amount,
+    public Withdrawal(LocalDateTime timestamp, double amount,
                       String reason, String executorID, TransactionStatus status,
                       String sourceIBAN) {
-        super(transactionId, timestamp, amount, reason, executorID, status);
+        super( timestamp, amount, reason, executorID, status);
         this.sourceIBAN = sourceIBAN;
     }
 
@@ -27,7 +27,7 @@ public class Withdrawal extends Transaction {
     protected void createStatement(BankAcount Source, BankAcount Target) {
         String[] ibansInvolved = {sourceIBAN,""};
         double[] remainingBalances = {Source.getAccountBalance(),0.0};
-        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),0.0);
+        Statement accountStatements = new Statement(super.getTransactionId(),getTimestamp(),getAmount(),  remainingBalances,getReason(),ibansInvolved,getTransactionId(),0.0,getType());
         Source.addStatements(accountStatements);
         StatementManager.getInstance().createStatement(accountStatements);
     }

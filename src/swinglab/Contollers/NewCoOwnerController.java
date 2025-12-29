@@ -7,11 +7,10 @@ import Entities.Accounts.PersonalAccount;
 import Entities.AdminRequests.NewCoOwnerRequest;
 import Entities.Users.Customer;
 import Entities.Users.IndividualPerson;
-import Managers.AccountManager;
 import Managers.AdminRequestsManager;
 import Managers.UserManager;
-import swinglab.AppMediator;
-import swinglab.NewCoOwnerPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.NewCoOwnerPanel;
 
 
 public class NewCoOwnerController {

@@ -21,9 +21,11 @@ public class NewAccountRequest extends AdminRequest{
 
     public NewAccountRequest(Customer customer, double initialDeposit, ArrayList<IndividualPerson> coOwners ) {
             super( String.format(
-                    "NAID-%s-%04d"+
-                    LocalDateTime.now().toLocalDate().toString().replace("-", "")+
-                    customer.getUserId()+String.valueOf(random.nextInt(1000))), "NewAccount", "New Account", customer);
+                    "NAID-%s-%s-%04d",
+                    LocalDateTime.now().toLocalDate().toString().replace("-", ""),
+                    customer.getUserId(),
+                    random.nextInt(10000)
+            ), "NewAccount", "New Account", customer);
             this.initialDeposit = initialDeposit;
             this.coOwners = coOwners;
 

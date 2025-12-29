@@ -21,9 +21,11 @@ public class NewCoOwnerRequest extends AdminRequest {
 
     public NewCoOwnerRequest(Customer customer,PersonalAccount personalAccount,IndividualPerson individualPerson) {
         super(String.format(
-                "NAID-%s-%04d"+
-                        LocalDateTime.now().toLocalDate().toString().replace("-", "")+
-                        customer.getUserId()+String.valueOf(random.nextInt(1000))), "NewCoOwner", "New Co-Owner", customer);
+                "NCID-%s-%s-%04d",
+                LocalDateTime.now().toLocalDate().toString().replace("-", ""),
+                customer.getUserId(),
+                random.nextInt(10000)
+        ), "NewCoOwner", "New Co-Owner", customer);
         this.personalAccount = personalAccount;
         this.individualPerson = individualPerson;
     }

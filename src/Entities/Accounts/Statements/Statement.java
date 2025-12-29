@@ -17,14 +17,11 @@ public class Statement {
     private String transactionId;// connection to Transaction
     private static long COUNTER = 0;
     private double fee;
+    private String transactionType;
 
     public Statement( LocalDateTime timestamp, double amount,
-                     double[] balanceAfter, String description,String[] ibansInvolved, String transactionId,double fee) {
-        this.statementId =  String.format(
-                "SID-%s-%04d",
-                timestamp.toLocalDate().toString().replace("-", ""),
-                ++COUNTER
-        );
+                     double[] balanceAfter, String description,String[] ibansInvolved, String transactionId,double fee, String transactionType) {
+        this.statementId = transactionId.replace("TR","ST");
         this.timestamp = timestamp;
         this.amount = amount;
         this.balanceAfter = balanceAfter;
@@ -32,9 +29,15 @@ public class Statement {
         this.ibansInvolved = ibansInvolved;
         this.transactionId = transactionId;
         this.fee = fee;
+        this.transactionType = transactionType;
     }
-    public Statement( String statementId,LocalDateTime timestamp, double amount,
-                      double[] balanceAfter, String description,String[] ibansInvolved, String transactionId,double fee) {
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public Statement(String statementId, LocalDateTime timestamp, double amount,
+                     double[] balanceAfter, String description, String[] ibansInvolved, String transactionId, double fee,String transactionType) {
         this.statementId =  statementId;
         this.timestamp = timestamp;
         this.amount = amount;
@@ -43,6 +46,7 @@ public class Statement {
         this.ibansInvolved = ibansInvolved;
         this.transactionId = transactionId;
         this.fee = fee;
+        this.transactionType = transactionType;
     }
 
     public void setFee(double fee) {
@@ -68,7 +72,7 @@ public class Statement {
     // ---------------------------------------------------------
     public String marshal() {
         return String.format(
-                "statementId:%s,timestamp:%s,amount:%s,description:%s,iban1:%s,iban2:%s,balanceAfter1:%s,balanceAfter2:%s,transactionId:%s,fee:%s",
+                "statementId:%s,timestamp:%s,amount:%s,description:%s,iban1:%s,iban2:%s,balanceAfter1:%s,balanceAfter2:%s,transactionId:%s,fee:%s,transactionType:%s",
                 statementId,
                 timestamp,
                 String.valueOf(amount),
@@ -78,7 +82,8 @@ public class Statement {
                 String.valueOf(balanceAfter[0]),
                 balanceAfter[1] == 0 ? "" : String.format("%.2f", balanceAfter[1]),
                 transactionId,
-                fee
+                fee,
+                transactionType
         );
     }
 
@@ -112,7 +117,8 @@ public class Statement {
                map.get("description"),
                ibans,
                map.get("transactionId"),
-               Double.parseDouble(map.get("fee"))
+               Double.parseDouble(map.get("fee")),
+               map.get("transactionType")
        );
        s.setStatementId(map.get("statementId"));
         return s;

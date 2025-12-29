@@ -7,21 +7,19 @@ import Entities.Transactions.InterBankTransfers.SepaExecutor;
 import Entities.Transactions.InterBankTransfers.SwiftExecutor;
 import Entities.Transactions.Rails.Strategies.FeeStrategy;
 import Entities.Transactions.Rails.Strategies.FeeStrategyFactory;
-import Entities.Transactions.Transaction;
 import Entities.Transactions.TransactionStatus;
 import Entities.Transactions.Builders.TransferBuilder;
 import Entities.Transactions.Requests.TransferRequest;
 import Entities.Transactions.Transfer;
 import Entities.checks.BalanceCheck;
 import Entities.checks.DailyLimitCheck;
-import Entities.checks.IbanFormatCheck;
+import Entities.checks.RecipientIbanCheck;
 import Entities.checks.TransactionCheck;
 
 import Managers.TransactionManager;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.HashMap;
 
@@ -30,13 +28,13 @@ public class TransferRail {
     private String Message = "";
     
     public TransferRail() {
-        var iban = new IbanFormatCheck();
+        var RecipientIbanCheck = new RecipientIbanCheck();
         var balance = new BalanceCheck();
         var daily = new DailyLimitCheck();
-        iban.setNext(balance);
+        RecipientIbanCheck.setNext(balance);
         balance.setNext(daily);
         
-        checks = iban;
+        checks = RecipientIbanCheck;
     }
 
     public Boolean execute(TransferRequest req, HashMap<String, String> Details) {
@@ -51,7 +49,7 @@ public class TransferRail {
 
         // 2) Strategy: fee computation
         FeeStrategy feeStrategy = FeeStrategyFactory.getStrategyFor(req);
-        double fee = req.getFee()==0.0? feeStrategy.computeFee(req):req.getFee();        // ⭐ Use your TransferBuilder with flow interface
+        double fee = req.getFee()==0.0? feeStrategy.computeFee(req):req.getFee();
         Transfer transfer = (Transfer) new TransferBuilder()
                 .setSourceIBAN(req.getFromIban())
                 .setBankFee(fee)
@@ -62,7 +60,6 @@ public class TransferRail {
                 .setExecutorID(AppMediator.getUser().getUserId())
                 .setStatus(TransactionStatus.PENDING)
                 .setTimestamp(AppMediator.getToday().atTime(LocalTime.now()))
-                .setTransactionId("DefaultID....")
                 .build();
 
         switch(req.getRail()){

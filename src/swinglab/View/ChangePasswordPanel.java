@@ -1,4 +1,4 @@
-package swinglab;
+package swinglab.View;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -83,7 +83,8 @@ class ChangePasswordPanel extends JPanel implements ActionListener {
                 "Password changed successfully!\nYou will need to use the new password next time you log in.");
         }
         else if (e.getSource() == btnClose) {
-            AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
+            AppMediator.goToHomeDashboard();
+
         }
     }
 }

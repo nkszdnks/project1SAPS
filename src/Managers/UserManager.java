@@ -70,7 +70,7 @@ public class UserManager implements Manager {
         for (User usr : users) {
             if (usr.getRole().equals(UserRole.PERSON)) {
                 p = (IndividualPerson) usr;
-                if ((p.getFirstName()+p.getLastName()).equals(fullName))
+                if ((p.getFirstName()+" "+p.getLastName()).equals(fullName))
                     return p;
             }
         }

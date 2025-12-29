@@ -1,11 +1,10 @@
 package swinglab.Contollers;
 
 import Entities.AdminRequests.AdminRequest;
-import Entities.AdminRequests.RequestStatus;
 import Entities.Users.Admin;
 import Managers.AdminRequestsManager;
 import swinglab.View.AdminRequestsPanel;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,7 +58,7 @@ public class AdminRequestsController implements ActionListener {
             view.addRequestRow(
                     req.getRequestID(),
                     req.getRequestType(),
-                    req.getCustomer().getUserId(),// if exists
+                    req.getCustomer().getFullName(),// if exists
                     req.getRequestStatus().name()
             );
         }

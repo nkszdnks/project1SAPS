@@ -1,7 +1,5 @@
 package swinglab.View;
 
-import swinglab.AppMediator;
-
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;

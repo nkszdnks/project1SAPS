@@ -1,4 +1,4 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Accounts.BankAcount;
 
@@ -55,6 +55,15 @@ public class InterBankTransferPanel extends JPanel implements hasIbanField {
     private final JLabel lblSwiftCode = new JLabel("SWIFT code:");
     private final JLabel lblCountry = new JLabel("Country:");
 
+    // Date selection combo boxes
+    public final JComboBox<Integer> dayBox = new JComboBox<>();
+    public final JComboBox<Integer> monthBox = new JComboBox<>();
+    public final JComboBox<Integer> yearBox = new JComboBox<>();
+    public final JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+
+    // Choice box to enable date selection
+    public final JComboBox<String> scheduleChoice = new JComboBox<>(new String[]{"Immediate Transfer", "Schedule Transfer"});
+
     /* -------- Buttons -------- */
     private final JButton btnFinish = new JButton("Finish Inter-Bank Transfer");
     private final JButton btnClose = new JButton("Close");
@@ -92,6 +101,33 @@ public class InterBankTransferPanel extends JPanel implements hasIbanField {
         addRow(row++, lblBankName, bankName);
         addRow(row++, lblSwiftCode, swiftCode);
         addRow(row++, lblCountry, country);
+
+        // Prepare date panel but hide it initially
+        for (int i = 1; i <= 31; i++) dayBox.addItem(i);
+        Integer[] months = {1,2,3,4,5,6,7,8,9,10,11,12};
+        for (Integer m : months) monthBox.addItem(m);
+        int currentYear = AppMediator.getToday().getYear();
+        for (int i = 0; i <= 5; i++) yearBox.addItem(currentYear + i);
+
+        datePanel.add(dayBox);
+        datePanel.add(monthBox);
+        datePanel.add(yearBox);
+        datePanel.setVisible(false); // initially hidden
+        c.gridx = 1;
+        c.gridy = row++;
+        add(datePanel, c);
+
+
+        // Show/hide date panel based on choice
+        scheduleChoice.addActionListener(e -> {
+            boolean showDate = scheduleChoice.getSelectedIndex() == 1; // Schedule Transfer
+            datePanel.setVisible(showDate);
+            revalidate();
+            repaint();
+        });
+        JLabel lblSchedule = new JLabel("Transfer Option:");
+
+        addRow(row++, lblSchedule, scheduleChoice);
 
         // Buttons
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -209,6 +245,21 @@ public class InterBankTransferPanel extends JPanel implements hasIbanField {
         for (BankAcount b : accounts)
             fromIbans.addItem(b.getIBAN());
     }
+    public LocalDate getSelectedDate() {
+        if (scheduleChoice.getSelectedIndex() == 0) { // Immediate Transfer
+            return AppMediator.getToday();
+        }
+
+        int day = (Integer) dayBox.getSelectedItem();
+        int year = (Integer) yearBox.getSelectedItem();
+
+        // Convert month string to Month enum
+        int  month =(Integer) monthBox.getSelectedItem();
+
+
+        return LocalDate.of(year, month, day);
+    }
+
 
     /* ---- Buttons ---- */
     public void addFinishListener(ActionListener l) { btnFinish.addActionListener(l); }

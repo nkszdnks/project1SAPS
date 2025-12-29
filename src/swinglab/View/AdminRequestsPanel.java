@@ -26,7 +26,7 @@ public class AdminRequestsPanel extends JPanel {
         add(title, BorderLayout.NORTH);
 
         String[] cols = {
-                "Request ID", "Type", "User", "Status"
+                "Request ID", "Type", "Customer", "Status"
         };
 
         model = new DefaultTableModel(cols, 0) {

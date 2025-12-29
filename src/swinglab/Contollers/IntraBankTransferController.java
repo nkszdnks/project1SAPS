@@ -1,13 +1,12 @@
 package swinglab.Contollers;
 
-import Entities.Accounts.BankAcount;
+import Commands.ScheduledTransferCommand;
 import Entities.Transactions.Rails.TransferRail;
 import Entities.Transactions.Requests.TransferRequest;
-import Managers.AccountManager;
-import swinglab.AppMediator;
-import swinglab.InterBankTransferPanel;
-import swinglab.IntraBankTransferPanel;
-import swinglab.TransferTypeHelper;
+import Managers.StandingOrderManager;
+import swinglab.View.AppMediator;
+import swinglab.View.InterBankTransferPanel;
+import swinglab.View.IntraBankTransferPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -91,9 +90,25 @@ public class IntraBankTransferController implements ActionListener {
                 return;
             }
 
-            var svc = new TransferRail();
+
             TransferRequest.Rail rail = TransferRequest.Rail.valueOf(viewInter.getTransferType());
             var okLocal = new TransferRequest(from,to,amt, rail,AppMediator.getUser().getUserId(), reason);
+
+            if(viewInter.scheduleChoice.getSelectedIndex() == 1){
+                if (viewInter.getSelectedDate().isBefore(AppMediator.getToday())) {
+                    JOptionPane.showMessageDialog(viewInter,
+                            "You can't schedule in past dates!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                StandingOrderManager.getInstance().getScheduledTransfers().add(new ScheduledTransferCommand(okLocal,viewInter.getSelectedDate(),viewInter.getTransferDetails()));
+                JOptionPane.showMessageDialog(viewInter,
+                        rail + " Transfer Scheduled Successfully! It will executed automatically at:"+"\n"+String.valueOf(viewInter.getSelectedDate()));
+                return;
+            }
+
+            var svc = new TransferRail();
             boolean isSuccesfull = svc.execute(okLocal,viewInter.getTransferDetails());
             if(!isSuccesfull){
                 throw new Exception(svc.getMessage());
@@ -138,17 +153,24 @@ public class IntraBankTransferController implements ActionListener {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            BankAcount targetAccount = AccountManager.getInstance().findAccountByIBAN(to);
-            if(targetAccount == null){
+
+
+
+            var okLocal = new TransferRequest(from,to,amt, LOCAL,AppMediator.getUser().getUserId(), reason);
+            if(viewIntra.scheduleChoice.getSelectedIndex() == 1){
+                if (viewIntra.getSelectedDate().isBefore(AppMediator.getToday())) {
+                    JOptionPane.showMessageDialog(viewIntra,
+                            "You can't schedule in past dates!",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                StandingOrderManager.getInstance().getScheduledTransfers().add(new ScheduledTransferCommand(okLocal,viewIntra.getSelectedDate(),null));
                 JOptionPane.showMessageDialog(viewIntra,
-                        "Target account does not exists!",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE);
+                        "Transfer Scheduled Successfully! It will executed automatically at:"+"\n"+String.valueOf(viewIntra.getSelectedDate()));
                 return;
             }
             var svc = new TransferRail();
-
-            var okLocal = new TransferRequest(from,to,amt, LOCAL,AppMediator.getUser().getUserId(), reason);
             boolean isSuccesfull = svc.execute(okLocal,null);
             if(!isSuccesfull){
                 throw new Exception(svc.getMessage());

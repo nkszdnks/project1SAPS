@@ -2,12 +2,10 @@ package Entities.AdminRequests;
 
 import Entities.Accounts.BankAcount;
 import Entities.Transactions.Deposit;
-import Entities.Transactions.Requests.TransactionRequest;
 import Entities.Transactions.TransactionStatus;
-import Entities.Users.Admin;
 import Entities.Users.Customer;
 import Managers.TransactionManager;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -24,7 +22,7 @@ public class DepositAdminRequest extends AdminRequest {
 
     @Override
     public void acceptRequest() {
-        Deposit deposit = new Deposit("defaultID",AppMediator.getToday().atTime(LocalTime.now()),getAmount(),getDescription(),getCustomer().getUserId(), TransactionStatus.PENDING,getBankAccount());
+        Deposit deposit = new Deposit(AppMediator.getToday().atTime(LocalTime.now()),getAmount(),getDescription(),getCustomer().getUserId(), TransactionStatus.PENDING,getBankAccount());
         TransactionManager.getInstance().Transact(deposit);
         setRequestStatus(RequestStatus.ACCEPTED);
     }
@@ -41,9 +39,11 @@ public class DepositAdminRequest extends AdminRequest {
 
     public DepositAdminRequest(String description, Customer customer, BankAcount bankAccount, double amount) {
         super(String.format(
-                "NAID-%s-%04d"+
-                        LocalDateTime.now().toLocalDate().toString().replace("-", "")+
-                        customer.getUserId()+String.valueOf(random.nextInt(1000))), "Deposit", description, customer);
+                "DPID-%s-%s-%04d",
+                LocalDateTime.now().toLocalDate().toString().replace("-", ""),
+                customer.getUserId(),
+                random.nextInt(10000)
+        ), "Deposit", description, customer);
         this.bankAccount = bankAccount;
         this.amount = amount;
     }

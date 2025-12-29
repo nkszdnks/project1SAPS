@@ -5,9 +5,8 @@ import Entities.Transactions.InterBankTransfers.LocalExecutor;
 import Entities.Transactions.TransactionStatus;
 import Entities.Transactions.Transfer;
 import Managers.TransactionManager;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class PostMonthlyInterestCommand implements BankCommand {
@@ -24,7 +23,7 @@ public class PostMonthlyInterestCommand implements BankCommand {
     public void execute() {
         double amount = account.getAccruedInterest();
         if (amount > 0) {
-            Transfer transfer = new Transfer("IntrestID", AppMediator.getToday().atTime(LocalTime.now()),amount,"Interest from bank","BankOfTucID", TransactionStatus.PENDING,AppMediator.getBankOfTucAccount().getIBAN(), account.getIBAN(), 0.0,"");
+            Transfer transfer = new Transfer( AppMediator.getToday().atTime(LocalTime.now()),amount,"Interest from bank","BankOfTucID", TransactionStatus.PENDING,AppMediator.getBankOfTucAccount().getIBAN(), account.getIBAN(), 0.0,"");
             transfer.setTransferExecutor(new LocalExecutor());
             TransactionManager.getInstance().Transact(transfer);
             account.resetAccruedInterest();

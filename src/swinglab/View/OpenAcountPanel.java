@@ -1,10 +1,9 @@
-package swinglab;
+package swinglab.View;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.table.*;
 
 public class OpenAcountPanel extends JPanel {
     private final JTextField userField = new JTextField(14);

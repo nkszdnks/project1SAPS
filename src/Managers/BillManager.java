@@ -8,10 +8,8 @@ import Entities.Users.BillStatus;
 import Entities.Users.Bills;
 import Entities.Users.Business;
 import Entities.Users.Customer;
-import Managers.Manager;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;

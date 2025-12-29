@@ -1,20 +1,17 @@
 package swinglab.Contollers;
 
-import Entities.Accounts.BankAcount;
 import Entities.StandingOrders.StandingOrder;
 import Entities.Users.Customer;
-import Entities.Users.UserRole;
-import Managers.AccountManager;
 import Managers.StandingOrderManager;
-import swinglab.*;
+import swinglab.View.*;
 import swinglab.Observers.StandingOrderObserver;
 import swinglab.View.StandingOrderDetailsDialog;
+import Entities.Users.UserRole;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -120,10 +117,14 @@ public class ActiveOrdersController implements ActionListener, StandingOrderObse
 
             case "Close":
                 if(model==null){
-                    AppMediator.getCardLayout().show(AppMediator.getCards(),"adminDashboard");
+                    String card = AppMediator.getUser().getRole() == UserRole.BUSINESS ? "businessDashboard"
+                            : AppMediator.getUser().getRole() == UserRole.ADMIN    ? "adminDashboard"
+                            : "dashboard";
+                    AppMediator.getCardLayout().show(AppMediator.getCards(), card);
                     break;
                 }
-                AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
+                AppMediator.goToHomeDashboard();
+
                 break;
 
             case "Show Failed":

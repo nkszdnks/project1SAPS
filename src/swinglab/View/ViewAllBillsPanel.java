@@ -1,16 +1,10 @@
 package swinglab.View;
 
-import Entities.Accounts.Statements.Statement;
-import Entities.Users.BillStatus;
 import Entities.Users.Bills;
-import Entities.Users.Customer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.text.NumberFormat;
-import java.time.LocalDate;
-import java.util.Locale;
 
 public class ViewAllBillsPanel extends JPanel {
     private final JTable table;
@@ -26,8 +20,6 @@ public class ViewAllBillsPanel extends JPanel {
 
     public JButton  closePan;
 
-    private final NumberFormat euroFormat =
-            NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
     public ViewAllBillsPanel() {
 
@@ -74,7 +66,7 @@ public class ViewAllBillsPanel extends JPanel {
         model.addRow(new Object[]{
                 t.getBillNumber(),
                 t.getRF(),
-                euroFormat.format(t.getAmount()),
+                AppMediator.euroFormat.format(t.getAmount()),
                 t.getIssuer().getBusinessName(),
                 t.getCustomer().getFullName(),
                 String.valueOf(t.getIssueDate()),

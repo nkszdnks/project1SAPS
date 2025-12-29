@@ -30,10 +30,11 @@ public class LocalExecutor implements TransferExecutor{
             source.setAccountBalance(source.getAccountBalance() -amount - bankFee);
             target.setAccountBalance(target.getAccountBalance() + amount);
             double debited = amount + bankFee;
-            return new ExecutionResult(true, "Transfer executed successfully: rail= LOCAL"
-                    + " amount=" +  String.format("%.2f", amount)+
-                    " fee=" + String.format("%.2f", bankFee)
-                    + " debited=" + String.format("%.2f", debited),transactionId);
+            return new ExecutionResult(true, "Transfer executed successfully:"+"\n"
+                    + "Rail: LOCAL"+"\n"
+                    + "Amount: " +  String.format("%.2f", amount)+"\n"+
+                    "Fee: " + String.format("%.2f", bankFee)+"\n"
+                    + "Debited: " + String.format("%.2f", debited),transactionId);
         }
 
         return new ExecutionResult(false,"Transfer failed insuffisient balance",transactionId);

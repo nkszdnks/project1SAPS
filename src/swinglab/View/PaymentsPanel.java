@@ -1,4 +1,4 @@
-package swinglab;
+package swinglab.View;
 
 import Entities.Users.Customer;
 import swinglab.Contollers.PayBillsController;
@@ -51,7 +51,8 @@ class PaymentsPanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src == btnClose) {
-            AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
+            AppMediator.goToHomeDashboard();
+
         }
         else if (src == btnPayBill) {
             PayBillsController.getInstance().setAccounts();

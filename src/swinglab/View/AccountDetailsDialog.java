@@ -1,7 +1,6 @@
-package swinglab;
+package swinglab.View;
 import Entities.Accounts.BankAcount;
 import Entities.Accounts.PersonalAccount;
-import Entities.Users.IndividualPerson;
 import swinglab.Contollers.CoOwnersController;
 import swinglab.Contollers.TransactionHistoryController;
 
@@ -9,7 +8,7 @@ import java.awt.*;
 
 import javax.swing.*;;
 
-// Popup Using JDialog
+
 public class AccountDetailsDialog extends JDialog {
     AccountDetailsDialog(Window owner, String iban, String type, String balance, String interest, BankAcount b) {
         super(owner, "Account Details", ModalityType.APPLICATION_MODAL);
@@ -69,7 +68,7 @@ public class AccountDetailsDialog extends JDialog {
         close.addActionListener(e -> dispose());
         if(b.getAccountType().equals("Personal Account")) {
             CoOwnersController.getInstance().setModel((PersonalAccount) b);
-            co_owners.addActionListener(e ->AppMediator.getCardLayout().show(AppMediator.getCards(), "coOwners") );
+            co_owners.addActionListener(e -> AppMediator.getCardLayout().show(AppMediator.getCards(), "coOwners") );
         }
         TransactionHistoryController.getInstance().setModel(b);
         transactions.addActionListener(e ->AppMediator.getCardLayout().show(AppMediator.getCards(), "transactionsPanel") );

@@ -24,6 +24,7 @@ public class Admin extends User {
                 ",firstName:" +
                 ",lastName:" +
                 ",afm:" +
+                ",lastLogin:"+String.valueOf(getLastLogin()) +
                 ",businessName:" +
                 ",employeeId:" + employeeId +
                 ",vatNumber:";

@@ -1,12 +1,7 @@
 package swinglab.View;
 
-import Entities.Accounts.BankAcount;
-import Entities.Accounts.PersonalAccount;
 import Entities.AdminRequests.*;
 import Entities.Users.IndividualPerson;
-import swinglab.AppMediator;
-import swinglab.Contollers.CoOwnersController;
-import swinglab.Contollers.TransactionHistoryController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,7 +98,7 @@ public class RequestsDetailsDialog extends JDialog implements ActionListener {
             // Row 2
             NewAccountRequest newAccountRequest = (NewAccountRequest)adminRequest;
             c.gridx = 0; c.gridy = 5; content.add(new JLabel("Initial Deposit:"), c);
-            c.gridx = 1; c.gridy = 5; content.add(new JTextField(String.valueOf(newAccountRequest.getInitialDeposit()), 22) {{
+            c.gridx = 1; c.gridy = 5; content.add(new JTextField(AppMediator.euroFormat.format(newAccountRequest.getInitialDeposit()), 22) {{
                 setEditable(false);
             }}, c);
             int i = 0;

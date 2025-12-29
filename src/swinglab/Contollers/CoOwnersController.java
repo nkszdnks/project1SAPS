@@ -4,8 +4,8 @@ package swinglab.Contollers;
 import Entities.Accounts.PersonalAccount;
 import Entities.Users.IndividualPerson;
 import Managers.UserManager;
-import swinglab.AppMediator;
-import swinglab.CoOwnersPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.CoOwnersPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -51,6 +51,11 @@ public class CoOwnersController extends WindowAdapter implements ActionListener 
                     p.getAfm()
             );
         }
+        if(AppMediator.getUser().equals(model.getMainOwner())){
+            view.addNew.setVisible(true);
+            return;
+        }
+        view.addNew.setVisible(false);
     }
 
     private CoOwnersController() {

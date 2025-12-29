@@ -1,13 +1,11 @@
 package swinglab.Contollers;
 
 import Entities.Accounts.Statements.Statement;
-import Entities.Transactions.Transaction;
 import Entities.Users.Bills;
 import Managers.BillManager;
 import Managers.StatementManager;
-import Managers.TransactionManager;
 import swinglab.View.AllStatementsPanel;
-import swinglab.AppMediator;
+import swinglab.View.AppMediator;
 import swinglab.View.ViewAllBillsPanel;
 
 import java.awt.event.ActionEvent;

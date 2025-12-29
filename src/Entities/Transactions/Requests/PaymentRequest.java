@@ -5,13 +5,13 @@ public class PaymentRequest extends TransactionRequest {
     private String RfCode;
     private double fee;
     public PaymentRequest(String fromIban,String RfCode,String ExecutorID) {
-        super(fromIban, 0, "Bill Payment", "Payment",ExecutorID);
+        super(fromIban, 0, "BILL PAYMENT", "Payment",ExecutorID);
         this.RfCode = RfCode;
         this.fee = 0.0;
 
     }
     public PaymentRequest(String fromIban,String RfCode,String ExecutorID,double fee) {
-        super(fromIban, 0, "Bill Payment", "Payment",ExecutorID);
+        super(fromIban, 0, "BILL PAYMENT", "Payment",ExecutorID);
         this.RfCode = RfCode;
         this.fee = fee;
 

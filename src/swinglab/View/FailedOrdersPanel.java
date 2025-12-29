@@ -1,5 +1,7 @@
 package swinglab;
 
+import swinglab.View.AppMediator;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -69,7 +71,7 @@ public class FailedOrdersPanel extends JPanel {
         model.addRow(new Object[]{
                 title,
                 type,
-                amount,
+                AppMediator.euroFormat.format(amount),
                 date,
                 sourceIban,
                 reason,

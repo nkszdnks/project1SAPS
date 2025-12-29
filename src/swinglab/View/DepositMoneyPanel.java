@@ -1,11 +1,13 @@
-package swinglab;
+package swinglab.View;
+
+import Entities.Accounts.BankAcount;
 
 import java.awt.*;
-import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
-public class DepositMoneyPanel extends JPanel {
-    private final JTextField ibanField = new JTextField(20);
+public class DepositMoneyPanel extends JPanel implements hasIbanField {
+    public final JComboBox<String> fromIbans = new JComboBox<>();
     private final JTextField amountField = new JTextField(10);
     private final JTextField descriptionField = new JTextField(30);
     private final JButton btnFinish = new JButton("Finish");
@@ -19,7 +21,7 @@ public class DepositMoneyPanel extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
 
         c.gridx=0; c.gridy=0; add(new JLabel("Account IBAN:"), c);
-        c.gridx=1; add(ibanField, c);
+        c.gridx=1; add(fromIbans, c);
         c.gridx=0; c.gridy=1; add(new JLabel("Deposit Amount (€):"), c);
         c.gridx=1; add(amountField, c);
         c.gridx=0; c.gridy=2; add(new JLabel("Description:"), c);
@@ -35,8 +37,8 @@ public class DepositMoneyPanel extends JPanel {
     }
 
 
-    public JTextField getIbanField() {
-        return ibanField;
+    public String getIbanField() {
+        return String.valueOf(fromIbans.getSelectedItem());
     }
 
     public JButton getBtnFinish() {
@@ -45,11 +47,11 @@ public class DepositMoneyPanel extends JPanel {
     public JButton getBtnClose() {
         return btnClose;
     }
-    public JTextField getAmountField() {
-        return amountField;
+    public String getAmountField() {
+        return amountField.getText();
     }
-    public JTextField getDescriptionField() {
-        return descriptionField;
+    public String getDescriptionField() {
+        return descriptionField.getText();
     }
     // ----- Listener registration -----
     public void addFinishListener(java.awt.event.ActionListener l) {
@@ -58,5 +60,12 @@ public class DepositMoneyPanel extends JPanel {
 
     public void addCloseListener(java.awt.event.ActionListener l) {
         btnClose.addActionListener(l);
+    }
+
+    @Override
+    public void setIbans(ArrayList<BankAcount> accounts) {
+        fromIbans.removeAllItems();
+        for (BankAcount b : accounts)
+            fromIbans.addItem(b.getIBAN());
     }
 }

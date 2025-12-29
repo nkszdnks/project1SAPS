@@ -4,8 +4,8 @@ import Entities.Transactions.Rails.PaymentRail;
 import Entities.Transactions.Requests.PaymentRequest;
 import Managers.BillManager;
 import Managers.UserManager;
-import swinglab.AppMediator;
-import swinglab.PayBillsPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.PayBillsPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -69,10 +69,8 @@ public class PayBillsController implements ActionListener {
             if (business == null) {
                 throw new Exception("Please select a business.");
             }
-            if(BillManager.getInstance().findBill(rf) == null  ){
-                throw new Exception("Bill not found.");
-            }
-            if(!BillManager.getInstance().findBill(rf).getIssuer().getBusinessName().equals(business)) {
+
+            if(BillManager.getInstance().findBill(rf)!= null && !BillManager.getInstance().findBill(rf).getIssuer().getBusinessName().equals(business)) {
                 throw new Exception("Business issue and RF code does not match.");
             }
 

@@ -11,14 +11,13 @@ import Entities.Transactions.Requests.TransferRequest;
 import Entities.Users.Bills;
 import Entities.Users.Customer;
 import Entities.StandingOrders.TransferOrder;
-import Entities.Users.User;
 import Managers.AccountManager;
 import Managers.BillManager;
 import Managers.StandingOrderManager;
 import Managers.UserManager;
-import swinglab.AppMediator;
-import swinglab.StandingPaymentOrderPanel;
-import swinglab.StandingTransferOrderPanel;
+import swinglab.View.AppMediator;
+import swinglab.View.StandingPaymentOrderPanel;
+import swinglab.View.StandingTransferOrderPanel;
 
 public class StandingTransferOrderController {
 
@@ -111,7 +110,7 @@ public class StandingTransferOrderController {
             TransferOrder order =
                     new TransferOrder(
                             ((Customer) AppMediator.getUser()).getUserId(),
-                            "TestID"+ LocalDateTime.now().getSecond()+LocalDateTime.now().getMinute(),
+                            LocalDateTime.now().getSecond()+LocalDateTime.now().getMinute()+((Customer) AppMediator.getUser()).getUserId(),
                             title,
                             view.getDescription(),
                             executionDay,
