@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class CompanyReceiptsPanel extends JPanel implements ActionListener {
 
@@ -117,18 +118,7 @@ public class CompanyReceiptsPanel extends JPanel implements ActionListener {
         }
     }
 
-    public void loadReceipts() {
-        tableModel.setRowCount(0);
 
-        Business currentBusiness = getCurrentBusiness();
-        if (currentBusiness == null) {
-            JOptionPane.showMessageDialog(this, "No business user logged in.", "Warning", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        ArrayList<Bills> companyBills = BillManager.getInstance().findCompanyIssuedBills(currentBusiness.getUserId());
-        displayBills(companyBills);
-    }
 
     private void applyFilters() {
         Business currentBusiness = getCurrentBusiness();
@@ -137,7 +127,16 @@ public class CompanyReceiptsPanel extends JPanel implements ActionListener {
             return;
         }
 
-        ArrayList<Bills> companyBills = BillManager.getInstance().findCompanyIssuedBills(currentBusiness.getUserId());
+
+
+        ArrayList<Bills> companyBills =
+                BillManager.getInstance()
+                        .getAllBills()
+                        .stream()
+                        .filter(b -> b.getIssuer() != null &&
+                                b.getIssuer().getUserId().equals(currentBusiness.getUserId()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
 
         String selectedStatus = (String) statusFilterComboBox.getSelectedItem();
         if (!"ALL".equals(selectedStatus)) {
@@ -156,6 +155,28 @@ public class CompanyReceiptsPanel extends JPanel implements ActionListener {
 
         displayBills(companyBills);
     }
+
+
+    public void loadReceipts() {
+        tableModel.setRowCount(0);
+
+        Business currentBusiness = getCurrentBusiness();
+        if (currentBusiness == null) {
+            JOptionPane.showMessageDialog(this, "No business user logged in.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        ArrayList<Bills> companyBills =
+                BillManager.getInstance()
+                        .getAllBills()
+                        .stream()
+                        .filter(b -> b.getIssuer() != null &&
+                                b.getIssuer().getUserId().equals(currentBusiness.getUserId()))
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+        displayBills(companyBills);
+    }
+
 
     private void clearFilters() {
         statusFilterComboBox.setSelectedItem("ALL");
