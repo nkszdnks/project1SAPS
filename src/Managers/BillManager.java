@@ -60,7 +60,6 @@ public class BillManager implements Manager {
             LocalDate dueDate) {
 
         loadIfNeeded();
-
         Bills bill = new Bills(
                 RF,
                 billNumber,
@@ -72,7 +71,8 @@ public class BillManager implements Manager {
                 BillStatus.PENDING
         );
 
-        issued.add(bill);
+        if (issueDate.isAfter(AppMediator.getToday())) addToFutureBills(bill);
+        else issued.add(bill);
     }
 
     public void billsPayed(Bills bill) {
@@ -103,6 +103,29 @@ public class BillManager implements Manager {
                 return bill;
         }
         return null;
+    }
+
+    public Bills billWithThisRf(String RF) {
+        loadIfNeeded();
+
+        for (Bills bill : getAllBills()) {
+            if (bill.getRF().equals(RF))
+                return bill;
+        }
+        return null;
+    }
+
+    void addToFutureBills(Bills bill) {
+        loadIfNeeded();
+        int i=0;
+        for (Bills bill2 : futureBills) {
+            if (bill2.getIssueDate().isAfter(bill.getIssueDate())) {
+                futureBills.add(i,bill);
+                return;
+            }
+            i+=1;
+        }
+        futureBills.add(i,bill);
     }
 
     // --------------------------------------------------

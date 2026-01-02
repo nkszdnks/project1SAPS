@@ -1,5 +1,6 @@
 package swinglab.View;
 
+import DataAccessObjects.FactoryDAO;
 import Managers.BillManager;
 import Managers.UserManager;
 import Entities.Users.Business;
@@ -14,6 +15,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -21,10 +24,14 @@ public class IssueBillPanel extends JPanel implements ActionListener {
 
     private final JTextField billNumberField = new JTextField(15);
     private final JTextField amountField = new JTextField(10);
-    private final JComboBox<String> rfComboBox = new JComboBox<>();
-    private final JComboBox<String> customerComboBox = new JComboBox<>();
-    private final JTextField descriptionField = new JTextField(20);
-    private final JTextField dueDateField = new JTextField(10);
+    private final JTextField rfField = new JTextField(15);
+    private final JTextField customerField = new JTextField(15);
+    private final JComboBox<Integer> startYear = new JComboBox<>();
+    private final JComboBox<Integer> startMonth = new JComboBox<>();
+    private final JComboBox<Integer> startDay = new JComboBox<>();
+    private final JComboBox<Integer> dueYear = new JComboBox<>();
+    private final JComboBox<Integer> dueMonth = new JComboBox<>();
+    private final JComboBox<Integer> dueDay = new JComboBox<>();
     private final JButton issueButton = new JButton("Issue Bill");
     private final JButton cancelButton = new JButton("Cancel");
 
@@ -49,7 +56,7 @@ public class IssueBillPanel extends JPanel implements ActionListener {
         gbc.gridx = 0; gbc.gridy = 2;
         add(new JLabel("RF Code:"), gbc);
         gbc.gridx = 1;
-        add(rfComboBox, gbc);
+        add(rfField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;
         add(new JLabel("Amount (€):"), gbc);
@@ -59,18 +66,13 @@ public class IssueBillPanel extends JPanel implements ActionListener {
         gbc.gridx = 0; gbc.gridy = 4;
         add(new JLabel("Customer ID:"), gbc);
         gbc.gridx = 1;
-        add(customerComboBox, gbc);
+        add(customerField, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 5;
-        add(new JLabel("Due Date (YYYY-MM-DD):"), gbc);
-        gbc.gridx = 1;
-        dueDateField.setText(LocalDate.now().plusDays(30).toString());
-        add(dueDateField, gbc);
+        populateDateBoxes(startYear, startMonth, startDay);
+        addDateRow(5, gbc, "Start Date:", startYear, startMonth, startDay);
 
-        gbc.gridx = 0; gbc.gridy = 6;
-        add(new JLabel("Description:"), gbc);
-        gbc.gridx = 1;
-        add(descriptionField, gbc);
+        populateDateBoxes(dueYear, dueMonth, dueDay);
+        addDateRow(6, gbc, "Due Date:", dueYear, dueMonth, dueDay);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.add(issueButton);
@@ -83,35 +85,60 @@ public class IssueBillPanel extends JPanel implements ActionListener {
         cancelButton.addActionListener(this);
     }
 
+    public LocalDate getStartDate() {
+        return LocalDate.of(
+                (Integer) startYear.getSelectedItem(),
+                (Integer) startMonth.getSelectedItem(),
+                (Integer) startDay.getSelectedItem()
+        );
+    }
 
-    public void loadData() {
-        rfComboBox.removeAllItems();
-        customerComboBox.removeAllItems();
+    public LocalDate getDueDate() {
+        return LocalDate.of(
+                (Integer) dueYear.getSelectedItem(),
+                (Integer) dueMonth.getSelectedItem(),
+                (Integer) dueDay.getSelectedItem()
+        );
+    }
 
-        Set<String> rfSet = new LinkedHashSet<>();
-        Set<String> customerSet = new LinkedHashSet<>();
+    private void addDateRow(int y, GridBagConstraints c, String label,
+                            JComboBox<Integer> year,
+                            JComboBox<Integer> month,
+                            JComboBox<Integer> day) {
 
-        BillsDAO dao = new BillsDAO("./data/bills/bills.csv");
-        dao.loadBills(LocalDate.now());
+        JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        p.add(year);
+        p.add(month);
+        p.add(day);
 
-        for (Bills b : dao.getIssued()) {
-            rfSet.add(b.getRF());
-            customerSet.add(b.getCustomer().getUserId());
-        }
-        for (Bills b : dao.getPaid()) {
-            rfSet.add(b.getRF());
-            customerSet.add(b.getCustomer().getUserId());
-        }
-        for (Bills b : dao.getExpired()) {
-            rfSet.add(b.getRF());
-            customerSet.add(b.getCustomer().getUserId());
-        }
+        c.gridx = 0; c.gridy = y; add(new JLabel(label), c);
+        c.gridx = 1; add(p, c);
+    }
 
-        for (String rf : rfSet) rfComboBox.addItem(rf);
-        for (String id : customerSet) customerComboBox.addItem(id);
+    private void populateDateBoxes(JComboBox<Integer> year,
+                                   JComboBox<Integer> month,
+                                   JComboBox<Integer> day) {
 
-        if (rfComboBox.getItemCount() == 0) rfComboBox.addItem("RF10203040");
-        if (customerComboBox.getItemCount() == 0) customerComboBox.addItem("TestID2");
+        int currentYear = AppMediator.getToday().getYear();
+        for (int y = currentYear; y <= currentYear + 10; y++) year.addItem(y);
+        for (int m = 1; m <= 12; m++) month.addItem(m);
+
+        year.setSelectedItem(currentYear);
+        month.setSelectedItem(AppMediator.getToday().getMonthValue());
+
+        updateDays(year, month, day);
+    }
+
+    private void updateDays(JComboBox<Integer> year,
+                            JComboBox<Integer> month,
+                            JComboBox<Integer> day) {
+
+        int y = (Integer) year.getSelectedItem();
+        int m = (Integer) month.getSelectedItem();
+        int max = YearMonth.of(y, m).lengthOfMonth();
+
+        day.removeAllItems();
+        for (int d = 1; d <= max; d++) day.addItem(d);
     }
 
     @Override
@@ -134,13 +161,19 @@ public class IssueBillPanel extends JPanel implements ActionListener {
             Business currentBusiness = (Business) currentUser;
 
             String billNumber = billNumberField.getText().trim();
-            String rf = (String) rfComboBox.getSelectedItem();
-            String customerID = (String) customerComboBox.getSelectedItem();
+            String rf = rfField.getText().trim();
+            String customerID = customerField.getText().trim();
             double amount = Double.parseDouble(amountField.getText().trim());
-            LocalDate dueDate = LocalDate.parse(dueDateField.getText().trim());
+            LocalDate dueDate = getDueDate();
+            LocalDate startDate = getStartDate();
 
-            if (billNumber.isEmpty() || rf == null || customerID == null) {
+            if (billNumber.isEmpty() || rf.isEmpty() || customerID.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please fill all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (startDate.isAfter(dueDate)) {
+                JOptionPane.showMessageDialog(this, "Issue Date cannot be later that Due Date.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -149,9 +182,9 @@ public class IssueBillPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Customer with ID " + customerID + " not found.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            if (BillManager.getInstance().findBill(rf) != null) {
-                JOptionPane.showMessageDialog(this, "RF code " + rf + " already exists.", "Error", JOptionPane.ERROR_MESSAGE);
+            Bills tempBill = BillManager.getInstance().billWithThisRf(rf);
+            if (tempBill != null && tempBill.getIssuer() != currentBusiness && tempBill.getCustomer() != customer && tempBill.getIssueDate().isBefore(startDate) && tempBill.getDueDate().isAfter(startDate)) {
+                JOptionPane.showMessageDialog(this, "RF code " + rf + " cannot be used.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -161,7 +194,7 @@ public class IssueBillPanel extends JPanel implements ActionListener {
                     (int) amount,
                     currentBusiness,
                     customer,
-                    LocalDate.now(),
+                    startDate,
                     dueDate
             );
 
@@ -177,10 +210,8 @@ public class IssueBillPanel extends JPanel implements ActionListener {
 
     private void clearFields() {
         billNumberField.setText("");
-        rfComboBox.setSelectedIndex(0);
-        customerComboBox.setSelectedIndex(0);
+        rfField.setText("");
+        customerField.setText("");
         amountField.setText("");
-        descriptionField.setText("");
-        dueDateField.setText(LocalDate.now().plusDays(30).toString());
     }
 }
