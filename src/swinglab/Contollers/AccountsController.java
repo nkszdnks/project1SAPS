@@ -109,10 +109,7 @@ public class AccountsController extends WindowAdapter implements ActionListener 
                     AppMediator.getCardLayout().show(AppMediator.getCards(),"adminDashboard");
                     break;
                 }
-                String card = AppMediator.getUser().getRole() == UserRole.BUSINESS ? "businessDashboard"
-                        : AppMediator.getUser().getRole() == UserRole.ADMIN    ? "adminDashboard"
-                        : "dashboard";
-                AppMediator.getCardLayout().show(AppMediator.getCards(), card);
+                AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
                 break;
 
             case "Open New Acount":

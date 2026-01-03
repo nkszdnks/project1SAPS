@@ -12,9 +12,6 @@ import java.util.Locale;
 
 import javax.swing.JPanel;
 
-import static Entities.Users.UserRole.ADMIN;
-import static Entities.Users.UserRole.BUSINESS;
-
 public class AppMediator {
 
 		private static User CurrentUser;
@@ -55,32 +52,14 @@ public class AppMediator {
 			return CurrentUser;
 		}
 
-
-
-	public static void goToHomeDashboard() {
-		if (CurrentUser == null) return;
-
-		switch (CurrentUser.getRole()) {
-			case BUSINESS ->
-					cardLayout.show(cards, "businessDashboard");
-			case ADMIN ->
-					cardLayout.show(cards, "adminDashboard");
-			default ->
-					cardLayout.show(cards, "dashboard");
-		}
-	}
-
-
-
-
-	public static void setUser(User user) {
+		public static void setUser(User user) {
 
             AppMediator.CurrentUser = user;
             if(user==null){
                 bank.user.setText("  User: -");
                 return;
             }
-            bank.user.setText("  User: " +(user.getRole().equals(ADMIN)?user.getUsername():((Customer)user).getFullName()));
+            bank.user.setText("  User: " +(user.getRole().equals(UserRole.ADMIN)?user.getUsername():((Customer)user).getFullName()));
 
         }
 
@@ -107,17 +86,6 @@ public class AppMediator {
         cards.revalidate();
         cards.repaint();
     }
-
-
-
-
-
-		public static void goToIssueBill() {
-			if (CurrentUser != null && CurrentUser.getRole() == BUSINESS) {///////////////////////////////
-				cardLayout.show(cards, "issueBill");
-			}
-		}
-
 
 
         public static LocalDate getToday() {

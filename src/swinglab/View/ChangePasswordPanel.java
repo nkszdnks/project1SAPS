@@ -83,8 +83,7 @@ class ChangePasswordPanel extends JPanel implements ActionListener {
                 "Password changed successfully!\nYou will need to use the new password next time you log in.");
         }
         else if (e.getSource() == btnClose) {
-            AppMediator.goToHomeDashboard();
-
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
         }
     }
 }

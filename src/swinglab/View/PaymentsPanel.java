@@ -51,8 +51,7 @@ class PaymentsPanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src == btnClose) {
-            AppMediator.goToHomeDashboard();
-
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
         }
         else if (src == btnPayBill) {
             PayBillsController.getInstance().setAccounts();

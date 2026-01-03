@@ -182,7 +182,7 @@ public class IssueBillPanel extends JPanel implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Customer with ID " + customerID + " not found.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            Bills tempBill = BillManager.getInstance().billWithThisRf(rf);
+            Bills tempBill = BillManager.getInstance().findBill(rf);
             if (tempBill != null && tempBill.getIssuer() != currentBusiness && tempBill.getCustomer() != customer && tempBill.getIssueDate().isBefore(startDate) && tempBill.getDueDate().isAfter(startDate)) {
                 JOptionPane.showMessageDialog(this, "RF code " + rf + " cannot be used.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;

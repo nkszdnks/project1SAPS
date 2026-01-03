@@ -4,7 +4,7 @@ import Entities.Accounts.Statements.FailedOrderStatement;
 import Entities.Users.Customer;
 import Managers.StandingOrderManager;
 import swinglab.View.AppMediator;
-import swinglab.FailedOrdersPanel;
+import swinglab.View.FailedOrdersPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

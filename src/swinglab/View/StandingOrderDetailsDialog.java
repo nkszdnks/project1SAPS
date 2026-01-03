@@ -73,10 +73,12 @@ public class StandingOrderDetailsDialog extends JDialog {
         JButton btnClose = new JButton("Close");
         JButton btnPause = new JButton("Pause");
         JButton btnActivate = new JButton("Activate");
+        JButton btnDelete = new JButton("Delete");
 
         buttons.add(btnClose);
         buttons.add(btnPause);
         buttons.add(btnActivate);
+        buttons.add(btnDelete);
 
         // Status-based visibility
         if (s.getStatus() == OrderStatus.EXPIRED ) {
@@ -109,6 +111,12 @@ public class StandingOrderDetailsDialog extends JDialog {
         btnActivate.addActionListener(e -> {
            s.setStatus(OrderStatus.ACTIVE);
            dispose();
+        });
+
+        btnDelete.addActionListener(e -> {
+
+            s.setStatus(OrderStatus.ACTIVE);
+            dispose();
         });
     }
 

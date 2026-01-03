@@ -15,6 +15,7 @@ class TransfersPanel extends JPanel implements ActionListener {
     private final JButton btnDeposit;       // Κατάθεση χρημάτων
     private final JButton btnWithdraw;      // Ανάληψη χρημάτων
     private final JButton btnStandingOrder;
+    private final JButton btnScheduledTransfer;
     private final JButton btnClose;         // Κλείσιμο / Επιστροφή
 
     TransfersPanel() {
@@ -33,13 +34,14 @@ class TransfersPanel extends JPanel implements ActionListener {
         btnDeposit   = new JButton("Deposit Money");          // Κατάθεση χρημάτων
         btnWithdraw  = new JButton("Withdraw Money");         // Ανάληψη χρημάτων
         btnStandingOrder  = new JButton("Standing Transfer Order ");         // Ανάληψη χρημάτων
-
+        btnScheduledTransfer  = new JButton("Scheduled Transfers");         //προγραμματισμενες μεταφορες
         
         center.add(btnStandingOrder);
         center.add(btnInterbank);
         center.add(btnIntraBank);
         center.add(btnDeposit);
         center.add(btnWithdraw);
+        center.add(btnScheduledTransfer);
         add(center, BorderLayout.CENTER);
 
         // ---- South (Close) ----
@@ -56,6 +58,7 @@ class TransfersPanel extends JPanel implements ActionListener {
         btnStandingOrder.addActionListener(this);
         btnWithdraw.addActionListener(this);
         btnClose.addActionListener(this);
+        btnScheduledTransfer.addActionListener(this);
     }
 
     @Override
@@ -63,8 +66,8 @@ class TransfersPanel extends JPanel implements ActionListener {
         Object src = e.getSource();
 
         if (src == btnClose) {
-            AppMediator.goToHomeDashboard();
-
+            // return to dashboard
+            AppMediator.getCardLayout().show(AppMediator.getCards(), "dashboard");
         }
         else if (src == btnInterbank) {
             IntraBankTransferController.getInstance().setIbanFields();
@@ -86,5 +89,10 @@ class TransfersPanel extends JPanel implements ActionListener {
             StandingTransferOrderController.getInstance().setModel((Customer) AppMediator.getUser());
             AppMediator.getCardLayout().show(AppMediator.getCards(), "standingTransferOrder");
         }
+        else if (src == btnScheduledTransfer){
+            ScheduledTransfersController.getInstance()
+                    .setModel((Customer) AppMediator.getUser());
+            AppMediator.getCardLayout()
+                    .show(AppMediator.getCards(), "scheduledTransfers");        }
     }
 }

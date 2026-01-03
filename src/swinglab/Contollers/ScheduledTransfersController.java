@@ -1,6 +1,8 @@
 package swinglab.Contollers;
 
+import Commands.ScheduledTransferCommand;
 import Entities.StandingOrders.StandingOrder;
+import Entities.Transactions.Requests.TransferRequest;
 import Entities.Users.Customer;
 import Managers.StandingOrderManager;
 import swinglab.View.*;
@@ -14,15 +16,15 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ActiveOrdersController implements ActionListener, StandingOrderObserver {
-    private static ActiveOrdersController instance;
-    private ActiveStandingOrdersPanel view;
+public class ScheduledTransfersController implements ActionListener, StandingOrderObserver {
+    private static ScheduledTransfersController instance;
+    private ScheduledTransfersPanel view;
     private Customer model;
 
 
-    public static ActiveOrdersController getInstance() {
+    public static ScheduledTransfersController getInstance() {
         if(instance == null){
-            instance = new ActiveOrdersController();
+            instance = new ScheduledTransfersController();
             return instance;
         }
         return instance;
@@ -36,18 +38,17 @@ public class ActiveOrdersController implements ActionListener, StandingOrderObse
         }
     }
 
-    private ActiveOrdersController() {
+    private ScheduledTransfersController() {
 
         // Load table data initially
     }
 
-    public void setView(ActiveStandingOrdersPanel view) {
+    public void setView(ScheduledTransfersPanel view) {
         this.view = view;
 
         // Attach button listeners
 
         view.getBtnClose().addActionListener(this);
-        view.getBtnEdit().addActionListener(this);
         view.getBtnDelete().addActionListener(this);
 
     }
@@ -58,43 +59,23 @@ public class ActiveOrdersController implements ActionListener, StandingOrderObse
 
     private void loadOrders() {
         view.clearTable();
-        ArrayList<StandingOrder> orders = new ArrayList<>();
-        orders.addAll(StandingOrderManager.getInstance().getMyActive(model));
-        orders.addAll(StandingOrderManager.getInstance().getMyExpired(model));
+        ArrayList<ScheduledTransferCommand> orders = new ArrayList<>();
+        orders.addAll(StandingOrderManager.getInstance().getScheduledTransfers());
 
-        for (StandingOrder s :orders)
+        for (ScheduledTransferCommand s :orders)
         {
-            s.attach(this);
-            s.computeNextExecutionDate(AppMediator.getToday());
+         //   s.attach(this);
+         //   s.computeNextExecutionDate(AppMediator.getToday());
             view.addAccountRow(
-                    s.getOrderId(),
-                    s.getTitle(),
-                    s.getType(),
-                    String.valueOf(s.getStartDate()),
-                    String.valueOf(s.getEndDate()),
-                    String.valueOf(s.getExecutionDate().equals(LocalDate.MAX)?"NO ISSUED BILL FOUND":s.getExecutionDate()),
-                    s.getChargeIBAN(),
-                    String.valueOf(s.getStatus())
-            );
-        }
-    }
-    public void loadAllOrders(){
-        view.clearTable();
-        ArrayList<StandingOrder> orders = new ArrayList<>();
-        orders.addAll(StandingOrderManager.getInstance().getActive());
-        orders.addAll(StandingOrderManager.getInstance().getExpired());
-        for (StandingOrder s : orders) {
-            s.attach(this);
-            s.computeNextExecutionDate(AppMediator.getToday());
-            view.addAccountRow(
-                    s.getOrderId(),
-                    s.getTitle(),
-                    s.getType(),
-                    String.valueOf(s.getStartDate()),
-                    String.valueOf(s.getEndDate()),
-                    String.valueOf(s.getExecutionDate().equals(LocalDate.MAX)?"NO ISSUED BILL FOUND":s.getExecutionDate()),
-                    s.getChargeIBAN(),
-                    String.valueOf(s.getStatus())
+                    s.getreq(),
+                    String.valueOf(s.getreq().getAmount()),
+                    s.getreq().getReason(),
+                    s.getreq().getToIban(),
+              //      String.valueOf(s.getStartDate()),
+              //      String.valueOf(s.getEndDate()),
+                    String.valueOf(s.getScheduledDate().equals(LocalDate.MAX)?"NO ISSUED BILL FOUND":s.getScheduledDate())
+                //    s.getChargeIBAN(),
+                //    String.valueOf(s.getStatus())
             );
         }
     }
@@ -106,8 +87,9 @@ public class ActiveOrdersController implements ActionListener, StandingOrderObse
 
         switch (cmd) {
 
-            case "View Details":
-                showSelectedRowDetails();
+            case "Delete":
+                deleteOrder();
+                loadOrders();
                 break;
 
             case "Clear Selection":
@@ -155,6 +137,19 @@ public class ActiveOrdersController implements ActionListener, StandingOrderObse
         standingOrderDetailsDialog.setVisible(true);
     }
 
+    public void deleteOrder() {
+
+        int viewRow = view.getTable().getSelectedRow();
+        if (viewRow == -1) {
+            JOptionPane.showMessageDialog(view, "Please select a row first.", "No selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int modelRow = view.getTable().convertRowIndexToModel(viewRow);
+
+        StandingOrderManager.getInstance().deleteScheduledTransferByRequest((TransferRequest) view.getModel().getValueAt(modelRow, 0));
+
+    }
 
     @Override
     public void update(String orderID) {
@@ -173,5 +168,4 @@ public class ActiveOrdersController implements ActionListener, StandingOrderObse
         }
 
     }
-    }
-
+}

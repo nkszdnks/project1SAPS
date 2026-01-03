@@ -34,7 +34,7 @@ public class AboutPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (AppMediator.getUser() != null)
-            AppMediator.goToHomeDashboard();
+            AppMediator.getCardLayout().show(AppMediator.getCards(),"dashboard");
         else
             AppMediator.getCardLayout().show(AppMediator.getCards(),"login");
     }

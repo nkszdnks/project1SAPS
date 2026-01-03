@@ -9,12 +9,14 @@ import Entities.Accounts.BankAcount;
 import Entities.Accounts.Statements.FailedOrderStatement;
 import Entities.StandingOrders.OrderStatus;
 import Entities.StandingOrders.StandingOrder;
+import Entities.Transactions.Requests.TransferRequest;
 import Entities.Transactions.TransactionStatus;
 import Entities.Users.Customer;
 import swinglab.View.AppMediator;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class StandingOrderManager implements Manager {
     private static StandingOrderManager INSTANCE;
@@ -107,19 +109,6 @@ public class StandingOrderManager implements Manager {
         StandingOrdersDAO.saveExpriredStandingOrders(expired);
         StandingOrdersDAO.saveFailedStandingOrders(failed);
     }
-//    @Override
-//    public void save(){
-//        Storager.getInstance().load(active,"./data/orders/active.csv");
-//        Storager.getInstance().load(expired,"./data/orders/expired.csv");
-//        Storager.getInstance().load(failed,"./data/orders/failed.csv");
-//        executeOrder();
-//    }
-
-//    public void deleteOrder(StandingOrder standingOrder) {
-//        active.remove(standingOrder);
-//        expired.remove(standingOrder);
-//        failed.remove(standingOrder);
-//    }
     public void executeScheduledTransfers(){
         ArrayList<ScheduledTransferCommand> toRemove = new ArrayList<>();
         for (ScheduledTransferCommand scheduledTransferCommand : scheduledTransfers) {
@@ -188,5 +177,27 @@ public class StandingOrderManager implements Manager {
             }
         }
         return null;
+    }
+
+    public void deleteOrder(StandingOrder order){
+
+        active.remove(order);
+        expired.remove(order);
+    }
+
+    public boolean deleteScheduledTransferByRequest(TransferRequest request) {
+        if (request == null) return false;
+
+        Iterator<ScheduledTransferCommand> iterator = scheduledTransfers.iterator();
+
+        while (iterator.hasNext()) {
+            ScheduledTransferCommand cmd = iterator.next();
+
+            if (request.equals(cmd.getreq())) {
+                iterator.remove();   // SAFE removal during iteration
+                return true;         // deleted successfully
+            }
+        }
+        return false; // not found
     }
 }

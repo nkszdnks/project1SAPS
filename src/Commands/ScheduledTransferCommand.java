@@ -19,6 +19,8 @@ public class ScheduledTransferCommand implements BankCommand{
         this.TransferDetails = TransferDetails;
     }
 
+    public TransferRequest getreq() {return req;}
+
     public LocalDate getScheduledDate() {
         return scheduledDate;
     }
@@ -49,6 +51,10 @@ public class ScheduledTransferCommand implements BankCommand{
 
     public void setStatus(TransactionStatus status) {
         this.status = status;
+    }
+
+    public void selfDestruct() {
+
     }
 
     @Override

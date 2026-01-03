@@ -1,5 +1,7 @@
 package Managers;
 
+
+
 import DataAccessObjects.BillsDAO;
 import DataAccessObjects.FactoryDAO;
 import Entities.Users.BillStatus;
@@ -13,91 +15,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BillManager implements Manager {
-
     private static BillManager INSTANCE;
-
-    private final BillsDAO billsDAO;
-
+    FactoryDAO factoryDAO;
+    BillsDAO billsDAO;
     private ArrayList<Bills> issued = new ArrayList<>();
     private ArrayList<Bills> paid = new ArrayList<>();
     private ArrayList<Bills> expired = new ArrayList<>();
     private ArrayList<Bills> futureBills = new ArrayList<>();
 
-    private boolean loaded = false;
 
     private BillManager() {
-        FactoryDAO factoryDAO = FactoryDAO.getInstance();
+        factoryDAO = FactoryDAO.getInstance();
         billsDAO = factoryDAO.getBillsDAO();
     }
-
-    public static BillManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new BillManager();
+    
+    public static BillManager getInstance(){
+        if (INSTANCE==null){
+            INSTANCE=new BillManager();
+            return INSTANCE;
         }
         return INSTANCE;
     }
 
-    // --------------------------------------------------
-    // INTERNAL LOAD (CRITICAL FIX)
-    // --------------------------------------------------
-    private void loadIfNeeded() {
-        if (!loaded) {
-            restore();
-            loaded = true;
-        }
+    public ArrayList<Bills> getIssued() {
+        return issued;
     }
 
-    // --------------------------------------------------
-    // CRUD
-    // --------------------------------------------------
+    public ArrayList<Bills> getPaid() {
+        return paid;
+    }
+
+    public ArrayList<Bills> getExpired() {
+        return expired;
+    }               
+        
+
+
     public void create(
-            String RF,
-            String billNumber,
-            int amount,
-            Business issuer,
-            Customer customer,
-            LocalDate issueDate,
-            LocalDate dueDate) {
-
-        loadIfNeeded();
-        Bills bill = new Bills(
-                RF,
-                billNumber,
-                amount,
-                issuer,
-                customer,
-                issueDate,
-                dueDate,
-                BillStatus.PENDING
-        );
-
-        if (issueDate.isAfter(AppMediator.getToday())) addToFutureBills(bill);
-        else issued.add(bill);
+        String RF,
+         String billNumber,
+         int amount,
+         Business issuer,
+         Customer customer,
+         LocalDate issueDate,
+         LocalDate dueDate) {
+        Bills bill = new Bills(RF , billNumber, amount, issuer , customer , issueDate , dueDate, BillStatus.PENDING);
+        issued.add(bill);
     }
 
     public void billsPayed(Bills bill) {
-        loadIfNeeded();
-
-        bill.setStatus(BillStatus.PAID);
-        issued.remove(bill);
         paid.add(bill);
+        issued.remove(bill);
     }
 
     public void deleteBill(String RF) {
-        loadIfNeeded();
-
         Bills bill = findBill(RF);
-        if (bill != null) {
-            issued.remove(bill);
-            paid.remove(bill);
-            expired.remove(bill);
-            futureBills.remove(bill);
-        }
+        issued.remove(bill);
+        paid.remove(bill);
     }
 
     public Bills findBill(String RF) {
-        loadIfNeeded();
-
         for (Bills bill : issued) {
             if (bill.getRF().equals(RF))
                 return bill;
@@ -105,127 +82,137 @@ public class BillManager implements Manager {
         return null;
     }
 
-    public Bills billWithThisRf(String RF) {
-        loadIfNeeded();
-
-        for (Bills bill : getAllBills()) {
-            if (bill.getRF().equals(RF))
-                return bill;
-        }
-        return null;
-    }
-
-    void addToFutureBills(Bills bill) {
-        loadIfNeeded();
-        int i=0;
-        for (Bills bill2 : futureBills) {
-            if (bill2.getIssueDate().isAfter(bill.getIssueDate())) {
-                futureBills.add(i,bill);
-                return;
-            }
-            i+=1;
-        }
-        futureBills.add(i,bill);
-    }
-
-    // --------------------------------------------------
-    // FINDERS (FIXED)
-    // --------------------------------------------------
-    public ArrayList<Bills> findMyBills(String customerId) {
-        loadIfNeeded();
-
+    public ArrayList<Bills> findMyBills(String customer) {
         ArrayList<Bills> myBills = new ArrayList<>();
         for (Bills bill : issued) {
-            if (bill.getCustomer() != null &&
-                    bill.getCustomer().getUserId().equals(customerId)) {
+            if(bill.getCustomer().equals(customer))
                 myBills.add(bill);
-            }
         }
         return myBills;
     }
 
-    public ArrayList<Bills> findCompanyIssuedBills(String issuerId) {
-        loadIfNeeded();
-
+    public ArrayList<Bills> findCompanyIssuedBills(String issuer) {
         ArrayList<Bills> companyBills = new ArrayList<>();
         for (Bills bill : issued) {
-            if (bill.getIssuer() != null &&
-                    bill.getIssuer().getUserId().equals(issuerId)) {
+            if (bill.getIssuer().equals(issuer))
                 companyBills.add(bill);
-            }
         }
         return companyBills;
     }
 
-    public ArrayList<Bills> findCompanyPayedBills(String issuerId) {
-        loadIfNeeded();
-
+    public ArrayList<Bills> findCompanyPayedBills(String issuer) {
         ArrayList<Bills> companyBills = new ArrayList<>();
         for (Bills bill : paid) {
-            if (bill.getIssuer() != null &&
-                    bill.getIssuer().getUserId().equals(issuerId)) {
+            if (bill.getIssuer().equals(issuer))
                 companyBills.add(bill);
-            }
         }
         return companyBills;
     }
 
-    // --------------------------------------------------
-    // DAILY RESTORE
-    // --------------------------------------------------
-    public void restoreEachDay(LocalDate today) {
+//    public void restoreEachDay(){
+//        ArrayList<Bills> tempBills = new ArrayList<>();
+//        String fileName;
+//        File[] files = new File("./data/bills/").listFiles();
+//        if (files == null) return;
+//        for (File file : files) {
+//            fileName = file.getName().substring(0,file.getName().length()-4);
+//            if (fileName.startsWith(".")||fileName.equals("issued")||fileName.equals("paid")) continue;
+//            if (LocalDate.parse(fileName).isBefore(MainMenu.today)){
+//                Storager.getInstance().load(tempBills,"./data/bills/"+file.getName());
+//                for (Bills bill : tempBills.getList()) {
+//                    issued.getList().add(bill);
+//                }
+//
+//                tempBills.getList().clear(); // newLine
+//                file.delete();
+//            }
+//        }
+//    }
+public void restoreEachDay(LocalDate today) {
+    List<Bills> toMoveFromFuture = new ArrayList<>();
+    List<Bills> toMoveFromIssued = new ArrayList<>();
 
-        loadIfNeeded();
-
-        List<Bills> toMoveFromFuture = new ArrayList<>();
-        List<Bills> toMoveFromIssued = new ArrayList<>();
-
-        for (Bills bill : futureBills) {
-            if (!today.isBefore(bill.getIssueDate())) {
-                issued.add(bill);
-                toMoveFromFuture.add(bill);
-            }
+    for (Bills bill : futureBills) {
+        if (!today.isBefore(bill.getIssueDate())) {
+            issued.add(bill);
+            toMoveFromFuture.add(bill);
         }
-
-        for (Bills bill : issued) {
-            if (today.isAfter(bill.getDueDate())) {
-                bill.setStatus(BillStatus.EXPIRED);
-                expired.add(bill);
-                toMoveFromIssued.add(bill);
-            }
+    }
+    for (Bills bill : issued) {
+        if(today.isAfter(bill.getDueDate())){
+            bill.setStatus(BillStatus.EXPIRED);
+            expired.add(bill);
+            toMoveFromIssued.add(bill);
         }
-
-        futureBills.removeAll(toMoveFromFuture);
-        issued.removeAll(toMoveFromIssued);
     }
 
-    // --------------------------------------------------
-    // PERSISTENCE
-    // --------------------------------------------------
+    futureBills.removeAll(toMoveFromFuture);
+    issued.removeAll(toMoveFromIssued);
+}
+
+
     @Override
     public void restore() {
-        billsDAO.loadBills(AppMediator.getToday());
-        issued = new ArrayList<>(billsDAO.getIssued());
-        paid = new ArrayList<>(billsDAO.getPaid());
-        expired = new ArrayList<>(billsDAO.getExpired());
-        futureBills = new ArrayList<>(billsDAO.getFutureBills());
+       billsDAO.loadBills(AppMediator.getToday());
+       issued =(ArrayList<Bills>) billsDAO.getIssued();
+       paid =(ArrayList<Bills>) billsDAO.getPaid();
+       expired =(ArrayList<Bills>) billsDAO.getExpired();
+       futureBills = (ArrayList<Bills>) billsDAO.getFutureBills();
     }
-
     @Override
-    public void save() {
-        List<Bills> all = getAllBills();
-        billsDAO.saveBills(all);
+    public void save(){
+        billsDAO.saveBills(issued);
+        billsDAO.appendBills(paid);
+        billsDAO.appendBills(expired);
+        billsDAO.appendBills(futureBills);
     }
 
-    // --------------------------------------------------
-    // GETTERS
-    // --------------------------------------------------
     public ArrayList<Bills> getAllBills() {
         ArrayList<Bills> all = new ArrayList<>();
+
         all.addAll(issued);
         all.addAll(paid);
         all.addAll(expired);
         all.addAll(futureBills);
+
         return all;
     }
+
+
+//    @Override
+//    public void save() {
+//        List<ArrayList<Bills>> sameDateCollections = new ArrayList<>();
+//        ArrayList<Bills> removeList = new ArrayList<>();
+//        boolean isAdded;
+//        sameDateCollections.add(new ArrayList<Bills>());
+//        sameDateCollections.get(0).getList().add(issued.getList().get(0));
+//        for (Bills bill : issued.getList()) {
+//            isAdded = false;
+//            if(bill.equals(issued.getList().get(0)))
+//                continue;
+//            for (ArrayList<Bills> sameDateCollection : sameDateCollections) {
+//                if (sameDateCollection.getList().get(0).getIssueDate().equals(bill.getIssueDate())) {
+//                    sameDateCollection.getList().add(bill);
+//                    if (bill.getIssueDate().isAfter(MainMenu.today)) removeList.getList().add(bill);
+//                    isAdded = true;
+//                    break;
+//                }
+//            }
+//            if (!isAdded){
+//                sameDateCollections.add(new ArrayList<Bills>());
+//                sameDateCollections.get(sameDateCollections.size()-1).getList().add(bill);
+//                if (bill.getIssueDate().isAfter(MainMenu.today)) removeList.getList().add(bill);
+//            }
+//        }
+//        for (Bills bill : removeList.getList()) {
+//            issued.getList().remove(bill);
+//        }
+//        for (ArrayList<Bills> sameDateCollection : sameDateCollections) {
+//            if (sameDateCollection.getList().get(0).getIssueDate().isAfter(MainMenu.today))
+//                Storager.getInstance().save(sameDateCollection,"./data/bills/"+sameDateCollection.getList().get(0).getIssueDate()+".csv", false);
+//        }
+//        Storager.getInstance().save(issued,"./data/bills/issued.csv", false);
+//        Storager.getInstance().save(paid,"./data/bills/paid.csv", false);
+//    }
+
 }
