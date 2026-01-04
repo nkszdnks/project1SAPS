@@ -1,0 +1,11 @@
+AccountID:ACC000,IBAN:GR100202503111546001,InterestRate:2.0,Balance:1000.0,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:TestID2,SecondaryOwnerIDs:TestID4|,accruedInterest:0.00602858640143255
+AccountID:ACC001,IBAN:GR100202503111546002,InterestRate:1.3200000524520874,Balance:2000.0,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:TestID3,SecondaryOwnerIDs:,accruedInterest:0.0026520226152051732
+AccountID:ACC002,IBAN:GR100202503111546003,InterestRate:2.0,Balance:3050.0,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:TestID4,SecondaryOwnerIDs:,accruedInterest:0.21641999331237194
+AccountID:ACC003,IBAN:GR100202503111546004,InterestRate:2.0,Balance:1780.3,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:TestID2,SecondaryOwnerIDs:TestID3|,accruedInterest:0.040226398645070334
+AccountID:ACC004,IBAN:GR100202503111546005,InterestRate:2.0,Balance:54.2,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:TestID7,SecondaryOwnerIDs:,accruedInterest:0.031005986268323057
+AccountID:ACC005,IBAN:GR100202503111546006,InterestRate:2.0,Balance:625.6,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:TestID5,SecondaryOwnerIDs:TestID3|TestID2|,accruedInterest:0.09678895311698427
+AccountID:ACC006,IBAN:GR100202503111546007,InterestRate:2.0,Balance:25.982396416909836,DateCreated:2024-01-01,AccountType:PERSONAL,MainOwnerID:TestID3,SecondaryOwnerIDs:,accruedInterest:0.001423692954351224
+AccountID:ACC007,IBAN:GR200202503131719401,InterestRate:3.0,Balance:10519.383893981556,DateCreated:2024-01-01,AccountType:BUSINESS,MainOwnerID:TestID8,SecondaryOwnerIDs:,MaintenanceFee:5.0,accruedInterest:0.8646068953957443
+AccountID:ACC008,IBAN:GR200202503131719402,InterestRate:1.0,Balance:20922.73022196659,DateCreated:2024-01-01,AccountType:BUSINESS,MainOwnerID:TestID9,SecondaryOwnerIDs:,MaintenanceFee:5.0,accruedInterest:0.5732254855333313
+AccountID:ACC009,IBAN:GR200202503131719403,InterestRate:1.2000000476837158,Balance:102160.10131245381,DateCreated:2024-01-01,AccountType:BUSINESS,MainOwnerID:TestID10,SecondaryOwnerIDs:,MaintenanceFee:8.0,accruedInterest:3.3586883957895295
+AccountID:ACC010,IBAN:GR200202503131719404,InterestRate:1.0199999809265137,Balance:7230.868514327405,DateCreated:2024-01-01,AccountType:BUSINESS,MainOwnerID:TestID11,SecondaryOwnerIDs:,MaintenanceFee:5.0,accruedInterest:0.20374481494662117
